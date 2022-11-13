@@ -6,7 +6,9 @@ html,
 body {
   padding: 0;
   margin: 0;
-  @apply bg-slate-100;
+  @apply bg-slate-50;
+  @apply font-sans;
+  @apply text-slate-700;
 }
 
 a {

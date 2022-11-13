@@ -7,7 +7,7 @@ export interface LayoutProps{
 }
 export default function Layout({children}: LayoutProps) {
   return (
-    <div className='bg-slate-100 flex flex-col font-sans'>
+    <div className=' flex flex-col '>
         <Navbar/>
         <main className="flex flex-row p-10">{children}</main>
         

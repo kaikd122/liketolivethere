@@ -9,6 +9,7 @@ module.exports = {
     fontFamily: {
       sans: ["Inter", "sans-serif"],
       serif: ["Merriweather", "serif"],
+      display: ["Krona One", "sans-serif"],
     },
   },
   plugins: [],

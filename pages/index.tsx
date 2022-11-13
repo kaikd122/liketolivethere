@@ -2,7 +2,7 @@ import Head from 'next/head'
 import prisma from '../lib/prisma'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import { Review } from '@prisma/client'
-import Layout from '../components/layout'
+import Layout from '../components/Layout'
  
 
 
@@ -24,8 +24,7 @@ export default function Home({ reviews }: InferGetStaticPropsType<typeof getStat
       <Head>
       <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet"/>
-        <title>Local Expert</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Krona+One&display=swap" rel="stylesheet"/>        <title>Local Expert</title>
         <meta name="description" content="Placeholder" />
       </Head>
         {reviews.map(r=>{
