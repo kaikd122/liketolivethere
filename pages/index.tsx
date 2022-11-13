@@ -20,13 +20,13 @@ export const getStaticProps: GetStaticProps<{reviews: Review[] }> = async() => {
 export default function Home({ reviews }: InferGetStaticPropsType<typeof getStaticProps>) {
 
   return (
+    <>
+    <Head>
+    <title>Local Expert</title>
+     <meta name="description" content="Placeholder" />
+   </Head>
     <Layout>
-      <Head>
-      <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Krona+One&display=swap" rel="stylesheet"/>        <title>Local Expert</title>
-        <meta name="description" content="Placeholder" />
-      </Head>
+     
         {reviews.map(r=>{
           return<div key={r.id}>Raleway {r.body}</div>
         })}
@@ -34,5 +34,6 @@ export default function Home({ reviews }: InferGetStaticPropsType<typeof getStat
 
       }}>Poop Create</button>
     </Layout>
+    </>
   )
 }
