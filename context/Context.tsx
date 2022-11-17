@@ -1,19 +1,20 @@
 import { User } from '@prisma/client'
-import React, {useState, useContext} from 'react'
+import { useSession } from 'next-auth/react';
+import React, {useState, useContext, useEffect} from 'react'
 
 export interface ContextProps {
-    user: User;
-    setUser: (user: User) => void;
     isLoading: boolean;
     setIsLoading: (isLoading: boolean) => void;
+    user: User;
+    setUser: (user: User) => void;
 }
 
 
 export const Context = React.createContext<ContextProps>({
     isLoading: true,
     setIsLoading: ()=>{},
-    user: {email: "", id: "", username: ""},
-    setUser: ()=> {}
+    user: {} as User,
+    setUser: ()=>{}
 });
 
 export interface ContextProviderProps {
@@ -21,10 +22,19 @@ export interface ContextProviderProps {
 }
 
 export const ContextProvider = ({children}: ContextProviderProps) => {
-    const [user, setUser] = useState<User>({email: "", id: "", username: ""});
   const [isLoading, setIsLoading] = useState(true);
+  const {data: session} = useSession()
+  const [user, setUser] = useState<User>({} as User)
+  useEffect(()=>{
+      if (!session?.user?.name){
+          return 
+      } 
+
+      setUser({...user, email: session.user.email!, name: session.user.name })
+
+  }, [session])
   return (
-      <Context.Provider value={{isLoading: isLoading, setIsLoading: setIsLoading, setUser: setUser, user: user}}>
+      <Context.Provider value={{isLoading: isLoading, setIsLoading: setIsLoading, user: user, setUser: setUser}}>
             {children}
       </Context.Provider>
   )
