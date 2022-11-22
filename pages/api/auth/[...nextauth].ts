@@ -3,29 +3,38 @@ import Email from 'next-auth/providers/email'
 
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import prisma from '../../../lib/prisma'
-import { updateUsername } from '../../../lib/actions/user'
 import generateUsername from '../../../lib/util/generate-username'
+import { redirect } from 'next/dist/server/api-utils'
 
 const authOptions: NextAuthOptions = {
+
     callbacks: {
-        async signIn({ user, email}){
-            if (!email?.verificationRequest){
-                if (!user.name){
-                    await updateUsername(user.id, generateUsername())
-                }
+        // async signIn({ user, email}){
+        //     if (!email?.verificationRequest){
+        //         if (!user.name){
+        //             await prisma.user.update({
+        //                 where: {
+        //                     email: user.email!
+        //                 },
+        //                 data: {
+        //                     name: generateUsername()
+        //                 }
+        //             })
+        //         }
                 
 
-            }
-            return true
-        },
+        //     }
+        //     return true
+        // },
         async session({session, user}){
             if (user?.email){
-                // @ts-ignore
                 session.user.id = user.id
             }
             return session
-        }
+        },
+    
     },
+
     providers: [
 
         Email({
@@ -40,6 +49,7 @@ const authOptions: NextAuthOptions = {
             from: process.env.SMTP_FROM
           })
     ],
+    
     adapter: PrismaAdapter(prisma)
 }
 

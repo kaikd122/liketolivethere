@@ -23,16 +23,7 @@ export interface ContextProviderProps {
 
 export const ContextProvider = ({children}: ContextProviderProps) => {
   const [isLoading, setIsLoading] = useState(true);
-  const {data: session} = useSession()
   const [user, setUser] = useState<User>({} as User)
-  useEffect(()=>{
-      if (!session?.user?.name){
-          return 
-      } 
-
-      setUser({...user, email: session.user.email!, name: session.user.name })
-
-  }, [session])
   return (
       <Context.Provider value={{isLoading: isLoading, setIsLoading: setIsLoading, user: user, setUser: setUser}}>
             {children}
