@@ -4,7 +4,11 @@ import { useCtx } from '../context/Context';
 
 
 
+
 function AuthButton() {
+
+  const { data: session } = useSession()
+
   function handleLogin(){
     ctx.setIsLoading(!ctx.isLoading)
     signIn()
@@ -15,7 +19,7 @@ function AuthButton() {
   }
 
   
-  const { data: session } = useSession()
+  
 
   const ctx = useCtx();
   return ( 
