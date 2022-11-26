@@ -1,3 +1,4 @@
+import { User } from '@prisma/client'
 import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 import Layout from '../../components/Layout'
@@ -14,11 +15,14 @@ function ProfileId() {
         e.preventDefault()        
         const getRes = await getUserRequest({name: value})
         if (getRes.ok) {
-            
-            console.log("NOT OK")
+            const data: User[] = await getRes.json()
+            if (data.length) {
+                alert("username taken")
+                return
+            } 
 
         } else {
-            console.log("OK")
+            return
         }
 
 

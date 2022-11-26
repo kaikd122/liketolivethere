@@ -4,7 +4,7 @@ import { useCtx } from '../context/Context'
 import { useSession } from 'next-auth/react'
 import { User } from '@prisma/client'
 import generateUsername from '../lib/util/generate-username'
-import { updateUserArgs, updateUserCommand } from '../lib/actions/user'
+import { getUserRequest, updateUserArgs, updateUserCommand } from '../lib/actions/user'
 
 
 export interface LayoutProps{
@@ -14,32 +14,16 @@ export default function Layout({children}: LayoutProps) {
   const ctx = useCtx()
   const {data: session} = useSession()
   useEffect(()=>{
-    console.log("UF", 29)
-    if (!session) {
+    console.log("SESH", session, "USER", ctx.user)
+    console.log(18)
+    if (!session || ctx.user?.name) {
       return
     }
-    console.log("UF", 33)
-
-
-    if (ctx.user?.id) {
-
-      if (ctx.user?.name != session?.user?.name)
-      {
-        console.log(37)
-        ctx.setUser({...ctx.user, name: session?.user.name})
-      }
-
-
-
-      return 
-    }
-
     if (session.user?.name){
-      const user: User = {
+      console.log(26)
+      const user: User = {...ctx.user,
         email: session?.user?.email,
-        emailVerified: null,
         id: session?.user?.id,
-        image: null,
         name: session?.user?.name 
       }
       ctx.setUser(user)
@@ -47,6 +31,7 @@ export default function Layout({children}: LayoutProps) {
     }
 
     if (!ctx.user?.name) {
+      console.log(38)
       const newName = generateUsername()
       const args: updateUserArgs = {userId: session?.user?.id, data: {name: newName}}
       const updateUser = async()=>{
@@ -71,7 +56,7 @@ export default function Layout({children}: LayoutProps) {
     <div className=' flex flex-col '>
         <Navbar/>
         <main className="flex flex-row p-10">{children}</main>
-        {ctx.isLoading ? <p>Loading</p> : <p>Not loading</p>}
+        <button onClick={()=>console.log("USER", ctx.user, "SESSION", session)}>CLICK</button>
         
     </div>
   )

@@ -9,23 +9,6 @@ import { redirect } from 'next/dist/server/api-utils'
 const authOptions: NextAuthOptions = {
 
     callbacks: {
-        // async signIn({ user, email}){
-        //     if (!email?.verificationRequest){
-        //         if (!user.name){
-        //             await prisma.user.update({
-        //                 where: {
-        //                     email: user.email!
-        //                 },
-        //                 data: {
-        //                     name: generateUsername()
-        //                 }
-        //             })
-        //         }
-                
-
-        //     }
-        //     return true
-        // },
         async session({session, user}){
             if (user?.email){
                 session.user.id = user.id

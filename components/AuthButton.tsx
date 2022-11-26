@@ -11,7 +11,7 @@ function AuthButton() {
 
   function handleLogin(){
     ctx.setIsLoading(!ctx.isLoading)
-    signIn()
+    signIn(undefined, {callbackUrl: '/'})
   }
   function handleLogout(){
     ctx.setIsLoading(!ctx.isLoading)
