@@ -1,5 +1,12 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMap,
+  ZoomControl,
+} from "react-leaflet";
 import { Icon } from "leaflet";
 import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
 
@@ -25,7 +32,7 @@ function SearchBar({ isSearchBarAdded, setIsSearchBarAdded }: SearchBarProps) {
 
     const searchControl = GeoSearchControl({
       provider,
-
+      position: "topleft",
       marker: {
         icon,
       },
@@ -48,6 +55,7 @@ function Map() {
         zoom={13}
         scrollWheelZoom={false}
         className="h-full w-full flex flex-row"
+        zoomControl={false}
       >
         <SearchBar
           isSearchBarAdded={isSearchBarAdded}
@@ -55,13 +63,14 @@ function Map() {
         />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url="https://api.mapbox.com/styles/v1/liketolivethere/clayk9uf300jl14o3vdt15ijl/tiles/512/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGlrZXRvbGl2ZXRoZXJlIiwiYSI6ImNsYXlraGJ3NjBjNWQzc281Nm0wdjUwYzYifQ.Bf_rCJ63GmspoX170JUFYQ"
         />
         <Marker position={[51.505, -0.09]} icon={icon}>
           <Popup>
             A pretty CSS3 popup. <br /> Easily customizable.
           </Popup>
         </Marker>
+        <ZoomControl position="bottomleft" />
       </MapContainer>
     </div>
   );
