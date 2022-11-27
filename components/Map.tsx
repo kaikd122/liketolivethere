@@ -7,8 +7,17 @@ import {
   useMap,
   ZoomControl,
 } from "react-leaflet";
-import { Icon } from "leaflet";
+import L, { Icon, Control } from "leaflet";
 import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
+
+declare module "leaflet" {
+  interface Control {
+    Watermark: {
+      onAdd: () => HTMLImageElement;
+      onRemove: () => void;
+    };
+  }
+}
 
 const icon = new Icon({
   iconUrl: "/violet-pin.png",
@@ -16,14 +25,13 @@ const icon = new Icon({
   iconAnchor: [12.5, 41],
 });
 
-export interface SearchBarProps {
-  isSearchBarAdded: boolean;
-  setIsSearchBarAdded: Dispatch<SetStateAction<boolean>>;
+export interface MapChildProps {
+  isAdded: boolean;
+  setIsAdded: Dispatch<SetStateAction<boolean>>;
 }
 
-function SearchBar({ isSearchBarAdded, setIsSearchBarAdded }: SearchBarProps) {
-  console.log(isSearchBarAdded, "hi");
-  if (isSearchBarAdded) {
+function SearchBar({ isAdded, setIsAdded }: MapChildProps) {
+  if (isAdded) {
     return null;
   }
   const map = useMap();
@@ -39,7 +47,37 @@ function SearchBar({ isSearchBarAdded, setIsSearchBarAdded }: SearchBarProps) {
       },
     });
     map.addControl(searchControl);
-    setIsSearchBarAdded(true);
+    setIsAdded(true);
+  }, []);
+
+  return null;
+}
+
+function Watermark({ isAdded, setIsAdded }: MapChildProps) {
+  if (isAdded) {
+    return null;
+  }
+  const map = useMap();
+  L.Control.Watermark = L.Control.extend({
+    onAdd: function () {
+      var img = L.DomUtil.create("img");
+      img.src = "/mapbox-logo-black.png";
+      img.style.width = "100px";
+      return img;
+    },
+    onRemove: function () {
+      // Nothing to do here
+    },
+  });
+
+  L.control.watermark = function (opts) {
+    return new L.Control.Watermark(opts);
+  };
+
+  useEffect(() => {
+    const watermark = L.control.watermark({ position: "bottomleft" });
+    map.addControl(watermark);
+    setIsAdded(true);
   }, []);
 
   return null;
@@ -47,6 +85,7 @@ function SearchBar({ isSearchBarAdded, setIsSearchBarAdded }: SearchBarProps) {
 
 function Map() {
   const [isSearchBarAdded, setIsSearchBarAdded] = useState(false);
+  const [isWatermarkAdded, setIsWatermarkAdded] = useState(false);
   return (
     <div className="h-[600px] w-full p-10">
       <MapContainer
@@ -57,11 +96,15 @@ function Map() {
         zoomControl={false}
       >
         <SearchBar
-          isSearchBarAdded={isSearchBarAdded}
-          setIsSearchBarAdded={setIsSearchBarAdded}
+          isAdded={isSearchBarAdded}
+          setIsAdded={setIsSearchBarAdded}
+        />
+        <Watermark
+          isAdded={isWatermarkAdded}
+          setIsAdded={setIsWatermarkAdded}
         />
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          attribution={`&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> <strong><a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a></strong>`}
           url="https://api.mapbox.com/styles/v1/liketolivethere/clayk9uf300jl14o3vdt15ijl/tiles/512/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibGlrZXRvbGl2ZXRoZXJlIiwiYSI6ImNsYXlraGJ3NjBjNWQzc281Nm0wdjUwYzYifQ.Bf_rCJ63GmspoX170JUFYQ"
           zoomOffset={-1}
           tileSize={512}
@@ -71,7 +114,7 @@ function Map() {
             A pretty CSS3 popup. <br /> Easily customizable.
           </Popup>
         </Marker>
-        <ZoomControl position="bottomleft" />
+        <ZoomControl position="bottomright" />
       </MapContainer>
     </div>
   );
