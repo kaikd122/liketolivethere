@@ -12,5 +12,6 @@ module.exports = {
       display: ["Krona One", "sans-serif"],
     },
   },
+  important: true,
   plugins: [],
 };

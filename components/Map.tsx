@@ -11,9 +11,9 @@ import { Icon } from "leaflet";
 import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
 
 const icon = new Icon({
-  iconUrl: "/marker-icon.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
+  iconUrl: "/violet-pin.png",
+  iconSize: [25, 33],
+  iconAnchor: [12.5, 41],
 });
 
 export interface SearchBarProps {
@@ -32,13 +32,12 @@ function SearchBar({ isSearchBarAdded, setIsSearchBarAdded }: SearchBarProps) {
 
     const searchControl = GeoSearchControl({
       provider,
+      searchLabel: 'e.g. "London", "SE1", "Big Ben"',
       position: "topleft",
       marker: {
         icon,
       },
     });
-
-    console.log("ADDING");
     map.addControl(searchControl);
     setIsSearchBarAdded(true);
   }, []);
@@ -52,9 +51,9 @@ function Map() {
     <div className="h-[600px] w-full p-10">
       <MapContainer
         center={[51.505, -0.09]}
-        zoom={13}
+        zoom={16}
         scrollWheelZoom={false}
-        className="h-full w-full flex flex-row"
+        className="h-full w-full flex flex-row p-1"
         zoomControl={false}
       >
         <SearchBar
@@ -63,7 +62,9 @@ function Map() {
         />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://api.mapbox.com/styles/v1/liketolivethere/clayk9uf300jl14o3vdt15ijl/tiles/512/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGlrZXRvbGl2ZXRoZXJlIiwiYSI6ImNsYXlraGJ3NjBjNWQzc281Nm0wdjUwYzYifQ.Bf_rCJ63GmspoX170JUFYQ"
+          url="https://api.mapbox.com/styles/v1/liketolivethere/clayk9uf300jl14o3vdt15ijl/tiles/512/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibGlrZXRvbGl2ZXRoZXJlIiwiYSI6ImNsYXlraGJ3NjBjNWQzc281Nm0wdjUwYzYifQ.Bf_rCJ63GmspoX170JUFYQ"
+          zoomOffset={-1}
+          tileSize={512}
         />
         <Marker position={[51.505, -0.09]} icon={icon}>
           <Popup>
