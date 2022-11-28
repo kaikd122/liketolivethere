@@ -4,6 +4,7 @@ import { ContextProvider, useCtx } from "../context/Context";
 import { SessionProvider } from "next-auth/react";
 import "leaflet/dist/leaflet.css";
 import "leaflet-geosearch/dist/geosearch.css";
+import "mapbox-gl/dist/mapbox-gl.css";
 export default function App({
   Component,
   pageProps: { session, ...pageProps },

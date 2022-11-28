@@ -3,7 +3,10 @@ import Head from "next/head";
 import Layout from "../components/Layout";
 
 export default function Home() {
-  const Map = dynamic(() => import("../components/Map"), { ssr: false });
+  // const Map = dynamic(() => import("../components/Map"), { ssr: false });
+  const MapboxMap = dynamic(() => import("../components/MapboxMap"), {
+    ssr: false,
+  });
 
   return (
     <>
@@ -12,7 +15,8 @@ export default function Home() {
         <meta name="description" content="Placeholder" />
       </Head>
       <Layout>
-        <Map />
+        {/* <Map /> */}
+        <MapboxMap />
       </Layout>
     </>
   );
