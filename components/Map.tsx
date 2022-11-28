@@ -8,7 +8,11 @@ import {
   ZoomControl,
 } from "react-leaflet";
 import L, { Icon, Control } from "leaflet";
-import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
+import {
+  EsriProvider,
+  GeoSearchControl,
+  OpenStreetMapProvider,
+} from "leaflet-geosearch";
 
 declare module "leaflet" {
   interface Control {
@@ -24,34 +28,6 @@ const icon = new Icon({
   iconSize: [25, 33],
   iconAnchor: [12.5, 41],
 });
-
-export interface MapChildProps {
-  isAdded: boolean;
-  setIsAdded: Dispatch<SetStateAction<boolean>>;
-}
-
-function SearchBar({ isAdded, setIsAdded }: MapChildProps) {
-  if (isAdded) {
-    return null;
-  }
-  const map = useMap();
-  useEffect(() => {
-    const provider = new OpenStreetMapProvider();
-
-    const searchControl = GeoSearchControl({
-      provider,
-      searchLabel: 'e.g. "London", "SE1", "Big Ben"',
-      position: "topleft",
-      marker: {
-        icon,
-      },
-    });
-    map.addControl(searchControl);
-    setIsAdded(true);
-  }, []);
-
-  return null;
-}
 
 function Watermark({ isAdded, setIsAdded }: MapChildProps) {
   if (isAdded) {
@@ -77,6 +53,34 @@ function Watermark({ isAdded, setIsAdded }: MapChildProps) {
   useEffect(() => {
     const watermark = L.control.watermark({ position: "bottomleft" });
     map.addControl(watermark);
+    setIsAdded(true);
+  }, []);
+
+  return null;
+}
+
+export interface MapChildProps {
+  isAdded: boolean;
+  setIsAdded: Dispatch<SetStateAction<boolean>>;
+}
+
+function SearchBar({ isAdded, setIsAdded }: MapChildProps) {
+  if (isAdded) {
+    return null;
+  }
+  const map = useMap();
+  useEffect(() => {
+    const provider = new EsriProvider();
+
+    const searchControl = GeoSearchControl({
+      provider,
+      searchLabel: 'e.g. "London", "SE1", "Big Ben"',
+      position: "topleft",
+      marker: {
+        icon,
+      },
+    });
+    map.addControl(searchControl);
     setIsAdded(true);
   }, []);
 
@@ -109,11 +113,7 @@ function Map() {
           zoomOffset={-1}
           tileSize={512}
         />
-        <Marker position={[51.505, -0.09]} icon={icon}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
-        </Marker>
+        {/* <Marker position={[51.505, -0.09]} icon={icon}></Marker> */}
         <ZoomControl position="bottomright" />
       </MapContainer>
     </div>
