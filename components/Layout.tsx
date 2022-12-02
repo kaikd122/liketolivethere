@@ -62,7 +62,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className=" flex flex-col w-full">
       <Navbar />
-      <main className="flex flex-row p-10">{children}</main>
+      <main className="flex flex-col p-10">{children}</main>
       <button onClick={() => console.log("USER", ctx.user, "SESSION", session)}>
         CLICK
       </button>

@@ -1,61 +1,36 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-import Map, { useMap } from "react-map-gl";
+import Map, { Marker, useMap } from "react-map-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
-class Poop extends MapboxGeocoder {
-    constructor(){
-        super()
-        this.justSearched = false;
-        this.setJustSearched = ()=>void;
-        
-    }
-  justSearched: boolean;
-  setJustSearched: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
 function Geocoder() {
-  const [justSearched, setJustSearched] = useState(false);
   const { current: map } = useMap();
-  const [geocoder, setGeocoder] = useState<MapboxGeocoder | null>(null);
+  const [geo, setGeo] = useState<MapboxGeocoder | null>(null);
+
   useEffect(() => {
     if (!map) {
       return;
     }
+    if (geo) {
+      return;
+    }
+
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
       zoom: 16,
-      minLength: 0,
+      minLength: 4,
     });
 
-    geocoder._onKeyDown = (e: KeyboardEvent) => {
+    geocoder.on("result", (e) => {
       console.log(e);
-      if (e.key === "Enter") {
-        console.log(e.target.value);
-        geocoder._geocode(e.target.value);
-        geocoder._clear(e);
-        geocoder.eventManager.start(geocoder);
-        setJustSearched(true);
-      } else {
-        if (justSearched) {
-          console.log("Just searched");
+    });
 
-          geocoder.clear();
-          setJustSearched(false);
-        }
-      }
-    };
-
-    setGeocoder(geocoder);
     map.addControl(geocoder);
+    setGeo(geocoder);
   }, []);
-
-  useEffect(() => {
-    console.log("HII");
-  }, [geocoder]);
 
   return <div />;
 }
@@ -63,6 +38,7 @@ function Geocoder() {
 function MapboxMap() {
   return (
     <Map
+      onClick={(e) => console.log(e)}
       initialViewState={{
         longitude: -122.4,
         latitude: 37.8,
