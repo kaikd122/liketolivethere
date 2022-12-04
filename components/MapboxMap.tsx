@@ -53,8 +53,7 @@ function MapboxMap() {
   const [centerCoords, setCenterCoords] =
     useState<Coordinates>(kingsCrossCoords);
   return (
-    <>
-      <button onClick={() => console.log(centerCoords)}>hi</button>
+    <div className="flex flex-col items-center justify-center border border-stone-700">
       <Map
         onClick={(e) => console.log(e)}
         initialViewState={{
@@ -72,12 +71,16 @@ function MapboxMap() {
         >
           <img src="./mapbox-marker-icon-20px-blue.png" />
         </Marker>
+
         <Geocoder
           setCenterCoords={setCenterCoords}
           centerCoords={centerCoords}
         />
+        <button className="border border-stone-700 p-2 hover:bg-violet-100 absolute bottom-8 right-4 bg-stone-50 font-sans text-sm font-stone-700">
+          + Create review
+        </button>
       </Map>
-    </>
+    </div>
   );
 }
 
