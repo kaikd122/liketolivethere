@@ -4,6 +4,7 @@ import Map, { Marker, useMap } from "react-map-gl";
 import MapboxGeocoder, { Result, Results } from "@mapbox/mapbox-gl-geocoder";
 import { Coordinates, kingsCrossCoords } from "../types/types";
 import { coordsArrayToObject } from "../lib/util/map-utils";
+import { useCtx } from "../context/Context";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -39,7 +40,7 @@ function Geocoder(props: GeocoderProps) {
     geocoder.on("result", (e) => {
       const result: Result = e.result;
       props.setCenterCoords(coordsArrayToObject(result.geometry.coordinates));
-      console.log(result.geometry);
+      console.log(result);
     });
 
     map.addControl(geocoder);
@@ -50,8 +51,13 @@ function Geocoder(props: GeocoderProps) {
 }
 
 function MapboxMap() {
+  const ctx = useCtx();
   const [centerCoords, setCenterCoords] =
     useState<Coordinates>(kingsCrossCoords);
+
+  useEffect(() => {
+    ctx.setCurrentPoint({ ...ctx.currentPoint, coordinates: centerCoords });
+  }, [JSON.stringify(centerCoords)]);
   return (
     <div className="flex flex-col items-center justify-center border border-stone-700">
       <Map
@@ -68,6 +74,14 @@ function MapboxMap() {
           longitude={centerCoords.lng}
           latitude={centerCoords.lat}
           anchor="bottom"
+          draggable={true}
+          onDragEnd={(e) => {
+            const lngLat = e.lngLat;
+            setCenterCoords({
+              lng: lngLat.lng,
+              lat: lngLat.lat,
+            });
+          }}
         >
           <img src="./mapbox-marker-icon-20px-blue.png" />
         </Marker>

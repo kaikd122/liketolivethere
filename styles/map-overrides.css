@@ -22,6 +22,10 @@
 
  
     }
+    .mapboxgl-marker {
+        @apply hover:cursor-pointer
+
+    }
 #map {
     margin-top: 75px;
     }
