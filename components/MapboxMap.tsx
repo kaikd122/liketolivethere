@@ -5,6 +5,7 @@ import MapboxGeocoder, { Result, Results } from "@mapbox/mapbox-gl-geocoder";
 import { Coordinates, kingsCrossCoords } from "../types/types";
 import { coordsArrayToObject } from "../lib/util/map-utils";
 import { useCtx } from "../context/Context";
+import { isMap } from "util/types";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -58,8 +59,13 @@ function MapboxMap() {
   useEffect(() => {
     ctx.setCurrentPoint({ ...ctx.currentPoint, coordinates: centerCoords });
   }, [JSON.stringify(centerCoords)]);
+
   return (
-    <div className="flex flex-col items-center justify-center border border-stone-700">
+    <div
+      className={`flex flex-col items-center justify-center  ${
+        ctx.currentTab === "MAP" ? "h-500 border border-stone-700" : "h-0"
+      }`}
+    >
       <Map
         onClick={(e) => console.log(e)}
         initialViewState={{
@@ -67,7 +73,7 @@ function MapboxMap() {
           latitude: centerCoords.lat,
           zoom: 14,
         }}
-        style={{ width: "100%", height: "500px" }}
+        style={{ width: "100%", height: "500px", overflow: "hidden" }}
         mapStyle="mapbox://styles/mapbox/streets-v12"
       >
         <Marker

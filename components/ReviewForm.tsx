@@ -23,10 +23,15 @@ function ReviewForm() {
       className="flex flex-col gap-4 items-center justify-center border border-stone-700 p-8"
       autoComplete="off"
     >
-      <label htmlFor="body">
-        Review for{" "}
-        {`${ctx.currentPoint.coordinates.lat},${ctx.currentPoint.coordinates.lng}`}
-      </label>
+      {ctx.currentPoint.coordinates?.lat &&
+        ctx.currentPoint.coordinates?.lng && (
+          <label htmlFor="body">
+            Review for{" "}
+            {`${ctx.currentPoint.coordinates.lat.toFixed(
+              4
+            )},${ctx.currentPoint.coordinates.lng.toFixed(4)}`}
+          </label>
+        )}
       <textarea
         {...register("body", { required: true })}
         placeholder="Write review here"

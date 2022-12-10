@@ -10,6 +10,8 @@ export interface ContextProps {
   setUser: (user: User) => void;
   currentPoint: Point;
   setCurrentPoint: (point: Point) => void;
+  currentTab: "MAP" | "BROWSE";
+  setCurrentTab: (currentTab: "MAP" | "BROWSE") => void;
 }
 
 export const Context = React.createContext<ContextProps>({
@@ -19,6 +21,8 @@ export const Context = React.createContext<ContextProps>({
   setUser: () => {},
   currentPoint: {} as Point,
   setCurrentPoint: () => {},
+  currentTab: "MAP",
+  setCurrentTab: () => {},
 });
 
 export interface ContextProviderProps {
@@ -29,6 +33,7 @@ export const ContextProvider = ({ children }: ContextProviderProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User>({} as User);
   const [currentPoint, setCurrentPoint] = useState<Point>({} as Point);
+  const [currentTab, setCurrentTab] = useState<"MAP" | "BROWSE">("MAP");
   return (
     <Context.Provider
       value={{
@@ -38,6 +43,8 @@ export const ContextProvider = ({ children }: ContextProviderProps) => {
         setUser: setUser,
         currentPoint: currentPoint,
         setCurrentPoint: setCurrentPoint,
+        currentTab: currentTab,
+        setCurrentTab: setCurrentTab,
       }}
     >
       {children}
