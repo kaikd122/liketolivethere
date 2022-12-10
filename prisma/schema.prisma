@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,11 +11,13 @@ datasource db {
 model Review {
   id        String   @id @default(cuid())
   title     String
-  body      String   @db.Text
-  user      User     @relation(fields: [userId], references: id)
-  userId    String   @map(name: "user_id")
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  body      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+  latitude  Decimal
+  longitude Decimal
 }
 
 model Account {
@@ -27,15 +26,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -55,8 +53,8 @@ model User {
   emailVerified DateTime?
   image         String?
   accounts      Account[]
-  sessions      Session[]
   reviews       Review[]
+  sessions      Session[]
 }
 
 model VerificationToken {
@@ -65,4 +63,22 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model uk_towns {
+  id                    Int                      @id
+  name                  String?                  @db.VarChar(45)
+  county                String?                  @db.VarChar(32)
+  country               String?                  @db.VarChar(16)
+  grid_reference        String?                  @db.VarChar(8)
+  easting               Int?
+  northing              Int?
+  latitude              Decimal?                 @db.Decimal(8, 5)
+  longitude             Decimal?                 @db.Decimal(8, 5)
+  elevation             Int?
+  postcode_sector       String?                  @db.VarChar(6)
+  local_government_area String?                  @db.VarChar(44)
+  nuts_region           String?                  @db.VarChar(24)
+  type                  String?                  @db.VarChar(13)
+  geom                  Unsupported("geometry")?
 }
