@@ -16,6 +16,8 @@ model Review {
   updatedAt DateTime @updatedAt @map("updated_at")
   userId    String   @map("user_id")
   user      User     @relation(fields: [userId], references: [id])
+  townId    Int      @map("town_id")
+  //town      towns    @relation(fields: [townId], references: [id])
   latitude  Decimal
   longitude Decimal
 }
@@ -65,8 +67,8 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model uk_towns {
-  id                    Int                      @id
+model towns {
+  id                    Int                      @id(map: "uk_towns_pkey")
   name                  String?                  @db.VarChar(45)
   county                String?                  @db.VarChar(32)
   country               String?                  @db.VarChar(16)
@@ -81,4 +83,5 @@ model uk_towns {
   nuts_region           String?                  @db.VarChar(24)
   type                  String?                  @db.VarChar(13)
   geom                  Unsupported("geometry")?
+  //reviews               Review[]
 }

@@ -16,7 +16,17 @@ function ReviewForm() {
     formState: { errors },
     control,
   } = useForm();
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: any) => {
+    createReviewCommand({
+      data: {
+        body: data.body,
+        latitude: ctx.currentPoint.coordinates.lat,
+        longitude: ctx.currentPoint.coordinates.lng,
+        title: "EXAMPLE TITLE",
+        userId: ctx.user.id,
+      },
+    });
+  };
 
   return (
     <div>
