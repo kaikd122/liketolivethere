@@ -9,17 +9,18 @@ datasource db {
 }
 
 model Review {
-  id        String   @id @default(cuid())
+  id        String                   @id @default(cuid())
   title     String
   body      String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  userId    String   @map("user_id")
-  user      User     @relation(fields: [userId], references: [id])
-  townId    Int      @map("town_id")
-  //town      towns    @relation(fields: [townId], references: [id])
+  createdAt DateTime                 @default(now()) @map("created_at")
+  updatedAt DateTime                 @updatedAt @map("updated_at")
+  userId    String                   @map("user_id")
+  user      User                     @relation(fields: [userId], references: [id])
+  townId    Int?                     @map("town_id")
+  //town      towns                   @relation(fields: [townId], references: [id])
   latitude  Decimal
   longitude Decimal
+  geom      Unsupported("geometry")? @default(dbgenerated("ST_SetSRID(ST_MakePoint(0, 0), 4326)"))
 }
 
 model Account {
