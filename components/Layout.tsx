@@ -63,9 +63,6 @@ export default function Layout({ children }: LayoutProps) {
     <div className=" flex flex-col w-full ">
       <Navbar />
       <main className="flex flex-col p-10 gap-8">{children}</main>
-      <button onClick={() => console.log("USER", ctx.user, "SESSION", session)}>
-        CLICK
-      </button>
     </div>
   );
 }

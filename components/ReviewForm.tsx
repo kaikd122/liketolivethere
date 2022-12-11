@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useCtx } from "../context/Context";
 import { createReviewCommand } from "../lib/actions/review";
 
 type FormData = {
   body: string;
-  rating: number;
+  rating: string;
+  title: string;
 };
 
 function ReviewForm() {
@@ -15,44 +16,92 @@ function ReviewForm() {
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm();
-  const onSubmit = (data: any) => {
+  } = useForm<FormData>();
+  const onSubmit = (data: FormData) => {
+    let isInvalid = false;
+    const errors: string[] = [];
+    console.log("hi");
+    if (!data.body) {
+      errors.push("review");
+
+      isInvalid = true;
+    }
+
+    if (!data.title) {
+      errors.push("title");
+      isInvalid = true;
+    }
+
+    if (!data.rating) {
+      errors.push("rating");
+      isInvalid = true;
+    }
+
+    if (isInvalid) {
+      setFormErrors(errors);
+      return;
+    }
+
+    setFormErrors([]);
+
     console.log(data);
     createReviewCommand({
       data: {
         body: data.body,
         latitude: ctx.currentPoint.coordinates.lat,
         longitude: ctx.currentPoint.coordinates.lng,
-        title: "EXAMPLE TITLE",
+        title: data.title,
         userId: ctx.user.id,
         rating: parseInt(data.rating),
       },
     });
   };
 
+  const [formErrors, setFormErrors] = useState<string[]>([]);
+
   return (
     <div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-4 items-center justify-center border border-stone-700 p-8"
+        className="relative flex flex-col gap-4 items-center justify-center border border-stone-700 p-8"
         autoComplete="off"
       >
         {ctx.currentPoint.coordinates?.lat &&
           ctx.currentPoint.coordinates?.lng && (
-            <label htmlFor="body">
-              Review for{" "}
-              {`${ctx.currentPoint.coordinates.lat.toFixed(
+            <div className="absolute left-4 top-4 text-sm">
+              {`Lat lng: ${ctx.currentPoint.coordinates.lat.toFixed(
                 4
-              )},${ctx.currentPoint.coordinates.lng.toFixed(4)}`}
-            </label>
+              )}, ${ctx.currentPoint.coordinates.lng.toFixed(4)}`}
+              <br />
+              <p className="italic text-xs pt-1">
+                Drag map pin to adjust review coordinates
+              </p>
+            </div>
           )}
-        <textarea
-          {...register("body", { required: true })}
-          placeholder="Write review here"
+
+        <button className="absolute top-4 right-4 border border-stone-700 p-2 hover:bg-violet-100">
+          Cancel
+        </button>
+
+        <label htmlFor="title" className="mt-6">
+          Title
+        </label>
+        <input
+          {...register("title")}
+          placeholder="Title"
           className="border border-stone-700 w-3/4 outline-none p-2"
+          id="title"
         />
 
-        <label htmlFor="rating-reviews">Overall experience</label>
+        <label htmlFor="body">Review</label>
+        <textarea
+          {...register("body")}
+          placeholder="Write review here"
+          className="border border-stone-700 w-3/4 outline-none p-2"
+          id="body"
+        />
+
+        <label htmlFor="rating-radios">Overall experience</label>
         <div
           className="flex flex-row gap-4 text-sm text-center"
           id="rating-radios"
@@ -62,9 +111,10 @@ function ReviewForm() {
               type="radio"
               {...register("rating")}
               value={"3"}
-              className=" appearance-none h-5 w-5 border border-stone-700 checked:bg-lime-300 hover:cursor-pointer hover:bg-lime-300"
+              id="rating-positive"
+              className=" appearance-none h-5 w-5 border border-stone-700 checked:bg-emerald-400 hover:cursor-pointer hover:bg-emerald-400"
             />
-            <label htmlFor="POSITIVE">Positive</label>
+            <label htmlFor="rating-positive">Positive</label>
           </div>
 
           <div className="flex flex-col gap-4 justify-center items-center hover:cursor-pointer">
@@ -72,34 +122,33 @@ function ReviewForm() {
               type="radio"
               {...register("rating")}
               value={"2"}
+              id="rating-neutral"
               className=" appearance-none h-5 w-5 border border-stone-700 checked:bg-blue-400 hover:cursor-pointer hover:bg-blue-400"
             />
-            <label htmlFor="NEUTRAL">Neutral</label>
+            <label htmlFor="rating-neutral">Neutral</label>
           </div>
           <div className="flex flex-col gap-4 justify-center items-center">
             <input
               type="radio"
               {...register("rating")}
               value={"1"}
-              className=" appearance-none h-5 w-5 border border-stone-700  checked:bg-rose-300 hover:cursor-pointer hover:bg-rose-300"
+              id="rating-negative"
+              className=" appearance-none h-5 w-5 border border-stone-700  checked:bg-rose-400 hover:cursor-pointer hover:bg-rose-400"
             />
-            <label htmlFor="NEGATIVE">Negative</label>
+            <label htmlFor="rating-negative">Negative</label>
           </div>
         </div>
-        <div className="flex flex-row gap-4">
-          <button
-            className="border border-stone-700 p-2 hover:bg-violet-100"
-            type="submit"
-          >
-            Submit
-          </button>
-          <button
-            className="border border-stone-700 p-2 hover:bg-violet-100"
-            type="button"
-          >
-            Cancel
-          </button>
-        </div>
+        <button
+          className="border border-stone-700 p-2 hover:bg-violet-100"
+          type="submit"
+        >
+          Submit
+        </button>
+        {formErrors.length > 0 && (
+          <div className="text-red-700 text-sm">
+            {`Missing field(s): ${formErrors.join(", ")}.`}
+          </div>
+        )}
       </form>
     </div>
   );

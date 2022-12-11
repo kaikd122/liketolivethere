@@ -89,7 +89,7 @@ function MapboxMap() {
             });
           }}
         >
-          <img src="./mapbox-marker-icon-20px-blue.png" />
+          <img src="./mapbox-marker-icon-20px-purple.png" />
         </Marker>
 
         <Geocoder

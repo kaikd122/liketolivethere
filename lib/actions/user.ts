@@ -1,6 +1,3 @@
-import { User } from "@prisma/client";
-import prisma from "../prisma";
-
 export interface updateUserArgs {
   userId: string;
   data: {
