@@ -15,12 +15,13 @@ model Review {
   createdAt DateTime                 @default(now()) @map("created_at")
   updatedAt DateTime                 @updatedAt @map("updated_at")
   userId    String                   @map("user_id")
-  user      User                     @relation(fields: [userId], references: [id])
-  townId    Int?                     @map("town_id")
-  //town      towns                   @relation(fields: [townId], references: [id])
   latitude  Decimal
   longitude Decimal
-  geom      Unsupported("geometry")? @default(dbgenerated("ST_SetSRID(ST_MakePoint(0, 0), 4326)"))
+  townId    Int?                     @map("town_id")
+  geom      Unsupported("geometry")? @default(dbgenerated("st_setsrid(st_makepoint((0)::double precision, (0)::double precision), 4326)"))
+  town      towns?                   @relation(fields: [townId], references: [id])
+  user      User                     @relation(fields: [userId], references: [id])
+  rating    Int?                     @default(0)
 }
 
 model Account {
@@ -84,5 +85,5 @@ model towns {
   nuts_region           String?                  @db.VarChar(24)
   type                  String?                  @db.VarChar(13)
   geom                  Unsupported("geometry")?
-  //reviews               Review[]
+  reviews               Review[]
 }

@@ -5,7 +5,7 @@ import { createReviewCommand } from "../lib/actions/review";
 
 type FormData = {
   body: string;
-  rating: "positive" | "negative" | "neutral";
+  rating: number;
 };
 
 function ReviewForm() {
@@ -17,6 +17,7 @@ function ReviewForm() {
     control,
   } = useForm();
   const onSubmit = (data: any) => {
+    console.log(data);
     createReviewCommand({
       data: {
         body: data.body,
@@ -24,27 +25,13 @@ function ReviewForm() {
         longitude: ctx.currentPoint.coordinates.lng,
         title: "EXAMPLE TITLE",
         userId: ctx.user.id,
+        rating: parseInt(data.rating),
       },
     });
   };
 
   return (
     <div>
-      <button
-        onClick={() =>
-          createReviewCommand({
-            data: {
-              body: "hi",
-              latitude: ctx.currentPoint.coordinates.lat,
-              longitude: ctx.currentPoint.coordinates.lng,
-              title: "hi",
-              userId: ctx.user.id,
-            },
-          })
-        }
-      >
-        Query
-      </button>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-4 items-center justify-center border border-stone-700 p-8"
@@ -74,29 +61,29 @@ function ReviewForm() {
             <input
               type="radio"
               {...register("rating")}
-              value="positive"
+              value={"3"}
               className=" appearance-none h-5 w-5 border border-stone-700 checked:bg-lime-300 hover:cursor-pointer hover:bg-lime-300"
             />
-            <label htmlFor="positive">Positive</label>
+            <label htmlFor="POSITIVE">Positive</label>
           </div>
 
           <div className="flex flex-col gap-4 justify-center items-center hover:cursor-pointer">
             <input
               type="radio"
               {...register("rating")}
-              value="neutral"
+              value={"2"}
               className=" appearance-none h-5 w-5 border border-stone-700 checked:bg-blue-400 hover:cursor-pointer hover:bg-blue-400"
             />
-            <label htmlFor="neutral">Neutral</label>
+            <label htmlFor="NEUTRAL">Neutral</label>
           </div>
           <div className="flex flex-col gap-4 justify-center items-center">
             <input
               type="radio"
               {...register("rating")}
-              value="negative"
+              value={"1"}
               className=" appearance-none h-5 w-5 border border-stone-700  checked:bg-rose-300 hover:cursor-pointer hover:bg-rose-300"
             />
-            <label htmlFor="negative">Negative</label>
+            <label htmlFor="NEGATIVE">Negative</label>
           </div>
         </div>
         <div className="flex flex-row gap-4">

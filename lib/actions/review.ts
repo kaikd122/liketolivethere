@@ -7,6 +7,7 @@ export interface createReviewArgs {
     userId: string;
     latitude: number;
     longitude: number;
+    rating: number;
   };
 }
 

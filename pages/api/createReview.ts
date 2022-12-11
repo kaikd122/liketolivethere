@@ -12,14 +12,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const nearestTown: Array<{ id: number; name: string; geom: string }> =
       await prisma.$queryRaw`SELECT id, name, geom::text FROM towns ORDER BY geom <-> st_setsrid(st_makepoint(${data.longitude},${data.latitude}),4326) LIMIT 1`;
 
+    console.log("RATING", data.rating);
     const result =
-      await prisma.$executeRaw`INSERT INTO "Review" (id, body, title, user_id, town_id, latitude, longitude, geom, updated_at) VALUES (${cuid()}, ${
+      await prisma.$executeRaw`INSERT INTO "Review" (id, body, title, user_id, town_id, latitude, longitude, geom, updated_at, rating) VALUES (${cuid()}, ${
         data.body
       }, ${data.title}, ${data.userId}, ${nearestTown[0].id}, ${
         data.latitude
       }, ${data.longitude}, st_setsrid(st_makepoint(${data.longitude},${
         data.latitude
-      }),4326), current_timestamp);`;
+      }),4326), current_timestamp, ${data.rating});`;
+
+    // const result = await prisma.review.create({
+    //   data: {
+    //     ...data,
+    //     townId: nearestTown[0].id,
+    //   },
+    // });
     res.status(200).json(result);
   } catch (err) {
     console.log(err);
