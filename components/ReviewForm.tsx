@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useCtx } from "../context/Context";
 import { createReviewCommand } from "../lib/actions/review";
+import uzeStore from "../lib/store/store";
 
 type FormData = {
   body: string;
@@ -10,7 +10,11 @@ type FormData = {
 };
 
 function ReviewForm() {
-  const ctx = useCtx();
+  const coordinates = uzeStore((state) => state.coordinates);
+  const user = uzeStore((state) => state.user);
+  const [formErrors, setFormErrors] = useState<string[]>([]);
+  const { setIsCreatingReview } = uzeStore((state) => state.actions);
+  const isCreatingReview = uzeStore((state) => state.isCreatingReview);
   const {
     register,
     handleSubmit,
@@ -48,38 +52,39 @@ function ReviewForm() {
     createReviewCommand({
       data: {
         body: data.body,
-        latitude: ctx.currentPoint.coordinates.lat,
-        longitude: ctx.currentPoint.coordinates.lng,
+        latitude: coordinates.lat,
+        longitude: coordinates.lng,
         title: data.title,
-        userId: ctx.user.id,
+        userId: user.id,
         rating: parseInt(data.rating),
       },
     });
   };
 
-  const [formErrors, setFormErrors] = useState<string[]>([]);
-
   return (
-    <div>
+    <div className={`${isCreatingReview ? "" : "hidden"}`}>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="relative flex flex-col gap-4 items-center justify-center border border-stone-700 p-8"
         autoComplete="off"
       >
-        {ctx.currentPoint.coordinates?.lat &&
-          ctx.currentPoint.coordinates?.lng && (
-            <div className="absolute left-4 top-4 text-sm">
-              {`Lat lng: ${ctx.currentPoint.coordinates.lat.toFixed(
-                4
-              )}, ${ctx.currentPoint.coordinates.lng.toFixed(4)}`}
-              <br />
-              <p className="italic text-xs pt-1">
-                Drag map pin to adjust review coordinates
-              </p>
-            </div>
-          )}
+        {coordinates?.lat && coordinates?.lng && (
+          <div className="absolute left-4 top-4 text-sm">
+            {`Lat lng: ${coordinates.lat.toFixed(4)}, ${coordinates.lng.toFixed(
+              4
+            )}`}
+            <br />
+            <p className="italic text-xs pt-1">
+              Drag map pin to adjust review coordinates
+            </p>
+          </div>
+        )}
 
-        <button className="absolute top-4 right-4 border border-stone-700 p-2 hover:bg-violet-100">
+        <button
+          type="button"
+          onClick={() => setIsCreatingReview(false)}
+          className="absolute top-4 right-4 border border-stone-700 p-2 hover:bg-violet-100"
+        >
           Cancel
         </button>
 

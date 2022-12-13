@@ -2,16 +2,16 @@ import { User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import Layout from "../../components/Layout";
-import { useCtx } from "../../context/Context";
 import {
   updateUserCommand,
   updateUserArgs,
   getUserRequest,
 } from "../../lib/actions/user";
+import uzeStore from "../../lib/store/store";
 function ProfileId() {
-  const ctx = useCtx();
-
   const { data: session } = useSession();
+  const { setUser } = uzeStore((state) => state.actions);
+  const user = uzeStore((state) => state.user);
 
   const [value, setValue] = useState("");
 
@@ -34,7 +34,7 @@ function ProfileId() {
     };
     const updateRes = await updateUserCommand(args);
     if (updateRes.ok) {
-      ctx.setUser({ ...ctx.user, name: value });
+      setUser({ ...user, name: value });
     } else {
       console.log("NOT OK");
     }

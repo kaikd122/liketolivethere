@@ -1,16 +1,12 @@
-import React from 'react'
-import Layout from '../../components/Layout'
+import React from "react";
+import Layout from "../../components/Layout";
 
-export interface ProfileProps{
-    children: React.ReactNode
+export interface ProfileProps {
+  children: React.ReactNode;
 }
 
-function Profile({children}: ProfileProps) {
-  return (
-    <Layout>
-        {children}
-        </Layout>
-  )
+function Profile({ children }: ProfileProps) {
+  return <Layout>{children}</Layout>;
 }
 
-export default Profile
+export default Profile;

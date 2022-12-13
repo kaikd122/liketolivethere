@@ -1,20 +1,21 @@
 import { signIn, useSession, signOut } from "next-auth/react";
 import React from "react";
-import { useCtx } from "../context/Context";
+import uzeStore from "../lib/store/store";
 
 function AuthButton() {
+  const isLoading = uzeStore((state) => state.isLoading);
+  const { setIsLoading } = uzeStore((state) => state.actions);
   const { data: session } = useSession();
 
   function handleLogin() {
-    ctx.setIsLoading(!ctx.isLoading);
+    setIsLoading(!isLoading);
     signIn(undefined, { callbackUrl: "/" });
   }
   function handleLogout() {
-    ctx.setIsLoading(!ctx.isLoading);
+    setIsLoading(!isLoading);
     signOut();
   }
 
-  const ctx = useCtx();
   return (
     <>
       {session ? (

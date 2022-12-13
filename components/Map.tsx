@@ -1,21 +1,22 @@
-import React, { MutableRefObject, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import Map, { Marker, useMap } from "react-map-gl";
-import MapboxGeocoder, { Result, Results } from "@mapbox/mapbox-gl-geocoder";
-import { Coordinates, kingsCrossCoords } from "../types/types";
+import MapboxGeocoder, { Result } from "@mapbox/mapbox-gl-geocoder";
+import { Coordinates } from "../types/types";
 import { coordsArrayToObject } from "../lib/util/map-utils";
-import { useCtx } from "../context/Context";
-import { isMap } from "util/types";
+import uzeStore from "../lib/store/store";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
 export interface GeocoderProps {
-  setCenterCoords: React.Dispatch<React.SetStateAction<Coordinates>>;
-  centerCoords: Coordinates;
+  setCoordinates: (coordinates: Coordinates) => void;
+  coordinates: Coordinates;
 }
 
 function Geocoder(props: GeocoderProps) {
   const { current: map } = useMap();
+  const d = map?.getBounds();
+  console.log(d);
   const [geo, setGeo] = useState<MapboxGeocoder | null>(null);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ function Geocoder(props: GeocoderProps) {
 
     geocoder.on("result", (e) => {
       const result: Result = e.result;
-      props.setCenterCoords(coordsArrayToObject(result.geometry.coordinates));
+      props.setCoordinates(coordsArrayToObject(result.geometry.coordinates));
       console.log(result);
     });
 
@@ -51,39 +52,42 @@ function Geocoder(props: GeocoderProps) {
   return <div />;
 }
 
-function MapboxMap() {
-  const ctx = useCtx();
-  const [centerCoords, setCenterCoords] =
-    useState<Coordinates>(kingsCrossCoords);
+function MapContainer() {
+  const coordinates = uzeStore((state) => state.coordinates);
+  const { setCoordinates, setIsCreatingReview } = uzeStore(
+    (state) => state.actions
+  );
+  const currentTab = uzeStore((state) => state.currentTab);
+  const isCreatingReview = uzeStore((state) => state.isCreatingReview);
 
   useEffect(() => {
-    ctx.setCurrentPoint({ ...ctx.currentPoint, coordinates: centerCoords });
-  }, [JSON.stringify(centerCoords)]);
+    console.log("coordinates", coordinates);
+  }, [JSON.stringify(coordinates)]);
 
   return (
     <div
-      className={`flex flex-col items-center justify-center  ${
-        ctx.currentTab === "MAP" ? "h-500 border border-stone-700" : "h-0"
+      className={`flex flex-col items-center justify-center h-500 border border-stone-700  ${
+        currentTab === "MAP" ? "" : "hidden"
       }`}
     >
       <Map
         onClick={(e) => console.log(e)}
         initialViewState={{
-          longitude: centerCoords.lng,
-          latitude: centerCoords.lat,
+          longitude: coordinates.lng,
+          latitude: coordinates.lat,
           zoom: 14,
         }}
         style={{ width: "100%", height: "500px", overflow: "hidden" }}
         mapStyle="mapbox://styles/mapbox/streets-v12"
       >
         <Marker
-          longitude={centerCoords.lng}
-          latitude={centerCoords.lat}
+          longitude={coordinates.lng}
+          latitude={coordinates.lat}
           anchor="bottom"
           draggable={true}
           onDragEnd={(e) => {
             const lngLat = e.lngLat;
-            setCenterCoords({
+            setCoordinates({
               lng: lngLat.lng,
               lat: lngLat.lat,
             });
@@ -92,16 +96,18 @@ function MapboxMap() {
           <img src="./mapbox-marker-icon-20px-purple.png" />
         </Marker>
 
-        <Geocoder
-          setCenterCoords={setCenterCoords}
-          centerCoords={centerCoords}
-        />
-        <button className="border border-stone-700 p-2 hover:bg-violet-100 absolute bottom-8 right-4 bg-stone-50 font-sans text-sm font-stone-700">
-          + Create review
-        </button>
+        <Geocoder setCoordinates={setCoordinates} coordinates={coordinates} />
+        {!isCreatingReview && (
+          <button
+            onClick={() => setIsCreatingReview(true)}
+            className="border border-stone-700 p-2 hover:bg-violet-100 absolute bottom-8 right-4 bg-stone-50 font-sans text-sm font-stone-700"
+          >
+            + Create review
+          </button>
+        )}
       </Map>
     </div>
   );
 }
 
-export default MapboxMap;
+export default MapContainer;

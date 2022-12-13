@@ -1,40 +1,33 @@
 import { ReactNode, useEffect } from "react";
 import Navbar from "./Navbar";
-import { useCtx } from "../context/Context";
 import { useSession } from "next-auth/react";
-import { User } from "@prisma/client";
 import generateUsername from "../lib/util/generate-username";
-import {
-  getUserRequest,
-  updateUserArgs,
-  updateUserCommand,
-} from "../lib/actions/user";
+import { updateUserArgs, updateUserCommand } from "../lib/actions/user";
+import uzeStore from "../lib/store/store";
 
 export interface LayoutProps {
   children: ReactNode;
 }
 export default function Layout({ children }: LayoutProps) {
-  const ctx = useCtx();
+  const user = uzeStore((state) => state.user);
+  const { setUser } = uzeStore((state) => state.actions);
   const { data: session } = useSession();
   useEffect(() => {
-    console.log("SESH", session, "USER", ctx.user);
     console.log(18);
-    if (!session || ctx.user?.name) {
+    if (!session || user?.name) {
       return;
     }
     if (session.user?.name) {
-      console.log(26);
-      const user: User = {
-        ...ctx.user,
+      setUser({
+        ...user,
         email: session?.user?.email,
         id: session?.user?.id,
         name: session?.user?.name,
-      };
-      ctx.setUser(user);
+      });
       return;
     }
 
-    if (!ctx.user?.name) {
+    if (!user?.name) {
       console.log(38);
       const newName = generateUsername();
       const args: updateUserArgs = {
@@ -47,15 +40,13 @@ export default function Layout({ children }: LayoutProps) {
         return data;
       };
       const data = updateUser();
-      console.log(data);
-      const user: User = {
+      setUser({
         email: session?.user?.email,
         emailVerified: null,
         id: session?.user?.id,
         image: null,
         name: newName,
-      };
-      ctx.setUser(user);
+      });
       return;
     }
   }, [session?.user?.name]);

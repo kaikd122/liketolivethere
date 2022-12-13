@@ -2,9 +2,10 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 import Layout from "../components/Layout";
 import ReviewForm from "../components/ReviewForm";
+import uzeStore from "../lib/store/store";
 
 export default function Home() {
-  const MapboxMap = dynamic(() => import("../components/MapboxMap"), {
+  const MapContainer = dynamic(() => import("../components/Map"), {
     ssr: false,
   });
 
@@ -15,7 +16,7 @@ export default function Home() {
         <meta name="description" content="Placeholder" />
       </Head>
       <Layout>
-        <MapboxMap />
+        <MapContainer />
 
         <ReviewForm />
       </Layout>
