@@ -1,6 +1,7 @@
 import { signIn, useSession, signOut } from "next-auth/react";
 import React from "react";
 import uzeStore from "../lib/store/store";
+import Button from "./ui/Button";
 
 function AuthButton() {
   const isLoading = uzeStore((state) => state.isLoading);
@@ -19,19 +20,13 @@ function AuthButton() {
   return (
     <>
       {session ? (
-        <button
-          className="border border-stone-700 p-2 hover:bg-violet-100"
-          onClick={handleLogout}
-        >
+        <Button outlineColor="light" onClick={handleLogout}>
           Log out
-        </button>
+        </Button>
       ) : (
-        <button
-          className="border border-stone-700 p-2 hover:bg-violet-100"
-          onClick={handleLogin}
-        >
+        <Button outlineColor="light" onClick={handleLogin}>
           Log in
-        </button>
+        </Button>
       )}
     </>
   );

@@ -5,6 +5,7 @@ import MapboxGeocoder, { Result } from "@mapbox/mapbox-gl-geocoder";
 import { Coordinates } from "../types/types";
 import { coordsArrayToObject } from "../lib/util/map-utils";
 import uzeStore from "../lib/store/store";
+import Button from "./ui/Button";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -15,8 +16,6 @@ export interface GeocoderProps {
 
 function Geocoder(props: GeocoderProps) {
   const { current: map } = useMap();
-  const d = map?.getBounds();
-  console.log(d);
   const [geo, setGeo] = useState<MapboxGeocoder | null>(null);
 
   useEffect(() => {
@@ -31,7 +30,7 @@ function Geocoder(props: GeocoderProps) {
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
       zoom: 16,
-      minLength: 4,
+      minLength: 3,
       marker: false,
       flyTo: {
         speed: 2,
@@ -66,7 +65,7 @@ function MapContainer() {
 
   return (
     <div
-      className={`flex flex-col items-center justify-center h-500 border border-stone-700  ${
+      className={`flex flex-col items-center justify-center h-500 border border-stone-300 rounded shadow ${
         currentTab === "MAP" ? "" : "hidden"
       }`}
     >
@@ -77,7 +76,12 @@ function MapContainer() {
           latitude: coordinates.lat,
           zoom: 14,
         }}
-        style={{ width: "100%", height: "500px", overflow: "hidden" }}
+        style={{
+          width: "100%",
+          height: "500px",
+          overflow: "hidden",
+          borderRadius: "0.5rem",
+        }}
         mapStyle="mapbox://styles/mapbox/streets-v12"
       >
         <Marker
@@ -98,12 +102,14 @@ function MapContainer() {
 
         <Geocoder setCoordinates={setCoordinates} coordinates={coordinates} />
         {!isCreatingReview && (
-          <button
+          <Button
             onClick={() => setIsCreatingReview(true)}
-            className="border border-stone-700 p-2 hover:bg-violet-100 absolute bottom-8 right-4 bg-stone-50 font-sans text-sm font-stone-700"
+            bgColor="light"
+            outlineColor="stone"
+            className=" absolute bottom-8 right-4 font-sans text-sm !border"
           >
             + Create review
-          </button>
+          </Button>
         )}
       </Map>
     </div>

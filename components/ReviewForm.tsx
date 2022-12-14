@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { createReviewCommand } from "../lib/actions/review";
 import uzeStore from "../lib/store/store";
+import Button from "./ui/Button";
 
 type FormData = {
   body: string;
@@ -65,7 +66,7 @@ function ReviewForm() {
     <div className={`${isCreatingReview ? "" : "hidden"}`}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="relative flex flex-col gap-4 items-center justify-center border border-stone-700 p-8"
+        className="relative flex flex-col gap-4 items-center justify-center p-8 border border-stone-300 rounded shadow"
         autoComplete="off"
       >
         {coordinates?.lat && coordinates?.lng && (
@@ -80,13 +81,14 @@ function ReviewForm() {
           </div>
         )}
 
-        <button
+        <Button
           type="button"
           onClick={() => setIsCreatingReview(false)}
-          className="absolute top-4 right-4 border border-stone-700 p-2 hover:bg-violet-100"
+          outlineColor="red"
+          className="absolute top-4 right-4 "
         >
           Cancel
-        </button>
+        </Button>
 
         <label htmlFor="title" className="mt-6">
           Title
@@ -143,12 +145,9 @@ function ReviewForm() {
             <label htmlFor="rating-negative">Negative</label>
           </div>
         </div>
-        <button
-          className="border border-stone-700 p-2 hover:bg-violet-100"
-          type="submit"
-        >
+        <Button outlineColor="violet" type="submit">
           Submit
-        </button>
+        </Button>
         {formErrors.length > 0 && (
           <div className="text-red-700 text-sm">
             {`Missing field(s): ${formErrors.join(", ")}.`}

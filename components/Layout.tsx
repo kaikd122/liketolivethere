@@ -13,7 +13,6 @@ export default function Layout({ children }: LayoutProps) {
   const { setUser } = uzeStore((state) => state.actions);
   const { data: session } = useSession();
   useEffect(() => {
-    console.log(18);
     if (!session || user?.name) {
       return;
     }
@@ -28,7 +27,6 @@ export default function Layout({ children }: LayoutProps) {
     }
 
     if (!user?.name) {
-      console.log(38);
       const newName = generateUsername();
       const args: updateUserArgs = {
         userId: session?.user?.id,

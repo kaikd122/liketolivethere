@@ -14,8 +14,8 @@
 .mapboxgl-ctrl-geocoder {
     @apply text-stone-700;
     @apply bg-stone-50;
-    @apply rounded-none;
-    @apply shadow-none;
+    @apply rounded;
+    @apply shadow-sm;
     @apply border;
     @apply border-stone-700;
     @apply right-[6px] top-2;

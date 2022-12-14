@@ -7,7 +7,7 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      sans: ["Inter", "sans-serif"],
+      sans: ["Outfit", "sans-serif"],
       serif: ["Merriweather", "serif"],
       display: ["Krona One", "sans-serif"],
     },
