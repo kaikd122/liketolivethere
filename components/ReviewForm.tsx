@@ -86,6 +86,7 @@ function ReviewForm() {
           onClick={() => setIsCreatingReview(false)}
           outlineColor="red"
           className="absolute top-4 right-4 "
+          borderThickness="thin"
         >
           Cancel
         </Button>
@@ -96,7 +97,7 @@ function ReviewForm() {
         <input
           {...register("title")}
           placeholder="Title"
-          className="border border-stone-700 w-3/4 outline-none p-2"
+          className="border border-stone-700 w-3/4 outline-violet-500 p-2"
           id="title"
         />
 
@@ -145,7 +146,7 @@ function ReviewForm() {
             <label htmlFor="rating-negative">Negative</label>
           </div>
         </div>
-        <Button outlineColor="violet" type="submit">
+        <Button outlineColor="violet" type="submit" borderThickness="thin">
           Submit
         </Button>
         {formErrors.length > 0 && (

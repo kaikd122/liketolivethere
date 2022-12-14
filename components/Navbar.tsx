@@ -17,7 +17,7 @@ export default function Navbar() {
       </div>
       <div className="flex gap-4 justify-end">
         {user?.name && (
-          <Button outlineColor="light">
+          <Button outlineColor="light" borderThickness="thick">
             <Link href={`/profile/${encodeURIComponent(user?.id)}`}>
               {user?.name}
             </Link>

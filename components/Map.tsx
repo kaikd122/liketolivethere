@@ -106,7 +106,8 @@ function MapContainer() {
             onClick={() => setIsCreatingReview(true)}
             bgColor="light"
             outlineColor="stone"
-            className=" absolute bottom-8 right-4 font-sans text-sm !border"
+            borderThickness="thin"
+            className=" absolute bottom-8 right-4 font-sans text-sm"
           >
             + Create review
           </Button>
