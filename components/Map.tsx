@@ -53,7 +53,7 @@ function Geocoder(props: GeocoderProps) {
 
 function MapContainer() {
   const coordinates = uzeStore((state) => state.coordinates);
-  const { setCoordinates, setIsCreatingReview } = uzeStore(
+  const { setCoordinates, setIsCreatingReview, setIsDragging } = uzeStore(
     (state) => state.actions
   );
   const currentTab = uzeStore((state) => state.currentTab);
@@ -65,7 +65,7 @@ function MapContainer() {
 
   return (
     <div
-      className={`flex flex-col items-center justify-center h-500 border border-stone-300 rounded shadow ${
+      className={`flex flex-col items-center justify-center h-500 border border-stone-300 md:rounded shadow ${
         currentTab === "MAP" ? "" : "hidden"
       }`}
     >
@@ -80,7 +80,7 @@ function MapContainer() {
           width: "100%",
           height: "500px",
           overflow: "hidden",
-          borderRadius: "0.5rem",
+          borderRadius: "0.25rem",
         }}
         mapStyle="mapbox://styles/mapbox/streets-v12"
       >
@@ -89,12 +89,16 @@ function MapContainer() {
           latitude={coordinates.lat}
           anchor="bottom"
           draggable={true}
+          onDragStart={() => {
+            setIsDragging(true);
+          }}
           onDragEnd={(e) => {
             const lngLat = e.lngLat;
             setCoordinates({
               lng: lngLat.lng,
               lat: lngLat.lat,
             });
+            setIsDragging(false);
           }}
         >
           <img src="./mapbox-marker-icon-20px-purple.png" />

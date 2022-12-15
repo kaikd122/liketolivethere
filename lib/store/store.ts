@@ -10,11 +10,13 @@ interface State {
     setUser: (user: User) => void;
     setCurrentTab: (currentTab: "MAP" | "BROWSE") => void;
     setIsCreatingReview: (isCreatingReview: boolean) => void;
+    setIsDragging: (isDragging: boolean) => void;
   };
   isLoading: boolean;
   user: User;
   currentTab: "MAP" | "BROWSE";
   isCreatingReview: boolean;
+  isDragging: boolean;
 }
 
 const uzeStore = create<State>((set) => ({
@@ -26,12 +28,14 @@ const uzeStore = create<State>((set) => ({
   user: {} as User,
   currentTab: "MAP",
   isCreatingReview: false,
+  isDragging: false,
   actions: {
     setCoordinates: (coordinates) => set({ coordinates }),
     setCurrentTab: (currentTab) => set({ currentTab }),
     setIsLoading: (isLoading) => set({ isLoading }),
     setUser: (user) => set({ user }),
     setIsCreatingReview: (isCreatingReview) => set({ isCreatingReview }),
+    setIsDragging: (isDragging) => set({ isDragging }),
   },
 }));
 

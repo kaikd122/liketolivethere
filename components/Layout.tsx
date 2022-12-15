@@ -51,7 +51,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className=" flex flex-col w-full ">
       <Navbar />
-      <main className="flex flex-col p-10 gap-8">{children}</main>
+      <main className="flex flex-col md:p-10 md:gap-8">{children}</main>
     </div>
   );
 }

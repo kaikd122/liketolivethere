@@ -1,8 +1,10 @@
+import classNames from "classnames";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { createReviewCommand } from "../lib/actions/review";
 import uzeStore from "../lib/store/store";
 import Button from "./ui/Button";
+import Card from "./ui/Card";
 
 type FormData = {
   body: string;
@@ -16,6 +18,7 @@ function ReviewForm() {
   const [formErrors, setFormErrors] = useState<string[]>([]);
   const { setIsCreatingReview } = uzeStore((state) => state.actions);
   const isCreatingReview = uzeStore((state) => state.isCreatingReview);
+  const isDragging = uzeStore((state) => state.isDragging);
   const {
     register,
     handleSubmit,
@@ -62,34 +65,44 @@ function ReviewForm() {
     });
   };
 
+  const latLngClassName = classNames({
+    "text-stone-400": isDragging,
+    "text-violet-500": !isDragging,
+  });
   return (
-    <div className={`${isCreatingReview ? "" : "hidden"}`}>
+    <Card className={`${isCreatingReview ? "" : "hidden"}`}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="relative flex flex-col gap-4 items-center justify-center p-8 border border-stone-300 rounded shadow"
+        className="relative flex flex-col gap-4 items-center justify-center w-full  "
         autoComplete="off"
       >
-        {coordinates?.lat && coordinates?.lng && (
-          <div className="absolute left-4 top-4 text-sm">
-            {`Lat lng: ${coordinates.lat.toFixed(4)}, ${coordinates.lng.toFixed(
-              4
-            )}`}
-            <br />
-            <p className="italic text-xs pt-1">
-              Drag map pin to adjust review coordinates
-            </p>
-          </div>
-        )}
-
-        <Button
-          type="button"
-          onClick={() => setIsCreatingReview(false)}
-          outlineColor="red"
-          className="absolute top-4 right-4 "
-          borderThickness="thin"
-        >
-          Cancel
-        </Button>
+        <div className="flex flex-row justify-between w-full">
+          {coordinates?.lat && coordinates?.lng ? (
+            <div className="flex flex-col">
+              <div className={"text-sm flex flex-row"}>
+                <p className="pr-1">Lat lng:</p>
+                <p className={latLngClassName}>{coordinates.lat.toFixed(4)}</p>
+                <p className="pr-1">,</p>
+                <p className={latLngClassName}>{coordinates.lng.toFixed(4)}</p>
+                <br />
+              </div>
+              <p className="italic text-xs pt-1">
+                Drag map pin to adjust review coordinates
+              </p>
+            </div>
+          ) : (
+            <div />
+          )}
+          <Button
+            type="button"
+            onClick={() => setIsCreatingReview(false)}
+            outlineColor="red"
+            className=" "
+            borderThickness="thin"
+          >
+            Cancel
+          </Button>
+        </div>
 
         <label htmlFor="title" className="mt-6">
           Title
@@ -97,7 +110,7 @@ function ReviewForm() {
         <input
           {...register("title")}
           placeholder="Title"
-          className="border border-stone-700 w-3/4 outline-violet-500 p-2"
+          className="border rounded border-stone-300 w-3/4 outline-violet-300 p-2 shadow-sm"
           id="title"
         />
 
@@ -105,7 +118,7 @@ function ReviewForm() {
         <textarea
           {...register("body")}
           placeholder="Write review here"
-          className="border border-stone-700 w-3/4 outline-none p-2"
+          className="border rounded border-stone-300 w-3/4 outline-violet-300 p-2 shadow-sm"
           id="body"
         />
 
@@ -150,12 +163,14 @@ function ReviewForm() {
           Submit
         </Button>
         {formErrors.length > 0 && (
-          <div className="text-red-700 text-sm">
-            {`Missing field(s): ${formErrors.join(", ")}.`}
+          <div className="text-rose-700 text-sm">
+            {`Missing field${
+              formErrors.length === 1 ? "" : "s"
+            }: ${formErrors.join(", ")}.`}
           </div>
         )}
       </form>
-    </div>
+    </Card>
   );
 }
 
