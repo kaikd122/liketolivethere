@@ -67,7 +67,7 @@ function ReviewForm() {
 
   const latLngClassName = classNames({
     "text-stone-400": isDragging,
-    "text-violet-500": !isDragging,
+    "text-petal": !isDragging,
   });
   return (
     <Card className={`${isCreatingReview ? "" : "hidden"}`}>
@@ -159,7 +159,7 @@ function ReviewForm() {
             <label htmlFor="rating-negative">Negative</label>
           </div>
         </div>
-        <Button outlineColor="violet" type="submit" borderThickness="thin">
+        <Button outlineColor="petal" type="submit" borderThickness="thin">
           Submit
         </Button>
         {formErrors.length > 0 && (

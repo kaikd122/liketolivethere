@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.0.13",
     "@next-auth/prisma-adapter": "^0.5.2-next.19",
     "@prisma/client": "^4.7.1",
     "@types/react-map-gl": "^6.1.3",

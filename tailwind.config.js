@@ -6,6 +6,11 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    extend: {
+      colors: {
+        petal: "#a743e4",
+      },
+    },
     fontFamily: {
       sans: ["Outfit", "sans-serif"],
       serif: ["Merriweather", "serif"],
