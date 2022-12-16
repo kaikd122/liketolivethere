@@ -4,7 +4,7 @@ import classNames from "classnames";
 export interface ButtonProps {
   children: React.ReactNode;
   outlineColor?: "violet" | "stone" | "light" | "red" | "petal";
-  bgColor?: "violet" | "stone" | "light" | "red" | "petal";
+  bgColor?: "violet" | "stone" | "light" | "red" | "petal" | "petalGradient";
   className?: string;
   onClick?: (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   type?: "button" | "submit" | "reset" | undefined;
@@ -37,6 +37,8 @@ function Button({
           "bg-stone-50": bgColor === "light",
           "bg-rose-400": bgColor === "red",
           "border-rose-400 text-rose-400": outlineColor === "red",
+          "bg-gradient-to-br from-violet-500 to-fuchsia-600":
+            bgColor === "petalGradient",
           border: borderThickness === "thin",
           "border-2": borderThickness === "thick",
           "border-0": borderThickness === "none",

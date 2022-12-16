@@ -73,10 +73,10 @@ function ReviewForm() {
     <Card className={`${isCreatingReview ? "" : "hidden"}`}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="relative flex flex-col gap-4 items-center justify-center w-full  "
+        className="overflow-hidden relative flex flex-col gap-4 items-center justify-center w-full  "
         autoComplete="off"
       >
-        <div className="flex flex-row justify-between w-full">
+        <div className="flex flex-row justify-between w-full p-1">
           {coordinates?.lat && coordinates?.lng ? (
             <div className="flex flex-col">
               <div className={"text-sm flex flex-row"}>

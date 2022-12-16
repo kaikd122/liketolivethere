@@ -94,7 +94,7 @@ function MapContainer() {
   return (
     <div className="flex flex-col ">
       <div
-        className={`flex flex-col items-center justify-center h-500 border border-stone-300 md:rounded shadow ${
+        className={`flex flex-col items-center justify-center h-500 border border-stone-300  md:rounded shadow ${
           currentTab === "MAP" ? "" : "hidden"
         }`}
       >
@@ -155,7 +155,7 @@ function MapContainer() {
         {nearbyTowns.map((town) => {
           return (
             <Button
-              bgColor="petal"
+              bgColor="petalGradient"
               outlineColor="light"
               borderThickness="none"
               key={town.id}
