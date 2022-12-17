@@ -97,7 +97,7 @@ function MapContainer() {
   return (
     <div className="flex flex-col ">
       <div
-        className={`flex flex-col items-center justify-center h-500 border border-stone-300  rounded shadow ${
+        className={`flex flex-col items-center justify-center h-500 border border-stone-300 max-h-[50vh] md:max-h-[100vh] rounded shadow ${
           currentTab === "MAP" || currentTab === "WRITE" ? "" : "hidden"
         }`}
       >

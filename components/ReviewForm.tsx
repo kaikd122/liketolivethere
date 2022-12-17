@@ -20,6 +20,7 @@ function ReviewForm() {
   const { setIsCreatingReview } = uzeStore((state) => state.actions);
   const currentTab = uzeStore((state) => state.currentTab);
   const isDragging = uzeStore((state) => state.isDragging);
+  const isCreatingReview = uzeStore((state) => state.isCreatingReview);
   const {
     register,
     handleSubmit,
@@ -77,7 +78,7 @@ function ReviewForm() {
     formRef?.current && formRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  if (currentTab !== "WRITE") {
+  if (!isCreatingReview) {
     return null;
   }
 
@@ -89,11 +90,16 @@ function ReviewForm() {
         className="overflow-hidden relative flex flex-col gap-4 items-center justify-center w-full  "
         autoComplete="off"
       >
-        <div className="flex flex-row justify-between items-center gap-2 w-full p-2">
-          <CoordinatesDisplay
-            preText="Writing a review at"
-            className="text-2xl gap-2"
-          />
+        <div className="flex flex-row justify-between items-start gap-2 w-full p-2">
+          <div className="flex flex-col gap-2">
+            <CoordinatesDisplay
+              preText="Writing a review at"
+              className=" text-xl md:text-2xl gap-2"
+            />
+            <p className="text-sm italic">
+              Drag the map pin or search again to change coordinates
+            </p>
+          </div>
           <Button
             type="button"
             onClick={() => setIsCreatingReview(false)}

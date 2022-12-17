@@ -9,7 +9,9 @@ import Tab from "./ui/Tab";
 export default function Navbar() {
   const user = uzeStore((state) => state.user);
   const currentTab = uzeStore((state) => state.currentTab);
-  const { setCurrentTab } = uzeStore((state) => state.actions);
+  const { setCurrentTab, setIsCreatingReview } = uzeStore(
+    (state) => state.actions
+  );
   return (
     <div className="w-full flex flex-col">
       <div className="w-full flex flex-row flex-wrap items-center justify-between py-4 px-2 md:px-8 bg-gradient-to-br from-violet-500 to-fuchsia-600 shadow z-10">
@@ -37,7 +39,7 @@ export default function Navbar() {
         </Tab>
         <Tab
           selected={currentTab === "WRITE"}
-          onClick={() => setCurrentTab("WRITE")}
+          onClick={() => setIsCreatingReview(true)}
         >
           Write a review
         </Tab>
