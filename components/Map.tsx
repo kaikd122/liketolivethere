@@ -143,7 +143,7 @@ function MapContainer() {
               onClick={() => setIsCreatingReview(true)}
               bgColor="light"
               outlineColor="stone"
-              borderThickness="thin"
+              border="thin"
               className=" absolute bottom-8 right-4 font-sans text-sm"
             >
               + Create review
@@ -157,7 +157,7 @@ function MapContainer() {
             <Button
               bgColor="petalGradient"
               outlineColor="light"
-              borderThickness="none"
+              border="none"
               key={town.id}
             >
               {town.name}

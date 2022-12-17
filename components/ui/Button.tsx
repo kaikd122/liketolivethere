@@ -8,7 +8,8 @@ export interface ButtonProps {
   className?: string;
   onClick?: (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   type?: "button" | "submit" | "reset" | undefined;
-  borderThickness?: "thin" | "thick" | "none";
+  border?: "thin" | "thick" | "none";
+  shadow?: "none";
 }
 
 function Button({
@@ -18,7 +19,8 @@ function Button({
   bgColor,
   className,
   type,
-  borderThickness,
+  border,
+  shadow,
 }: ButtonProps) {
   return (
     <button
@@ -28,7 +30,7 @@ function Button({
         "shadow-sm rounded p-2 active:scale-100 duration-75 hover:scale-105",
         {
           "border-violet-500 text-violet-500": outlineColor === "violet",
-          "border-stone-700 text-stone-700": outlineColor === "stone",
+          "border-stone-400 text-stone-700": outlineColor === "stone",
           "border-stone-50 text-stone-50": outlineColor === "light",
           "border-petal text-petal": outlineColor === "petal",
           "bg-violet-500": bgColor === "violet",
@@ -39,9 +41,10 @@ function Button({
           "border-rose-400 text-rose-400": outlineColor === "red",
           "bg-gradient-to-br from-violet-500 to-fuchsia-600":
             bgColor === "petalGradient",
-          border: borderThickness === "thin",
-          "border-2": borderThickness === "thick",
-          "border-0": borderThickness === "none",
+          border: border === "thin",
+          "border-2": border === "thick",
+          "border-0": border === "none",
+          "shadow-none": shadow === "none",
         },
         className
       )}

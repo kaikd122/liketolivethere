@@ -2,19 +2,21 @@ import { User } from "@prisma/client";
 import create from "zustand";
 import { Coordinates, kingsCrossCoords } from "../../types/types";
 
+type TabOptions = "MAP" | "TOWNS" | "RANDOM" | "WRITE";
+
 interface State {
   coordinates: Coordinates;
   actions: {
     setCoordinates: (coordinates: Coordinates) => void;
     setIsLoading: (isLoading: boolean) => void;
     setUser: (user: User) => void;
-    setCurrentTab: (currentTab: "MAP" | "BROWSE") => void;
+    setCurrentTab: (currentTab: TabOptions) => void;
     setIsCreatingReview: (isCreatingReview: boolean) => void;
     setIsDragging: (isDragging: boolean) => void;
   };
   isLoading: boolean;
   user: User;
-  currentTab: "MAP" | "BROWSE";
+  currentTab: TabOptions;
   isCreatingReview: boolean;
   isDragging: boolean;
 }

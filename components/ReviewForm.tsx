@@ -98,7 +98,7 @@ function ReviewForm() {
             onClick={() => setIsCreatingReview(false)}
             outlineColor="red"
             className=" "
-            borderThickness="thin"
+            border="thin"
           >
             Cancel
           </Button>
@@ -159,7 +159,7 @@ function ReviewForm() {
             <label htmlFor="rating-negative">Negative</label>
           </div>
         </div>
-        <Button outlineColor="petal" type="submit" borderThickness="thin">
+        <Button outlineColor="petal" type="submit" border="thin">
           Submit
         </Button>
         {formErrors.length > 0 && (

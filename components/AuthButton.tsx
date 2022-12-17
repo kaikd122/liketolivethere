@@ -20,19 +20,11 @@ function AuthButton() {
   return (
     <>
       {session ? (
-        <Button
-          outlineColor="light"
-          borderThickness="thick"
-          onClick={handleLogout}
-        >
+        <Button outlineColor="light" border="thick" onClick={handleLogout}>
           Log out
         </Button>
       ) : (
-        <Button
-          outlineColor="light"
-          borderThickness="thick"
-          onClick={handleLogin}
-        >
+        <Button outlineColor="light" border="thick" onClick={handleLogin}>
           Log in
         </Button>
       )}
