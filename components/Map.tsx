@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import Map, { Marker, useMap } from "react-map-gl";
 import MapboxGeocoder, { Result } from "@mapbox/mapbox-gl-geocoder";
@@ -12,6 +12,9 @@ import { getNearbyTownsRequest } from "../lib/actions/search";
 import { towns } from "@prisma/client";
 import classNames from "classnames";
 import CoordinatesDisplay from "./CoordinatesDisplay";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { getTownUrl, replaceUrl } from "../lib/util/urls";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -42,7 +45,7 @@ function Geocoder(props: GeocoderProps) {
       flyTo: {
         speed: 2,
       },
-      countries: "GB,US",
+      countries: "GB",
     });
 
     //for initial load
@@ -81,27 +84,46 @@ function Geocoder(props: GeocoderProps) {
 }
 
 function MapContainer() {
+  const router = useRouter();
   const coordinates = uzeStore((state) => state.coordinates);
-  const { setCoordinates, setIsCreatingReview, setIsDragging } = uzeStore(
-    (state) => state.actions
-  );
+  const {
+    setCoordinates,
+    setIsCreatingReview,
+    setIsDragging,
+    setCurrentTab,
+    setIsMapLoaded,
+  } = uzeStore((state) => state.actions);
   const currentTab = uzeStore((state) => state.currentTab);
   const isCreatingReview = uzeStore((state) => state.isCreatingReview);
   const [nearbyTowns, setNearbyTowns] = useState<Array<Partial<towns>>>([]);
   const isDragging = uzeStore((state) => state.isDragging);
 
+  const mapRef = useRef(null);
+  const executeScroll = () => {
+    //@ts-ignore
+    mapRef?.current && mapRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
   useEffect(() => {
     console.log("coordinates", coordinates);
   }, [JSON.stringify(coordinates)]);
 
+  useEffect(() => {
+    if (!isCreatingReview) {
+      executeScroll();
+    }
+  }, [isCreatingReview]);
+
   return (
-    <div className="flex flex-col ">
+    <div className={`flex flex-col ${currentTab === "MAP" ? "" : "hidden"}`}>
       <div
-        className={`flex flex-col items-center justify-center h-500 border border-stone-300 max-h-[50vh] md:max-h-[100vh] rounded shadow ${
-          currentTab === "MAP" || currentTab === "WRITE" ? "" : "hidden"
-        }`}
+        ref={mapRef}
+        className={`flex flex-col items-center justify-center h-500 border border-stone-300 max-h-[50vh] md:max-h-[100vh] rounded shadow`}
       >
         <Map
+          onLoad={() => {
+            setIsMapLoaded(true);
+          }}
           onClick={(e) => {
             if (!isDragging) {
               return;
@@ -154,11 +176,22 @@ function MapContainer() {
         </Map>
       </div>
       {coordinates?.lat && coordinates?.lng ? (
-        <div className="py-2">
-          <CoordinatesDisplay preText="Lat lng:" className="text-sm gap-1" />
+        <div className="py-3 flex flex-row justify-between items-center px-3 md:px-0">
+          <CoordinatesDisplay preText="Lat lng:" className="text-base gap-1" />
+          {!isCreatingReview ? (
+            <Button
+              outlineColor="petal"
+              border="thin"
+              onClick={() => setIsCreatingReview(true)}
+            >
+              Write a review here
+            </Button>
+          ) : (
+            <div />
+          )}
         </div>
       ) : null}
-      <div className="flex flex-row  gap-4 flex-wrap">
+      <div className="flex flex-row  gap-4 flex-wrap px-3 md:px-0 py-1">
         {nearbyTowns.map((town) => {
           return (
             <Button
@@ -166,6 +199,11 @@ function MapContainer() {
               outlineColor="light"
               border="none"
               key={town.id}
+              className="text-sm"
+              onClick={() => {
+                setCurrentTab("TOWNS");
+                replaceUrl(getTownUrl(town));
+              }}
             >
               {town.name}
             </Button>

@@ -12,7 +12,7 @@ function Button({ onClick, children, selected }: TabProps) {
     <button
       onClick={onClick}
       className={classNames(
-        "active:scale-100 duration-75 hover:scale-105 text-stone-700",
+        "active:scale-100 duration-75 hover:scale-105 text-stone-700 text-lg",
         { "border-b border-petal !text-petal": selected }
       )}
     >

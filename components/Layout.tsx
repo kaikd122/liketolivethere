@@ -4,6 +4,8 @@ import { useSession } from "next-auth/react";
 import generateUsername from "../lib/util/generate-username";
 import { updateUserArgs, updateUserCommand } from "../lib/actions/user";
 import uzeStore from "../lib/store/store";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 
 export interface LayoutProps {
   children: ReactNode;
@@ -12,6 +14,8 @@ export default function Layout({ children }: LayoutProps) {
   const user = uzeStore((state) => state.user);
   const { setUser } = uzeStore((state) => state.actions);
   const { data: session } = useSession();
+  const router = useRouter();
+  console.log(router.asPath);
   useEffect(() => {
     if (!session || user?.name) {
       return;
@@ -51,6 +55,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className=" flex flex-col w-full ">
       <Navbar />
+
       <main className="flex flex-col md:px-8 md:gap-8">{children}</main>
     </div>
   );

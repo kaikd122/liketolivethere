@@ -1,7 +1,9 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import uzeStore from "../lib/store/store";
+import { replaceUrl } from "../lib/util/urls";
 import AuthButton from "./AuthButton";
 import Button from "./ui/Button";
 import Tab from "./ui/Tab";
@@ -9,9 +11,11 @@ import Tab from "./ui/Tab";
 export default function Navbar() {
   const user = uzeStore((state) => state.user);
   const currentTab = uzeStore((state) => state.currentTab);
+  const isMapLoaded = uzeStore((state) => state.isMapLoaded);
   const { setCurrentTab, setIsCreatingReview } = uzeStore(
     (state) => state.actions
   );
+  const router = useRouter();
   return (
     <div className="w-full flex flex-col">
       <div className="w-full flex flex-row flex-wrap items-center justify-between py-4 px-2 md:px-8 bg-gradient-to-br from-violet-500 to-fuchsia-600 shadow z-10">
@@ -31,21 +35,32 @@ export default function Navbar() {
         </div>
       </div>
       <div className="w-full flex flex-row flex-wrap items-center gap-3 md:gap-6 px-2 py-2 md:px-8 md:py-4">
+        {isMapLoaded ? (
+          <Tab
+            selected={currentTab === "MAP"}
+            onClick={() => {
+              replaceUrl("/");
+              setCurrentTab("MAP");
+            }}
+          >
+            Map search
+          </Tab>
+        ) : (
+          <Tab
+            selected={currentTab === "MAP"}
+            onClick={() => {
+              setCurrentTab("MAP");
+            }}
+          >
+            <Link href="/"> Map search</Link>
+          </Tab>
+        )}
         <Tab
-          selected={currentTab === "MAP"}
-          onClick={() => setCurrentTab("MAP")}
-        >
-          Map search
-        </Tab>
-        <Tab
-          selected={currentTab === "WRITE"}
-          onClick={() => setIsCreatingReview(true)}
-        >
-          Write a review
-        </Tab>
-        <Tab
-          selected={currentTab === "TOWNS"}
-          onClick={() => setCurrentTab("TOWNS")}
+          selected={router.asPath === "/towns" || currentTab === "TOWNS"}
+          onClick={() => {
+            replaceUrl("/towns");
+            setCurrentTab("TOWNS");
+          }}
         >
           Browse towns
         </Tab>

@@ -68,13 +68,14 @@ function ReviewForm() {
   };
 
   useEffect(() => {
-    if (currentTab === "WRITE") {
+    if (isCreatingReview) {
       executeScroll();
     }
-  }, [currentTab]);
+  }, [isCreatingReview]);
 
   const formRef = useRef(null);
   const executeScroll = () => {
+    //@ts-ignore
     formRef?.current && formRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -83,11 +84,11 @@ function ReviewForm() {
   }
 
   return (
-    <Card>
+    <Card className="">
       <form
         ref={formRef}
         onSubmit={handleSubmit(onSubmit)}
-        className="overflow-hidden relative flex flex-col gap-4 items-center justify-center w-full  "
+        className="overflow-hidden relative flex flex-col gap-2 items-center justify-center w-full  "
         autoComplete="off"
       >
         <div className="flex flex-row justify-between items-start gap-2 w-full p-2">
@@ -111,25 +112,29 @@ function ReviewForm() {
           </Button>
         </div>
 
-        <label htmlFor="title" className="mt-6">
+        <label htmlFor="title" className="mt-4">
           Title
         </label>
         <input
           {...register("title")}
           placeholder="Title"
-          className="border rounded border-stone-300 w-3/4 outline-violet-300 p-2 shadow-sm"
+          className="border rounded border-stone-300 md:w-3/4 w-full  outline-violet-300 p-2 shadow-sm"
           id="title"
         />
 
-        <label htmlFor="body">Review</label>
+        <label htmlFor="body" className="mt-4">
+          Review
+        </label>
         <textarea
           {...register("body")}
           placeholder="Write review here"
-          className="border rounded border-stone-300 w-3/4 outline-violet-300 p-2 shadow-sm"
+          className="border rounded border-stone-300 md:w-3/4 w-full  outline-violet-300 p-2 shadow-sm"
           id="body"
         />
 
-        <label htmlFor="rating-radios">Overall experience</label>
+        <label htmlFor="rating-radios" className="mt-4">
+          Overall rating
+        </label>
         <div
           className="flex flex-row gap-4 text-sm text-center"
           id="rating-radios"

@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
 import { useSession } from "next-auth/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 import {
   updateUserCommand,
@@ -10,10 +10,14 @@ import {
 import uzeStore from "../../lib/store/store";
 function ProfileId() {
   const { data: session } = useSession();
-  const { setUser } = uzeStore((state) => state.actions);
+  const { setUser, setIsMapLoaded } = uzeStore((state) => state.actions);
   const user = uzeStore((state) => state.user);
 
   const [value, setValue] = useState("");
+
+  useEffect(() => {
+    setIsMapLoaded(false);
+  }, []);
 
   async function handleSubmit(e: React.MouseEvent) {
     e.preventDefault();
