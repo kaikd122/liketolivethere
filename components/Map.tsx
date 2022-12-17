@@ -10,6 +10,8 @@ import { MapPinIcon } from "@heroicons/react/24/solid";
 import getNearbyTowns from "../pages/api/getNearbyTowns";
 import { getNearbyTownsRequest } from "../lib/actions/search";
 import { towns } from "@prisma/client";
+import classNames from "classnames";
+import CoordinatesDisplay from "./CoordinatesDisplay";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -86,6 +88,7 @@ function MapContainer() {
   const currentTab = uzeStore((state) => state.currentTab);
   const isCreatingReview = uzeStore((state) => state.isCreatingReview);
   const [nearbyTowns, setNearbyTowns] = useState<Array<Partial<towns>>>([]);
+  const isDragging = uzeStore((state) => state.isDragging);
 
   useEffect(() => {
     console.log("coordinates", coordinates);
@@ -94,12 +97,22 @@ function MapContainer() {
   return (
     <div className="flex flex-col ">
       <div
-        className={`flex flex-col items-center justify-center h-500 border border-stone-300  md:rounded shadow ${
-          currentTab === "MAP" ? "" : "hidden"
+        className={`flex flex-col items-center justify-center h-500 border border-stone-300  rounded shadow ${
+          currentTab === "MAP" || currentTab === "WRITE" ? "" : "hidden"
         }`}
       >
         <Map
-          onClick={(e) => console.log(e)}
+          onClick={(e) => {
+            if (!isDragging) {
+              return;
+            }
+            const lngLat = e.lngLat;
+            setCoordinates({
+              lng: lngLat.lng,
+              lat: lngLat.lat,
+            });
+            setIsDragging(false);
+          }}
           initialViewState={{
             longitude: coordinates.lng,
             latitude: coordinates.lat,
@@ -130,7 +143,7 @@ function MapContainer() {
               setIsDragging(false);
             }}
           >
-            <MapPinIcon className="w-10 h-10 text-petal" />
+            <MapPinIcon className="w-10 h-10 text-petal active:scale-90 duration-75 " />
           </Marker>
 
           <Geocoder
@@ -138,20 +151,12 @@ function MapContainer() {
             coordinates={coordinates}
             setNearbyTowns={setNearbyTowns}
           />
-          {!isCreatingReview && (
-            <Button
-              onClick={() => setIsCreatingReview(true)}
-              bgColor="light"
-              outlineColor="stone"
-              border="thin"
-              className=" absolute bottom-8 right-4 font-sans text-sm"
-            >
-              + Create review
-            </Button>
-          )}
         </Map>
       </div>
-      <div className="flex flex-row pt-4 gap-4 flex-wrap">
+      {coordinates?.lat && coordinates?.lng ? (
+        <CoordinatesDisplay preText="Lat lng:" className="text-sm py-2" />
+      ) : null}
+      <div className="flex flex-row pt-2 gap-4 flex-wrap">
         {nearbyTowns.map((town) => {
           return (
             <Button

@@ -1,8 +1,9 @@
 import classNames from "classnames";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { createReviewCommand } from "../lib/actions/review";
 import uzeStore from "../lib/store/store";
+import CoordinatesDisplay from "./CoordinatesDisplay";
 import Button from "./ui/Button";
 import Card from "./ui/Card";
 
@@ -17,7 +18,7 @@ function ReviewForm() {
   const user = uzeStore((state) => state.user);
   const [formErrors, setFormErrors] = useState<string[]>([]);
   const { setIsCreatingReview } = uzeStore((state) => state.actions);
-  const isCreatingReview = uzeStore((state) => state.isCreatingReview);
+  const currentTab = uzeStore((state) => state.currentTab);
   const isDragging = uzeStore((state) => state.isDragging);
   const {
     register,
@@ -65,34 +66,31 @@ function ReviewForm() {
     });
   };
 
-  const latLngClassName = classNames({
-    "text-stone-400": isDragging,
-    "text-petal": !isDragging,
-  });
+  useEffect(() => {
+    if (currentTab === "WRITE") {
+      executeScroll();
+    }
+  }, [currentTab]);
+
+  const formRef = useRef(null);
+  const executeScroll = () => {
+    formRef?.current && formRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  if (currentTab !== "WRITE") {
+    return null;
+  }
+
   return (
-    <Card className={`${isCreatingReview ? "" : "hidden"}`}>
+    <Card>
       <form
+        ref={formRef}
         onSubmit={handleSubmit(onSubmit)}
         className="overflow-hidden relative flex flex-col gap-4 items-center justify-center w-full  "
         autoComplete="off"
       >
-        <div className="flex flex-row justify-between w-full p-1">
-          {coordinates?.lat && coordinates?.lng ? (
-            <div className="flex flex-col">
-              <div className={"text-sm flex flex-row"}>
-                <p className="pr-1">Lat lng:</p>
-                <p className={latLngClassName}>{coordinates.lat.toFixed(4)}</p>
-                <p className="pr-1">,</p>
-                <p className={latLngClassName}>{coordinates.lng.toFixed(4)}</p>
-                <br />
-              </div>
-              <p className="italic text-xs pt-1">
-                Drag map pin to adjust review coordinates
-              </p>
-            </div>
-          ) : (
-            <div />
-          )}
+        <div className="flex flex-row justify-between items-center gap-2 w-full p-2">
+          <CoordinatesDisplay preText="Writing review at" className="text-xl" />
           <Button
             type="button"
             onClick={() => setIsCreatingReview(false)}

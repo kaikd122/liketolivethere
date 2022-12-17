@@ -28,30 +28,24 @@ export default function Navbar() {
           <AuthButton />
         </div>
       </div>
-      <div className="w-full flex flex-row flex-wrap items-center gap-4 px-2 py-2 md:px-8">
+      <div className="w-full flex flex-row flex-wrap items-center gap-3 md:gap-6 px-2 py-2 md:px-8 md:py-4">
         <Tab
           selected={currentTab === "MAP"}
           onClick={() => setCurrentTab("MAP")}
         >
-          Search
-        </Tab>
-        <Tab
-          selected={currentTab === "TOWNS"}
-          onClick={() => setCurrentTab("TOWNS")}
-        >
-          Towns
-        </Tab>
-        <Tab
-          selected={currentTab === "RANDOM"}
-          onClick={() => setCurrentTab("RANDOM")}
-        >
-          Random review
+          Map search
         </Tab>
         <Tab
           selected={currentTab === "WRITE"}
           onClick={() => setCurrentTab("WRITE")}
         >
-          Write review
+          Write a review
+        </Tab>
+        <Tab
+          selected={currentTab === "TOWNS"}
+          onClick={() => setCurrentTab("TOWNS")}
+        >
+          Browse towns
         </Tab>
       </div>
     </div>

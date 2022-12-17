@@ -2,7 +2,7 @@ import { User } from "@prisma/client";
 import create from "zustand";
 import { Coordinates, kingsCrossCoords } from "../../types/types";
 
-type TabOptions = "MAP" | "TOWNS" | "RANDOM" | "WRITE";
+type TabOptions = "MAP" | "TOWNS" | "WRITE";
 
 interface State {
   coordinates: Coordinates;

@@ -8,7 +8,7 @@ function Card({ children, className }: CardProps) {
   return (
     <div
       className={classNames(
-        "flex items-center justify-center p-4 border border-stone-300 md:rounded shadow bg-stone-50",
+        "flex items-center justify-center p-4 border border-stone-300 rounded shadow bg-stone-50",
         className
       )}
     >
