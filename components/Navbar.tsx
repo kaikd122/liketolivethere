@@ -37,7 +37,7 @@ export default function Navbar() {
       <div className="w-full flex flex-row flex-wrap items-center gap-3 md:gap-6 px-2 py-2 md:px-8 md:py-4">
         {isMapLoaded ? (
           <Tab
-            selected={currentTab === "MAP"}
+            selected={currentTab === "MAP" && router.asPath !== "/towns"}
             onClick={() => {
               replaceUrl("/");
               setCurrentTab("MAP");
@@ -47,7 +47,7 @@ export default function Navbar() {
           </Tab>
         ) : (
           <Tab
-            selected={currentTab === "MAP"}
+            selected={currentTab === "MAP" && router.asPath !== "/towns"}
             onClick={() => {
               setCurrentTab("MAP");
             }}
