@@ -25,10 +25,15 @@ export default function Navbar() {
 
         <div className="flex gap-4 ">
           {user?.name && (
-            <Button outlineColor="light" border="thick">
-              <Link href={`/profile/${encodeURIComponent(user?.id)}`}>
+            <Button
+              outlineColor="light"
+              border="thick"
+              onClick={() => setCurrentTab("PROFILE")}
+            >
+              {user.name}
+              {/* <Link href={`/profile/${encodeURIComponent(user?.id)}`}>
                 {user?.name}
-              </Link>
+              </Link> */}
             </Button>
           )}
           <AuthButton />
@@ -37,7 +42,7 @@ export default function Navbar() {
       <div className="w-full flex flex-row flex-wrap items-center gap-3 md:gap-6 px-2 py-2 md:px-8 md:py-4">
         {isMapLoaded ? (
           <Tab
-            selected={currentTab === "MAP" && router.asPath !== "/towns"}
+            selected={currentTab === "MAP"}
             onClick={() => {
               replaceUrl("/");
               setCurrentTab("MAP");
@@ -47,7 +52,7 @@ export default function Navbar() {
           </Tab>
         ) : (
           <Tab
-            selected={currentTab === "MAP" && router.asPath !== "/towns"}
+            selected={currentTab === "MAP"}
             onClick={() => {
               setCurrentTab("MAP");
             }}
@@ -56,7 +61,7 @@ export default function Navbar() {
           </Tab>
         )}
         <Tab
-          selected={router.asPath === "/towns" || currentTab === "TOWNS"}
+          selected={currentTab === "TOWNS"}
           onClick={() => {
             replaceUrl("/towns");
             setCurrentTab("TOWNS");

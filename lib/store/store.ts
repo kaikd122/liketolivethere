@@ -2,7 +2,7 @@ import { User } from "@prisma/client";
 import create from "zustand";
 import { Coordinates, kingsCrossCoords } from "../../types/types";
 
-type TabOptions = "MAP" | "TOWNS";
+type TabOptions = "MAP" | "TOWNS" | "PROFILE" | undefined;
 
 interface State {
   coordinates: Coordinates;
@@ -30,7 +30,7 @@ const uzeStore = create<State>((set) => ({
   },
   isLoading: false,
   user: {} as User,
-  currentTab: "MAP",
+  currentTab: undefined,
   isCreatingReview: false,
   isDragging: false,
   isMapLoaded: false,

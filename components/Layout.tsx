@@ -12,7 +12,7 @@ export interface LayoutProps {
 }
 export default function Layout({ children }: LayoutProps) {
   const user = uzeStore((state) => state.user);
-  const { setUser } = uzeStore((state) => state.actions);
+  const { setUser, setCurrentTab } = uzeStore((state) => state.actions);
   const { data: session } = useSession();
   const router = useRouter();
   console.log(router.asPath);
@@ -52,6 +52,16 @@ export default function Layout({ children }: LayoutProps) {
       return;
     }
   }, [session?.user?.name]);
+
+  useEffect(() => {
+    if (router.asPath === "/") {
+      setCurrentTab("MAP");
+    } else if (router.asPath === "/profile") {
+      setCurrentTab("PROFILE");
+    } else if (router.asPath === "/towns") {
+      setCurrentTab("TOWNS");
+    }
+  }, [router.asPath]);
   return (
     <div className=" flex flex-col w-full ">
       <Navbar />

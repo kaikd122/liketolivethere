@@ -3,6 +3,8 @@ import Head from "next/head";
 import Layout from "../components/Layout";
 import MapContainer from "../components/Map";
 import ReviewForm from "../components/ReviewForm";
+import ProfileContainer from "../containers/ProfileContainer";
+import TownsContainer from "../containers/TownsContainer";
 import uzeStore from "../lib/store/store";
 
 export default function Home() {
@@ -18,6 +20,8 @@ export default function Home() {
       <Layout>
         <MapContainer />
         <ReviewForm />
+        <ProfileContainer />
+        <TownsContainer />
       </Layout>
     </>
   );
