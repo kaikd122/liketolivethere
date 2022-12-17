@@ -154,9 +154,11 @@ function MapContainer() {
         </Map>
       </div>
       {coordinates?.lat && coordinates?.lng ? (
-        <CoordinatesDisplay preText="Lat lng:" className="text-sm py-2" />
+        <div className="py-2">
+          <CoordinatesDisplay preText="Lat lng:" className="text-sm gap-1" />
+        </div>
       ) : null}
-      <div className="flex flex-row pt-2 gap-4 flex-wrap">
+      <div className="flex flex-row  gap-4 flex-wrap">
         {nearbyTowns.map((town) => {
           return (
             <Button

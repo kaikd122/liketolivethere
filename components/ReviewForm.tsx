@@ -90,7 +90,10 @@ function ReviewForm() {
         autoComplete="off"
       >
         <div className="flex flex-row justify-between items-center gap-2 w-full p-2">
-          <CoordinatesDisplay preText="Writing review at" className="text-xl" />
+          <CoordinatesDisplay
+            preText="Writing a review at"
+            className="text-2xl gap-2"
+          />
           <Button
             type="button"
             onClick={() => setIsCreatingReview(false)}

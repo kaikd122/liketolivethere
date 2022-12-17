@@ -18,10 +18,12 @@ function CoordinatesDisplay({ preText, className }: CoordinatesDisplayProps) {
     <div
       className={classNames("flex flex-row items-center  flex-wrap", className)}
     >
-      <p className="pr-1">{preText}</p>
-      <div className="flex flex-row">
-        <p className={latLngClassName}>{coordinates.lat.toFixed(4)}</p>
-        <p className="pr-1">,</p>
+      <p className="">{preText}</p>
+      <div className={classNames("flex flex-row", className)}>
+        <div className="flex flex-row">
+          <p className={latLngClassName}>{coordinates.lat.toFixed(4)}</p>
+          <p className="">,</p>
+        </div>
         <p className={latLngClassName}>{coordinates.lng.toFixed(4)}</p>
       </div>
     </div>
