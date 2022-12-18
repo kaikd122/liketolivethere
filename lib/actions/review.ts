@@ -11,6 +11,12 @@ export interface createReviewArgs {
   };
 }
 
+export interface getReviewsNearTownArgs {
+  data: {
+    townId: number;
+  };
+}
+
 export async function createReviewCommand(args: createReviewArgs) {
   const res = await fetch("/api/createReview", {
     method: "POST",
@@ -20,3 +26,12 @@ export async function createReviewCommand(args: createReviewArgs) {
   return res;
 }
 //
+
+export async function getReviewsNearTownRequest(args: getReviewsNearTownArgs) {
+  const res = await fetch("/api/getReviewsNearTown", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(args),
+  });
+  return res;
+}

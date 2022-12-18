@@ -19,9 +19,11 @@ model Review {
   longitude Decimal
   townId    Int?                     @map("town_id")
   geom      Unsupported("geometry")? @default(dbgenerated("st_setsrid(st_makepoint((0)::double precision, (0)::double precision), 4326)"))
+  rating    Int?                     @default(0)
   town      towns?                   @relation(fields: [townId], references: [id])
   user      User                     @relation(fields: [userId], references: [id])
-  rating    Int?                     @default(0)
+
+  @@index([geom], map: "review_geom_index", type: Gist)
 }
 
 model Account {
@@ -86,4 +88,8 @@ model towns {
   type                  String?                  @db.VarChar(13)
   geom                  Unsupported("geometry")?
   reviews               Review[]
+
+  @@index([geom], type: Gist)
+  @@index([name(ops: raw("gin_trgm_ops"))], map: "towns_name_trgm_idx", type: Gin)
+  @@index([postcode_sector(ops: raw("gin_trgm_ops"))], map: "towns_postcode_sector_trgm_idx", type: Gin)
 }

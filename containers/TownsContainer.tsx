@@ -1,10 +1,13 @@
 import { towns } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
+import Button from "../components/ui/Button";
 import Card from "../components/ui/Card";
+import { getReviewsNearTownRequest } from "../lib/actions/review";
 import { getTownsByTextRequest } from "../lib/actions/search";
 import uzeStore from "../lib/store/store";
 import { getPostcodeOutcode } from "../lib/util/map-utils";
+import getReviewsNearTown from "../pages/api/getReviewsNearTown";
 import getTownsByText from "../pages/api/getTownsByText";
 
 function TownsContainer() {
@@ -49,10 +52,22 @@ function TownsContainer() {
       <div className="flex flex-col w-full ">
         {results.map((result) => {
           return (
-            <div className="flex flex-row justify-between items-center w-full md:w-3/4">
+            <Button
+              className="flex flex-row justify-between items-center w-full md:w-3/4"
+              onClick={() => {
+                getReviewsNearTownRequest({ data: { townId: result.id! } })
+                  .then(async (res) => {
+                    const data = await res.json();
+                    console.log(data);
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                  });
+              }}
+            >
               <p>{result.name}</p>
               <p>{getPostcodeOutcode(result.postcode_sector)}</p>
-            </div>
+            </Button>
           );
         })}
       </div>
