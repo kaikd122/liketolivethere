@@ -16,8 +16,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { data } = body;
   try {
     const result: Array<getReviewsNearTownResponse> =
-      await prisma.$queryRaw`SELECT id, title, body, rating, latitude, longitude, user_id FROM "Review" WHERE 
-        ST_DWithin(Geography(geom), Geography((SELECT geom FROM towns WHERE id = ${data.townId})), 2000)`;
+      await prisma.$queryRaw`WITH town_geom AS (SELECT geom FROM towns WHERE id = ${data.townId})  SELECT id, title, body, rating, latitude, longitude, user_id FROM "Review" WHERE 
+        ST_DWithin(Geography(geom), Geography((SELECT geom FROM town_geom)), 2000) ORDER BY geom <-> (SELECT geom FROM town_geom) LIMIT 10`;
     res.status(200).json(result);
   } catch (err) {
     console.log(err);

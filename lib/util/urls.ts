@@ -4,7 +4,7 @@ export function getTownSlug(town: Partial<towns>): string {
   return town.name?.replace(/\W/g, "") || "";
 }
 export function getTownUrl(town: Partial<towns>): string {
-  return `/towns/${getTownSlug(town)}`;
+  return `/towns/${getTownSlug(town)}${town.id}`;
 }
 
 export function replaceUrl(url: string) {
