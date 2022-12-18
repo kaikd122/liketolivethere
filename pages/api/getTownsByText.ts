@@ -1,15 +1,17 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getTownsByTextArgs } from "../../lib/actions/search";
 
+export interface getTownsByTextResponse {
+  id: number;
+  name: string | null;
+  postcode_sector: string | null;
+}
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const body: getTownsByTextArgs = req.body;
   const { data } = body;
   try {
-    const result: Array<{
-      id: number;
-      name: string | null;
-      postcode_sector: string | null;
-    }> = await prisma.towns.findMany({
+    const result: Array<getTownsByTextResponse> = await prisma.towns.findMany({
       where: {
         OR: [
           {

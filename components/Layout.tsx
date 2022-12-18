@@ -54,6 +54,7 @@ export default function Layout({ children }: LayoutProps) {
   }, [session?.user?.name]);
 
   useEffect(() => {
+    console.log(router.asPath);
     if (router.asPath === "/") {
       setCurrentTab("MAP");
     } else if (router.asPath === "/profile") {
