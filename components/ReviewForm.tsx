@@ -1,11 +1,16 @@
 import classNames from "classnames";
 import React, { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { createReviewCommand } from "../lib/actions/review";
+import toast from "react-hot-toast";
+import {
+  createReviewCommand,
+  getReviewByIdRequest,
+} from "../lib/actions/review";
 import uzeStore from "../lib/store/store";
 import CoordinatesDisplay from "./CoordinatesDisplay";
 import Button from "./ui/Button";
 import Card from "./ui/Card";
+import cuid from "cuid";
 
 type FormData = {
   body: string;
@@ -27,7 +32,8 @@ function ReviewForm() {
     formState: { errors },
     control,
   } = useForm<FormData>();
-  const onSubmit = (data: FormData) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const onSubmit = async (data: FormData) => {
     let isInvalid = false;
     const errors: string[] = [];
     console.log("hi");
@@ -54,17 +60,32 @@ function ReviewForm() {
 
     setFormErrors([]);
 
-    console.log(data);
-    createReviewCommand({
-      data: {
-        body: data.body,
-        latitude: coordinates.lat,
-        longitude: coordinates.lng,
-        title: data.title,
-        userId: user.id,
-        rating: parseInt(data.rating),
-      },
-    });
+    setIsSubmitting(true);
+    const id = cuid();
+
+    toast.loading("Creating review...");
+    try {
+      await createReviewCommand({
+        data: {
+          id: id,
+          body: data.body,
+          latitude: coordinates.lat,
+          longitude: coordinates.lng,
+          title: data.title,
+          userId: user.id,
+          rating: parseInt(data.rating),
+        },
+      });
+
+      toast.success("Review created!");
+
+      const reviewRes = await getReviewByIdRequest({ data: { id: id } });
+      const review = await reviewRes.json();
+      console.log(review);
+    } catch (e) {
+      toast.error("Something went wrong");
+      console.log(e);
+    }
   };
 
   useEffect(() => {
@@ -103,7 +124,9 @@ function ReviewForm() {
           </div>
           <Button
             type="button"
-            onClick={() => setIsCreatingReview(false)}
+            onClick={() => {
+              setIsCreatingReview(false);
+            }}
             outlineColor="red"
             className=" "
             border="thin"

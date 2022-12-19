@@ -6,6 +6,7 @@ import { updateUserArgs, updateUserCommand } from "../lib/actions/user";
 import uzeStore from "../lib/store/store";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import { Toaster } from "react-hot-toast";
 
 export interface LayoutProps {
   children: ReactNode;
@@ -65,6 +66,11 @@ export default function Layout({ children }: LayoutProps) {
   }, [router.asPath]);
   return (
     <div className=" flex flex-col w-full ">
+      <Toaster
+        toastOptions={{
+          style: { font: "Outfit" },
+        }}
+      />
       <Navbar />
 
       <main className="flex flex-col md:px-8 md:gap-8">{children}</main>
