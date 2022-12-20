@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 import Layout from "../components/Layout";
 import MapContainer from "../components/Map";
+import ReviewCard from "../components/ReviewCard";
 import ReviewForm from "../components/ReviewForm";
 import ProfileContainer from "../containers/ProfileContainer";
 import TownsContainer from "../containers/TownsContainer";
@@ -20,6 +21,7 @@ export default function Home() {
       <Layout>
         <MapContainer />
         <ReviewForm />
+        <ReviewCard />
         <ProfileContainer />
         <TownsContainer />
       </Layout>

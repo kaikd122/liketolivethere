@@ -83,6 +83,22 @@ function Geocoder(props: GeocoderProps) {
   return <div />;
 }
 
+function FlyTo() {
+  const { current: map } = useMap();
+  const coordinates = uzeStore((state) => state.coordinates);
+  useEffect(() => {
+    if (!map) {
+      return;
+    }
+
+    map.flyTo({
+      center: [coordinates.lng, coordinates.lat],
+      zoom: 14,
+    });
+  }, [coordinates]);
+  return null;
+}
+
 function MapContainer() {
   const router = useRouter();
   const coordinates = uzeStore((state) => state.coordinates);
@@ -167,6 +183,7 @@ function MapContainer() {
           >
             <MapPinIcon className="w-10 h-10 text-petal active:scale-90 duration-75 " />
           </Marker>
+          <FlyTo />
 
           <Geocoder
             setCoordinates={setCoordinates}
@@ -184,7 +201,7 @@ function MapContainer() {
               border="thin"
               onClick={() => setIsCreatingReview(true)}
             >
-              Write a review here
+              Write a review
             </Button>
           ) : (
             <div />

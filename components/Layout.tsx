@@ -73,7 +73,7 @@ export default function Layout({ children }: LayoutProps) {
       />
       <Navbar />
 
-      <main className="flex flex-col md:px-8 md:gap-8">{children}</main>
+      <main className="flex flex-col md:px-8 mb-8  md:gap-8">{children}</main>
     </div>
   );
 }

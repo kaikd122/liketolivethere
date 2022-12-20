@@ -22,7 +22,9 @@ function ReviewForm() {
   const coordinates = uzeStore((state) => state.coordinates);
   const user = uzeStore((state) => state.user);
   const [formErrors, setFormErrors] = useState<string[]>([]);
-  const { setIsCreatingReview } = uzeStore((state) => state.actions);
+  const { setIsCreatingReview, setCurrentReviewId } = uzeStore(
+    (state) => state.actions
+  );
   const currentTab = uzeStore((state) => state.currentTab);
   const isDragging = uzeStore((state) => state.isDragging);
   const isCreatingReview = uzeStore((state) => state.isCreatingReview);
@@ -63,7 +65,6 @@ function ReviewForm() {
     setIsSubmitting(true);
     const id = cuid();
 
-    toast.loading("Creating review...");
     try {
       await createReviewCommand({
         data: {
@@ -78,6 +79,8 @@ function ReviewForm() {
       });
 
       toast.success("Review created!");
+
+      setCurrentReviewId(id);
 
       const reviewRes = await getReviewByIdRequest({ data: { id: id } });
       const review = await reviewRes.json();
@@ -105,7 +108,7 @@ function ReviewForm() {
   }
 
   return (
-    <Card className="">
+    <Card>
       <form
         ref={formRef}
         onSubmit={handleSubmit(onSubmit)}
@@ -194,7 +197,12 @@ function ReviewForm() {
             <label htmlFor="rating-negative">Negative</label>
           </div>
         </div>
-        <Button outlineColor="petal" type="submit" border="thin">
+        <Button
+          outlineColor="petal"
+          type="submit"
+          border="thin"
+          className="mb-4"
+        >
           Submit
         </Button>
         {formErrors.length > 0 && (

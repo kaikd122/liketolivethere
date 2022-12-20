@@ -14,6 +14,7 @@ interface State {
     setIsCreatingReview: (isCreatingReview: boolean) => void;
     setIsDragging: (isDragging: boolean) => void;
     setIsMapLoaded: (isMapLoaded: boolean) => void;
+    setCurrentReviewId: (currentReviewId: string) => void;
   };
   isLoading: boolean;
   user: User;
@@ -21,6 +22,7 @@ interface State {
   isCreatingReview: boolean;
   isDragging: boolean;
   isMapLoaded: boolean;
+  currentReviewId: string;
 }
 
 const uzeStore = create<State>((set) => ({
@@ -34,7 +36,9 @@ const uzeStore = create<State>((set) => ({
   isCreatingReview: false,
   isDragging: false,
   isMapLoaded: false,
+  currentReviewId: "",
   actions: {
+    setCurrentReviewId: (currentReviewId) => set({ currentReviewId }),
     setCoordinates: (coordinates) => set({ coordinates }),
     setIsMapLoaded: (isMapLoaded) => set({ isMapLoaded }),
     setCurrentTab: (currentTab) => set({ currentTab }),
