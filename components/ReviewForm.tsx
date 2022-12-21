@@ -14,7 +14,6 @@ import cuid from "cuid";
 
 type FormData = {
   body: string;
-  rating: string;
   title: string;
 };
 
@@ -33,8 +32,12 @@ function ReviewForm() {
     handleSubmit,
     formState: { errors },
     control,
+    reset,
   } = useForm<FormData>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [rating, setRating] = useState<number | undefined>(undefined);
+
   const onSubmit = async (data: FormData) => {
     let isInvalid = false;
     const errors: string[] = [];
@@ -50,7 +53,7 @@ function ReviewForm() {
       isInvalid = true;
     }
 
-    if (!data.rating) {
+    if (!rating) {
       errors.push("rating");
       isInvalid = true;
     }
@@ -74,13 +77,17 @@ function ReviewForm() {
           longitude: coordinates.lng,
           title: data.title,
           userId: user.id,
-          rating: parseInt(data.rating),
+          rating: rating!,
         },
       });
 
       toast.success("Review created!");
+      setIsSubmitting(false);
 
       setCurrentReviewId(id);
+      setIsCreatingReview(false);
+      setRating(undefined);
+      reset();
 
       const reviewRes = await getReviewByIdRequest({ data: { id: id } });
       const review = await reviewRes.json();
@@ -97,6 +104,10 @@ function ReviewForm() {
     }
   }, [isCreatingReview]);
 
+  useEffect(() => {
+    setFormErrors([]);
+  }, [rating]);
+
   const formRef = useRef(null);
   const executeScroll = () => {
     //@ts-ignore
@@ -112,14 +123,17 @@ function ReviewForm() {
       <form
         ref={formRef}
         onSubmit={handleSubmit(onSubmit)}
-        className="overflow-hidden relative flex flex-col gap-2 items-center justify-center w-full  "
+        onChange={() => {
+          setFormErrors([]);
+        }}
+        className="overflow-hidden relative flex flex-col gap-6 items-center justify-center w-full  "
         autoComplete="off"
       >
-        <div className="flex flex-row justify-between items-start gap-2 w-full p-2">
+        <div className="flex flex-row justify-between items-start gap-2 w-full">
           <div className="flex flex-col gap-2">
             <CoordinatesDisplay
               preText="Writing a review at"
-              className=" text-xl md:text-2xl gap-2"
+              className=" text-lg md:text-2xl gap-1 md:gap-2"
             />
             <p className="text-sm italic">
               Drag the map pin or search again to change coordinates
@@ -129,6 +143,8 @@ function ReviewForm() {
             type="button"
             onClick={() => {
               setIsCreatingReview(false);
+              setRating(undefined);
+              reset();
             }}
             outlineColor="red"
             className=" "
@@ -138,80 +154,88 @@ function ReviewForm() {
           </Button>
         </div>
 
-        <label htmlFor="title" className="mt-4">
-          Title
-        </label>
-        <input
-          {...register("title")}
-          placeholder="Title"
-          className="border rounded border-stone-300 md:w-3/4 w-full  outline-violet-300 p-2 shadow-sm"
-          id="title"
-        />
+        <div className="flex flex-col w-full md:w-10/12 gap-2">
+          <label htmlFor="title" className="text-lg">
+            Title
+          </label>
+          <input
+            {...register("title")}
+            placeholder="Add a title here"
+            className="border rounded border-stone-300 w-full  outline-violet-300 p-2 shadow-sm"
+            id="title"
+          />
+        </div>
 
-        <label htmlFor="body" className="mt-4">
-          Review
-        </label>
-        <textarea
-          {...register("body")}
-          placeholder="Write review here"
-          className="border rounded border-stone-300 md:w-3/4 w-full  outline-violet-300 p-2 shadow-sm"
-          id="body"
-        />
+        <div className="flex flex-col w-full md:w-10/12 gap-2">
+          <label htmlFor="body" className="text-lg">
+            Review
+          </label>
+          <textarea
+            {...register("body")}
+            placeholder="Write your review here"
+            className="border rounded border-stone-300  w-full  outline-violet-300 p-2 shadow-sm"
+            id="body"
+          />
+        </div>
 
-        <label htmlFor="rating-radios" className="mt-4">
-          Overall rating
-        </label>
-        <div
-          className="flex flex-row gap-4 text-sm text-center"
-          id="rating-radios"
-        >
-          <div className="flex flex-col gap-4 justify-center items-center">
-            <input
-              type="radio"
-              {...register("rating")}
-              value={"3"}
-              id="rating-positive"
-              className=" appearance-none h-5 w-5 border border-stone-700 checked:bg-emerald-400 hover:cursor-pointer hover:bg-emerald-400"
-            />
-            <label htmlFor="rating-positive">Positive</label>
-          </div>
-
-          <div className="flex flex-col gap-4 justify-center items-center hover:cursor-pointer">
-            <input
-              type="radio"
-              {...register("rating")}
-              value={"2"}
-              id="rating-neutral"
-              className=" appearance-none h-5 w-5 border border-stone-700 checked:bg-blue-400 hover:cursor-pointer hover:bg-blue-400"
-            />
-            <label htmlFor="rating-neutral">Neutral</label>
-          </div>
-          <div className="flex flex-col gap-4 justify-center items-center">
-            <input
-              type="radio"
-              {...register("rating")}
-              value={"1"}
-              id="rating-negative"
-              className=" appearance-none h-5 w-5 border border-stone-700  checked:bg-rose-400 hover:cursor-pointer hover:bg-rose-400"
-            />
-            <label htmlFor="rating-negative">Negative</label>
+        <div className="flex flex-col w-full md:w-10/12 gap-2">
+          <label htmlFor="rating" className="text-lg">
+            Overall experience
+          </label>
+          <div className="flex flex-row gap-4 text-sm text-center bg-">
+            <Button
+              type="button"
+              outlineColor="stone"
+              border="thin"
+              onClick={() => {
+                setRating(1);
+              }}
+              selected={rating == 1}
+              selectedClassName="bg-rose-400  !text-stone-50 !border-stone-50"
+            >
+              Negative
+            </Button>
+            <Button
+              type="button"
+              outlineColor="stone"
+              border="thin"
+              onClick={() => setRating(2)}
+              selected={rating == 2}
+              selectedClassName="bg-blue-400 !text-stone-50 !border-stone-50"
+            >
+              Neutral
+            </Button>
+            <Button
+              type="button"
+              outlineColor="stone"
+              border="thin"
+              onClick={() => setRating(3)}
+              selected={rating == 3}
+              selectedClassName="bg-emerald-400 !text-stone-50 !border-stone-50"
+            >
+              Positive
+            </Button>
           </div>
         </div>
-        <Button
-          outlineColor="petal"
-          type="submit"
-          border="thin"
-          className="mb-4"
-        >
-          Submit
-        </Button>
+
         {formErrors.length > 0 && (
-          <div className="text-rose-700 text-sm">
+          <div className="text-rose-600 text-lg w-full md:w-10/12">
             {`Missing field${
               formErrors.length === 1 ? "" : "s"
             }: ${formErrors.join(", ")}.`}
           </div>
         )}
+
+        <Button
+          outlineColor="petal"
+          spinnerSize={7}
+          type="submit"
+          border="thin"
+          className="mb-4"
+          loading={isSubmitting}
+        >
+          Submit
+        </Button>
       </form>
     </Card>
   );

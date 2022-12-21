@@ -7,10 +7,6 @@ export interface ProfileProps {
 }
 
 function Profile({ children }: ProfileProps) {
-  const { setIsMapLoaded } = uzeStore((state) => state.actions);
-  useEffect(() => {
-    setIsMapLoaded(false);
-  }, []);
   return <Layout>{children}</Layout>;
 }
 

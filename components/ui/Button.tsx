@@ -1,5 +1,6 @@
 import React from "react";
 import classNames from "classnames";
+import { BeatLoader } from "react-spinners";
 
 export interface ButtonProps {
   children: React.ReactNode;
@@ -10,6 +11,10 @@ export interface ButtonProps {
   type?: "button" | "submit" | "reset" | undefined;
   border?: "thin" | "thick" | "none";
   shadow?: "none";
+  loading?: boolean;
+  spinnerSize?: number;
+  selected?: boolean;
+  selectedClassName?: string;
 }
 
 function Button({
@@ -21,13 +26,17 @@ function Button({
   type,
   border,
   shadow,
+  loading,
+  spinnerSize,
+  selected,
+  selectedClassName,
 }: ButtonProps) {
   return (
     <button
       onClick={onClick}
       type={type}
       className={classNames(
-        "shadow-sm rounded p-2 active:scale-100 duration-75 hover:scale-105",
+        "relative shadow-sm rounded p-2 active:scale-100 duration-75 hover:scale-105",
         {
           "border-violet-500 text-violet-500": outlineColor === "violet",
           "border-stone-400 text-stone-700": outlineColor === "stone",
@@ -46,10 +55,15 @@ function Button({
           "border-0": border === "none",
           "shadow-none": shadow === "none",
         },
-        className
+        className,
+        selected && selectedClassName
       )}
     >
-      {children}
+      {loading ? (
+        <BeatLoader loading={loading} size={spinnerSize} color={"#a743e4"} />
+      ) : (
+        children
+      )}
     </button>
   );
 }
