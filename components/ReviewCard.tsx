@@ -11,6 +11,7 @@ import Card from "./ui/Card";
 
 function ReviewCard() {
   const reviewId = uzeStore((state) => state.currentReviewId);
+  const { setCurrentReviewId } = uzeStore((state) => state.actions);
   const [review, setReview] = useState<Review | null>(null);
   const [user, setUser] = useState<User | null>(null);
   useEffect(() => {
@@ -55,7 +56,9 @@ function ReviewCard() {
           </div>
           <Button
             type="button"
-            onClick={() => {}}
+            onClick={() => {
+              setCurrentReviewId("");
+            }}
             outlineColor="red"
             className=" "
             border="thin"

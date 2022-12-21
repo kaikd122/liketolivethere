@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getReviewsNearTownArgs } from "../../lib/actions/review";
 
 export interface getReviewsNearTownResponse {
-  id: number;
+  id: string;
   title: string | null;
   body: string | null;
   rating: number | null;

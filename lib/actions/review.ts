@@ -1,5 +1,7 @@
 //make method for creating review
 
+import { Coordinates } from "../../types/types";
+
 export interface createReviewArgs {
   data: {
     body: string;
@@ -24,6 +26,15 @@ export interface getReviewByIdArgs {
   };
 }
 
+export interface getReviewsWithinMapBoundsArgs {
+  data: {
+    bounds: {
+      ne: Coordinates;
+      sw: Coordinates;
+    };
+  };
+}
+
 export async function createReviewCommand(args: createReviewArgs) {
   const res = await fetch("/api/createReview", {
     method: "POST",
@@ -36,6 +47,17 @@ export async function createReviewCommand(args: createReviewArgs) {
 
 export async function getReviewsNearTownRequest(args: getReviewsNearTownArgs) {
   const res = await fetch("/api/getReviewsNearTown", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(args),
+  });
+  return res;
+}
+
+export async function getReviewsWithinMapBounds(
+  args: getReviewsWithinMapBoundsArgs
+) {
+  const res = await fetch("/api/getReviewsWithinMapBounds", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(args),

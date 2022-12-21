@@ -15,6 +15,7 @@ import CoordinatesDisplay from "./CoordinatesDisplay";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { getTownUrl, replaceUrl } from "../lib/util/urls";
+import ReviewMarkers from "./ReviewMarkers";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -183,6 +184,7 @@ function MapContainer() {
           >
             <MapPinIcon className="w-10 h-10 text-petal active:scale-90 duration-75 " />
           </Marker>
+          <ReviewMarkers />
           <FlyTo />
 
           <Geocoder
