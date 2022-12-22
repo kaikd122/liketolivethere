@@ -41,7 +41,6 @@ function ReviewForm() {
   const onSubmit = async (data: FormData) => {
     let isInvalid = false;
     const errors: string[] = [];
-    console.log("hi");
     if (!data.body) {
       errors.push("review");
 
@@ -91,7 +90,6 @@ function ReviewForm() {
 
       const reviewRes = await getReviewByIdRequest({ data: { id: id } });
       const review = await reviewRes.json();
-      console.log(review);
     } catch (e) {
       toast.error("Something went wrong");
       console.log(e);
@@ -126,7 +124,7 @@ function ReviewForm() {
         onChange={() => {
           setFormErrors([]);
         }}
-        className="overflow-hidden relative flex flex-col gap-6 items-center justify-center w-full  "
+        className="overflow-hidden relative flex flex-col gap-6 items-center justify-center w-full p-2 "
         autoComplete="off"
       >
         <div className="flex flex-row justify-between items-start gap-2 w-full">

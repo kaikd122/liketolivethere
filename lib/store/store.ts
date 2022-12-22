@@ -1,6 +1,10 @@
 import { User } from "@prisma/client";
 import create from "zustand";
-import { Coordinates, kingsCrossCoords } from "../../types/types";
+import {
+  Coordinates,
+  kingsCrossCoords,
+  ReviewFeature,
+} from "../../types/types";
 
 type TabOptions = "MAP" | "TOWNS" | "PROFILE" | undefined;
 
@@ -15,6 +19,7 @@ interface State {
     setIsDragging: (isDragging: boolean) => void;
     setIsMapLoaded: (isMapLoaded: boolean) => void;
     setCurrentReviewId: (currentReviewId: string) => void;
+    setReviewFeatures: (reviewFeatures: ReviewFeature[]) => void;
   };
   isLoading: boolean;
   user: User;
@@ -23,6 +28,7 @@ interface State {
   isDragging: boolean;
   isMapLoaded: boolean;
   currentReviewId: string;
+  reviewFeatures: ReviewFeature[];
 }
 
 const uzeStore = create<State>((set) => ({
@@ -37,6 +43,7 @@ const uzeStore = create<State>((set) => ({
   isDragging: false,
   isMapLoaded: false,
   currentReviewId: "",
+  reviewFeatures: [],
   actions: {
     setCurrentReviewId: (currentReviewId) => set({ currentReviewId }),
     setCoordinates: (coordinates) => set({ coordinates }),
@@ -46,6 +53,7 @@ const uzeStore = create<State>((set) => ({
     setUser: (user) => set({ user }),
     setIsCreatingReview: (isCreatingReview) => set({ isCreatingReview }),
     setIsDragging: (isDragging) => set({ isDragging }),
+    setReviewFeatures: (reviewFeatures) => set({ reviewFeatures }),
   },
 }));
 

@@ -9,13 +9,14 @@ import Button from "./ui/Button";
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import getNearbyTowns from "../pages/api/getNearbyTowns";
 import { getNearbyTownsRequest } from "../lib/actions/search";
-import { towns } from "@prisma/client";
+import { Review, towns } from "@prisma/client";
 import classNames from "classnames";
 import CoordinatesDisplay from "./CoordinatesDisplay";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { getTownUrl, replaceUrl } from "../lib/util/urls";
 import ReviewMarkers from "./ReviewMarkers";
+import { getReviewsWithinMapBoundsRequest } from "../lib/actions/review";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -86,6 +87,8 @@ function Geocoder(props: GeocoderProps) {
 
 function FlyTo() {
   const { current: map } = useMap();
+  const isCreatingReview = uzeStore((state) => state.isCreatingReview);
+
   const coordinates = uzeStore((state) => state.coordinates);
   useEffect(() => {
     if (!map) {
@@ -94,7 +97,6 @@ function FlyTo() {
 
     map.flyTo({
       center: [coordinates.lng, coordinates.lat],
-      zoom: 14,
     });
   }, [coordinates]);
   return null;
@@ -109,11 +111,13 @@ function MapContainer() {
     setIsDragging,
     setCurrentTab,
     setIsMapLoaded,
+    setReviewFeatures,
   } = uzeStore((state) => state.actions);
   const currentTab = uzeStore((state) => state.currentTab);
   const isCreatingReview = uzeStore((state) => state.isCreatingReview);
   const [nearbyTowns, setNearbyTowns] = useState<Array<Partial<towns>>>([]);
   const isDragging = uzeStore((state) => state.isDragging);
+  const reviewFeatures = uzeStore((state) => state.reviewFeatures);
 
   const [bounds, setBounds] = useState<Array<number>>([]);
   const [zoom, setZoom] = useState<number>(0);
@@ -123,10 +127,6 @@ function MapContainer() {
     //@ts-ignore
     mapRef?.current && mapRef.current.scrollIntoView({ behavior: "smooth" });
   };
-
-  useEffect(() => {
-    console.log("coordinates", coordinates);
-  }, [JSON.stringify(coordinates)]);
 
   useEffect(() => {
     if (!isCreatingReview) {
@@ -141,8 +141,42 @@ function MapContainer() {
         className={`flex flex-col items-center justify-center h-500 border border-stone-300 max-h-[50vh] md:max-h-[100vh] rounded shadow`}
       >
         <Map
-          onLoad={() => {
+          onLoad={async (e) => {
             setIsMapLoaded(true);
+            const map = e.target;
+            const bounds = map.getBounds().toArray().flat();
+            setBounds(bounds);
+            setZoom(map.getZoom());
+
+            const res = await getReviewsWithinMapBoundsRequest({
+              data: {
+                bounds: {
+                  sw: {
+                    lat: bounds[1],
+                    lng: bounds[0],
+                  },
+                  ne: {
+                    lat: bounds[3],
+                    lng: bounds[2],
+                  },
+                },
+              },
+            });
+            const data: Partial<Review>[] = await res.json();
+            const features = data.map((r) => ({
+              type: "Feature",
+              properties: {
+                id: r.id,
+                title: r.title,
+                rating: r.rating,
+              },
+              geometry: {
+                type: "Point",
+                coordinates: [r.longitude, r.latitude],
+              },
+            }));
+            console.log(features);
+            setReviewFeatures(features);
           }}
           onClick={(e) => {
             if (!isDragging) {
@@ -167,32 +201,61 @@ function MapContainer() {
             borderRadius: "0.25rem",
           }}
           mapStyle="mapbox://styles/mapbox/streets-v12"
-          onMoveEnd={(e) => {
+          onDragEnd={(e) => {
+            if (isCreatingReview) {
+              return;
+            }
+
+            setZoom(e.viewState.zoom);
+            const bounds = e.target.getBounds().toArray().flat();
+            setBounds(bounds);
+            setCoordinates({
+              lng: e.viewState.longitude,
+              lat: e.viewState.latitude,
+            });
+          }}
+          onZoomEnd={(e) => {
+            if (isCreatingReview) {
+              return;
+            }
+
             setZoom(e.viewState.zoom);
             const bounds = e.target.getBounds().toArray().flat();
             setBounds(bounds);
           }}
         >
-          <Marker
-            longitude={coordinates.lng}
-            latitude={coordinates.lat}
-            anchor="bottom"
-            draggable={true}
-            onDragStart={() => {
-              setIsDragging(true);
-            }}
-            onDragEnd={(e) => {
-              const lngLat = e.lngLat;
-              setCoordinates({
-                lng: lngLat.lng,
-                lat: lngLat.lat,
-              });
-              setIsDragging(false);
-            }}
-            style={{ zIndex: "99" }}
-          >
-            <MapPinIcon className="w-10 h-10 text-petal active:scale-90 duration-75 " />
-          </Marker>
+          {isCreatingReview && (
+            <Marker
+              longitude={coordinates.lng}
+              latitude={coordinates.lat}
+              anchor="bottom"
+              draggable={true}
+              onDragStart={() => {
+                setIsDragging(true);
+              }}
+              onDragEnd={(e) => {
+                const lngLat = e.lngLat;
+                setCoordinates({
+                  lng: lngLat.lng,
+                  lat: lngLat.lat,
+                });
+                getNearbyTownsRequest({
+                  data: {
+                    latitude: lngLat.lat,
+                    longitude: lngLat.lng,
+                    limit: 5,
+                  },
+                }).then(async (res) => {
+                  const data = await res.json();
+                  setNearbyTowns(data);
+                });
+                setIsDragging(false);
+              }}
+              style={{ zIndex: "99" }}
+            >
+              <MapPinIcon className="w-10 h-10 text-petal active:scale-90 duration-75 " />
+            </Marker>
+          )}
           <ReviewMarkers bounds={bounds} zoom={zoom} />
           <FlyTo />
 
@@ -205,12 +268,17 @@ function MapContainer() {
       </div>
       {coordinates?.lat && coordinates?.lng ? (
         <div className="py-3 flex flex-row justify-between items-center px-3 md:px-0">
-          <CoordinatesDisplay preText="Lat lng:" className="text-base gap-1" />
+          <CoordinatesDisplay
+            preText="Centre lat lng:"
+            className="text-base gap-1"
+          />
           {!isCreatingReview ? (
             <Button
               outlineColor="petal"
               border="thin"
-              onClick={() => setIsCreatingReview(true)}
+              onClick={() => {
+                setIsCreatingReview(true);
+              }}
             >
               Write a review
             </Button>

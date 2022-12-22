@@ -1,9 +1,8 @@
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import { Review } from "@prisma/client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React from "react";
 import { Marker, useMap, LayerProps, Source, Layer } from "react-map-gl";
-import { getReviewsWithinMapBoundsRequest } from "../lib/actions/review";
 import uzeStore from "../lib/store/store";
 import useSupercluster from "use-supercluster";
 
@@ -14,65 +13,19 @@ export interface ReviewMarkersProps {
 
 function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
   const { current: map } = useMap();
-  const isMapLoaded = uzeStore((state) => state.isMapLoaded);
-  const [reviews, setReviews] = useState<Array<Partial<Review>>>([]);
-
-  useEffect(() => {
-    if (!isMapLoaded || !map) {
-      return;
-    }
-
-    const main = async () => {
-      const res = await getReviewsWithinMapBoundsRequest({
-        data: {
-          bounds: {
-            sw: {
-              lat: bounds[1],
-              lng: bounds[0],
-            },
-            ne: {
-              lat: bounds[3],
-              lng: bounds[2],
-            },
-          },
-        },
-      });
-      const data = await res.json();
-      console.log(data);
-
-      setReviews(data);
-    };
-
-    main();
-  }, [isMapLoaded]);
-
-  const reviewFeatures = useMemo(() => {
-    return reviews.map((r) => ({
-      type: "Feature",
-      properties: {
-        id: r.id,
-        title: r.title,
-        rating: r.rating,
-      },
-      geometry: {
-        type: "Point",
-        coordinates: [r.longitude, r.latitude],
-      },
-    }));
-  }, [JSON.stringify(reviews)]);
+  const reviewFeatures = uzeStore((state) => state.reviewFeatures);
 
   const { clusters, supercluster } = useSupercluster({
     points: reviewFeatures,
     bounds: bounds as unknown as [number, number, number, number],
     zoom,
-    options: { radius: 10, maxZoom: 20 },
+    options: { radius: 75, maxZoom: 22 },
   });
 
   return (
-    <>
+    <div className="w-full h-full ">
       {clusters.map((cluster) => {
         const [longitude, latitude] = cluster.geometry.coordinates;
-
         const { cluster: isCluster, point_count: pointCount } =
           cluster.properties;
 
@@ -87,9 +40,10 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
                   height: `${3 + (pointCount / reviewFeatures.length) * 5}vw`,
                 }}
                 onClick={() => {
+                  const d = supercluster.getLeaves(cluster.id, Infinity);
+                  console.log(d);
                   const expansionZoom = Math.min(
-                    supercluster.getClusterExpansionZoom(cluster.id),
-                    20
+                    supercluster.getClusterExpansionZoom(cluster.id)
                   );
 
                   map?.flyTo({
@@ -109,17 +63,7 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
           </Marker>
         );
       })}
-
-      {/* {reviews.map((r) => (
-        <Marker
-          key={r.id}
-          latitude={r.latitude as unknown as number}
-          longitude={r.longitude as unknown as number}
-        >
-          <MapPinIcon className="w-10 h-10 text-petal active:scale-90 duration-75 " />
-        </Marker>
-      ))} */}
-    </>
+    </div>
   );
 }
 
