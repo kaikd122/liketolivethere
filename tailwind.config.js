@@ -9,6 +9,7 @@ module.exports = {
     extend: {
       colors: {
         petal: "#a743e4",
+        petalLight: "#d6a9f7",
       },
     },
     fontFamily: {

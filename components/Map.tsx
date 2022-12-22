@@ -115,6 +115,9 @@ function MapContainer() {
   const [nearbyTowns, setNearbyTowns] = useState<Array<Partial<towns>>>([]);
   const isDragging = uzeStore((state) => state.isDragging);
 
+  const [bounds, setBounds] = useState<Array<number>>([]);
+  const [zoom, setZoom] = useState<number>(0);
+
   const mapRef = useRef(null);
   const executeScroll = () => {
     //@ts-ignore
@@ -164,6 +167,11 @@ function MapContainer() {
             borderRadius: "0.25rem",
           }}
           mapStyle="mapbox://styles/mapbox/streets-v12"
+          onMoveEnd={(e) => {
+            setZoom(e.viewState.zoom);
+            const bounds = e.target.getBounds().toArray().flat();
+            setBounds(bounds);
+          }}
         >
           <Marker
             longitude={coordinates.lng}
@@ -181,10 +189,11 @@ function MapContainer() {
               });
               setIsDragging(false);
             }}
+            style={{ zIndex: "99" }}
           >
             <MapPinIcon className="w-10 h-10 text-petal active:scale-90 duration-75 " />
           </Marker>
-          <ReviewMarkers />
+          <ReviewMarkers bounds={bounds} zoom={zoom} />
           <FlyTo />
 
           <Geocoder
