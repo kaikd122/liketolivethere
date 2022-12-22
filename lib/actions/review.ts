@@ -54,7 +54,7 @@ export async function getReviewsNearTownRequest(args: getReviewsNearTownArgs) {
   return res;
 }
 
-export async function getReviewsWithinMapBounds(
+export async function getReviewsWithinMapBoundsRequest(
   args: getReviewsWithinMapBoundsArgs
 ) {
   const res = await fetch("/api/getReviewsWithinMapBounds", {
