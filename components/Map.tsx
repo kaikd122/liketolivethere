@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
+import mapboxgl, { Control } from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import Map, { Marker, useMap } from "react-map-gl";
 import MapboxGeocoder, { Result } from "@mapbox/mapbox-gl-geocoder";
 import { Coordinates, kingsCrossCoords } from "../types/types";
 import { coordsArrayToObject } from "../lib/util/map-utils";
 import uzeStore from "../lib/store/store";
 import Button from "./ui/Button";
-import { MapPinIcon } from "@heroicons/react/24/solid";
+import { MapPinIcon, PlusIcon } from "@heroicons/react/24/solid";
 import getNearbyTowns from "../pages/api/getNearbyTowns";
 import { getNearbyTownsRequest } from "../lib/actions/search";
 import { Review, towns } from "@prisma/client";
@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { getTownUrl, replaceUrl } from "../lib/util/urls";
 import ReviewMarkers from "./ReviewMarkers";
 import { getReviewsWithinMapBoundsRequest } from "../lib/actions/review";
+import { map } from "leaflet";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -24,6 +25,28 @@ export interface GeocoderProps {
   setCoordinates: (coordinates: Coordinates) => void;
   coordinates: Coordinates;
   setNearbyTowns: (towns: Array<Partial<towns>>) => void;
+}
+
+export interface SearchHereButtonProps {}
+
+function SearchHereButton(props: SearchHereButtonProps) {
+  const isMapViewUnsearched = uzeStore((state) => state.isMapViewUnsearched);
+  const { setIsMapViewUnsearched } = uzeStore((state) => state.actions);
+  const [shouldShow, setShouldShow] = useState(true);
+
+  useEffect(() => {
+    if (isMapViewUnsearched) {
+      setShouldShow(true);
+    } else {
+      setShouldShow(false);
+    }
+  }, [isMapViewUnsearched]);
+
+  if (!shouldShow) {
+    return null;
+  }
+
+  return <Button>Search here</Button>;
 }
 
 function Geocoder(props: GeocoderProps) {
@@ -85,15 +108,24 @@ function Geocoder(props: GeocoderProps) {
   return <div />;
 }
 
-function FlyTo() {
+function FlyTo({
+  setBounds,
+  setZoom,
+}: {
+  setBounds: (bounds: Array<number>) => void;
+  setZoom: (zoom: number) => void;
+}) {
   const { current: map } = useMap();
-  const isCreatingReview = uzeStore((state) => state.isCreatingReview);
-
+  const { setIsMapViewUnsearched } = uzeStore((state) => state.actions);
   const coordinates = uzeStore((state) => state.coordinates);
   useEffect(() => {
     if (!map) {
       return;
     }
+
+    setIsMapViewUnsearched(true);
+    setBounds(map.getBounds().toArray().flat());
+    setZoom(map.getZoom());
 
     map.flyTo({
       center: [coordinates.lng, coordinates.lat],
@@ -103,7 +135,6 @@ function FlyTo() {
 }
 
 function MapContainer() {
-  const router = useRouter();
   const coordinates = uzeStore((state) => state.coordinates);
   const {
     setCoordinates,
@@ -112,12 +143,13 @@ function MapContainer() {
     setCurrentTab,
     setIsMapLoaded,
     setReviewFeatures,
+    setIsMapViewUnsearched,
   } = uzeStore((state) => state.actions);
   const currentTab = uzeStore((state) => state.currentTab);
   const isCreatingReview = uzeStore((state) => state.isCreatingReview);
   const [nearbyTowns, setNearbyTowns] = useState<Array<Partial<towns>>>([]);
   const isDragging = uzeStore((state) => state.isDragging);
-  const reviewFeatures = uzeStore((state) => state.reviewFeatures);
+  const isMapViewUnsearched = uzeStore((state) => state.isMapViewUnsearched);
 
   const [bounds, setBounds] = useState<Array<number>>([]);
   const [zoom, setZoom] = useState<number>(0);
@@ -142,7 +174,9 @@ function MapContainer() {
       >
         <Map
           onLoad={async (e) => {
+            console.log("LAODD");
             setIsMapLoaded(true);
+
             const map = e.target;
             const bounds = map.getBounds().toArray().flat();
             setBounds(bounds);
@@ -162,6 +196,9 @@ function MapContainer() {
                 },
               },
             });
+
+            setIsMapViewUnsearched(false);
+
             const data: Partial<Review>[] = await res.json();
             const features = data.map((r) => ({
               type: "Feature",
@@ -175,7 +212,6 @@ function MapContainer() {
                 coordinates: [r.longitude, r.latitude],
               },
             }));
-            console.log(features);
             setReviewFeatures(features);
           }}
           onClick={(e) => {
@@ -202,34 +238,36 @@ function MapContainer() {
           }}
           mapStyle="mapbox://styles/mapbox/streets-v12"
           onDragEnd={(e) => {
-            if (isCreatingReview) {
-              return;
-            }
-
             setZoom(e.viewState.zoom);
             const bounds = e.target.getBounds().toArray().flat();
             setBounds(bounds);
-            setCoordinates({
-              lng: e.viewState.longitude,
-              lat: e.viewState.latitude,
-            });
+            setIsMapViewUnsearched(true);
+            if (!isCreatingReview) {
+              setCoordinates({
+                lng: e.viewState.longitude,
+                lat: e.viewState.latitude,
+              });
+            }
           }}
           onZoomEnd={(e) => {
-            if (isCreatingReview) {
-              return;
-            }
-
             setZoom(e.viewState.zoom);
             const bounds = e.target.getBounds().toArray().flat();
             setBounds(bounds);
+            setIsMapViewUnsearched(true);
+            if (!isCreatingReview) {
+              setCoordinates({
+                lng: e.viewState.longitude,
+                lat: e.viewState.latitude,
+              });
+            }
           }}
         >
           {isCreatingReview && (
             <Marker
               longitude={coordinates.lng}
               latitude={coordinates.lat}
-              anchor="bottom"
               draggable={true}
+              anchor="bottom"
               onDragStart={() => {
                 setIsDragging(true);
               }}
@@ -239,6 +277,9 @@ function MapContainer() {
                   lng: lngLat.lng,
                   lat: lngLat.lat,
                 });
+
+                //need to get bounds
+
                 getNearbyTownsRequest({
                   data: {
                     latitude: lngLat.lat,
@@ -257,7 +298,8 @@ function MapContainer() {
             </Marker>
           )}
           <ReviewMarkers bounds={bounds} zoom={zoom} />
-          <FlyTo />
+          <FlyTo setBounds={setBounds} setZoom={setZoom} />
+          <SearchHereButton />
 
           <Geocoder
             setCoordinates={setCoordinates}
@@ -272,6 +314,7 @@ function MapContainer() {
             preText="Centre lat lng:"
             className="text-base gap-1"
           />
+          <SearchHereButton />
           {!isCreatingReview ? (
             <Button
               outlineColor="petal"

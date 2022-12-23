@@ -31,7 +31,11 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
 
         if (isCluster) {
           return (
-            <Marker key={cluster.id} latitude={latitude} longitude={longitude}>
+            <Marker
+              key={`${cluster.id}-cluster`}
+              latitude={latitude}
+              longitude={longitude}
+            >
               <div
                 className={`text-[xl] rounded-full bg-petalLight text-white flex items-center justify-center 
                 hover:scale-105 duration-75`}
@@ -58,7 +62,11 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
           );
         }
         return (
-          <Marker key={cluster.id} latitude={latitude} longitude={longitude}>
+          <Marker
+            key={`${cluster.id}-feature`}
+            latitude={latitude}
+            longitude={longitude}
+          >
             <MapPinIcon className="w-5 h-5 text-petal active:scale-90 duration-75 " />
           </Marker>
         );

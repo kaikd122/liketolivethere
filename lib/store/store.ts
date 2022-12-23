@@ -20,6 +20,9 @@ interface State {
     setIsMapLoaded: (isMapLoaded: boolean) => void;
     setCurrentReviewId: (currentReviewId: string) => void;
     setReviewFeatures: (reviewFeatures: ReviewFeature[]) => void;
+    setIsMapViewUnsearched: (isMapViewUnsearched: boolean) => void;
+    setZoom: (zoom: number) => void;
+    setBounds: (bounds: number[]) => void;
   };
   isLoading: boolean;
   user: User;
@@ -29,6 +32,9 @@ interface State {
   isMapLoaded: boolean;
   currentReviewId: string;
   reviewFeatures: ReviewFeature[];
+  isMapViewUnsearched: boolean;
+  zoom: number;
+  bounds: number[];
 }
 
 const uzeStore = create<State>((set) => ({
@@ -44,6 +50,9 @@ const uzeStore = create<State>((set) => ({
   isMapLoaded: false,
   currentReviewId: "",
   reviewFeatures: [],
+  isMapViewUnsearched: false,
+  zoom: 14,
+  bounds: [],
   actions: {
     setCurrentReviewId: (currentReviewId) => set({ currentReviewId }),
     setCoordinates: (coordinates) => set({ coordinates }),
@@ -54,6 +63,10 @@ const uzeStore = create<State>((set) => ({
     setIsCreatingReview: (isCreatingReview) => set({ isCreatingReview }),
     setIsDragging: (isDragging) => set({ isDragging }),
     setReviewFeatures: (reviewFeatures) => set({ reviewFeatures }),
+    setIsMapViewUnsearched: (isMapViewUnsearched) =>
+      set({ isMapViewUnsearched }),
+    setZoom: (zoom) => set({ zoom }),
+    setBounds: (bounds) => set({ bounds }),
   },
 }));
 
