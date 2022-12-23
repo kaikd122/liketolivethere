@@ -108,16 +108,15 @@ function Geocoder(props: GeocoderProps) {
   return <div />;
 }
 
-function FlyTo({
-  setBounds,
-  setZoom,
-}: {
-  setBounds: (bounds: Array<number>) => void;
-  setZoom: (zoom: number) => void;
-}) {
+function FlyTo() {
   const { current: map } = useMap();
-  const { setIsMapViewUnsearched } = uzeStore((state) => state.actions);
+  const { setIsMapViewUnsearched, setZoom, setBounds } = uzeStore(
+    (state) => state.actions
+  );
   const coordinates = uzeStore((state) => state.coordinates);
+  const zoom = uzeStore((state) => state.zoom);
+  const isCreatingReview = uzeStore((state) => state.isCreatingReview);
+
   useEffect(() => {
     if (!map) {
       return;
@@ -127,10 +126,13 @@ function FlyTo({
     setBounds(map.getBounds().toArray().flat());
     setZoom(map.getZoom());
 
-    map.flyTo({
-      center: [coordinates.lng, coordinates.lat],
-    });
-  }, [coordinates]);
+    if (!isCreatingReview) {
+      map.flyTo({
+        center: [coordinates.lng, coordinates.lat],
+        zoom: zoom,
+      });
+    }
+  }, [coordinates, zoom]);
   return null;
 }
 
@@ -144,15 +146,16 @@ function MapContainer() {
     setIsMapLoaded,
     setReviewFeatures,
     setIsMapViewUnsearched,
+    setZoom,
+    setBounds,
   } = uzeStore((state) => state.actions);
   const currentTab = uzeStore((state) => state.currentTab);
   const isCreatingReview = uzeStore((state) => state.isCreatingReview);
   const [nearbyTowns, setNearbyTowns] = useState<Array<Partial<towns>>>([]);
   const isDragging = uzeStore((state) => state.isDragging);
   const isMapViewUnsearched = uzeStore((state) => state.isMapViewUnsearched);
-
-  const [bounds, setBounds] = useState<Array<number>>([]);
-  const [zoom, setZoom] = useState<number>(0);
+  const zoom = uzeStore((state) => state.zoom);
+  const bounds = uzeStore((state) => state.bounds);
 
   const mapRef = useRef(null);
   const executeScroll = () => {
@@ -298,7 +301,7 @@ function MapContainer() {
             </Marker>
           )}
           <ReviewMarkers bounds={bounds} zoom={zoom} />
-          <FlyTo setBounds={setBounds} setZoom={setZoom} />
+          <FlyTo />
           <SearchHereButton />
 
           <Geocoder
