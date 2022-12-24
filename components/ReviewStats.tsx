@@ -55,9 +55,7 @@ function ReviewStats() {
           </div>
         )}
       </div>
-      <p className="text-sm italic pt-2">
-        Click on a review pin to open a review
-      </p>
+      <p className="text-sm italic pt-2">Click on a map pin to open a review</p>
     </div>
   );
 }

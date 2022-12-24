@@ -21,6 +21,7 @@ export default function FlyTo() {
     }
     setBounds(map.getBounds().toArray().flat());
     setZoom(map.getZoom());
+
     if (isCreatingReview) {
       map.flyTo({
         center: [coordinates.lng, coordinates.lat],
@@ -28,5 +29,6 @@ export default function FlyTo() {
       });
     }
   }, [coordinates, zoom]);
+
   return null;
 }

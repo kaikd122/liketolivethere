@@ -5,12 +5,16 @@ import toast from "react-hot-toast";
 import {
   createReviewCommand,
   getReviewByIdRequest,
+  getReviewsWithinMapBoundsRequest,
 } from "../lib/actions/review";
 import uzeStore from "../lib/store/store";
 import CoordinatesDisplay from "./CoordinatesDisplay";
 import Button from "./ui/Button";
 import Card from "./ui/Card";
 import cuid from "cuid";
+import { bounds } from "leaflet";
+import { Review } from "@prisma/client";
+import { reviewsToFeatures } from "../lib/util/review-utils";
 
 type FormData = {
   body: string;
@@ -37,6 +41,10 @@ function ReviewForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [rating, setRating] = useState<number | undefined>(undefined);
+  const bounds = uzeStore((state) => state.bounds);
+  const { setIsMapViewUnsearched, setReviewFeatures } = uzeStore(
+    (state) => state.actions
+  );
 
   const onSubmit = async (data: FormData) => {
     let isInvalid = false;
@@ -87,6 +95,29 @@ function ReviewForm() {
       setIsCreatingReview(false);
       setRating(undefined);
       reset();
+
+      const res = await getReviewsWithinMapBoundsRequest({
+        data: {
+          bounds: {
+            sw: {
+              lat: bounds[1],
+              lng: bounds[0],
+            },
+            ne: {
+              lat: bounds[3],
+              lng: bounds[2],
+            },
+          },
+          coordinates: {
+            lat: coordinates.lat,
+            lng: coordinates.lng,
+          },
+        },
+      });
+      setIsMapViewUnsearched(false);
+
+      const featureData: Partial<Review>[] = await res.json();
+      setReviewFeatures(reviewsToFeatures(featureData));
     } catch (e) {
       toast.error("Something went wrong");
       console.log(e);

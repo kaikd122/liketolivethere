@@ -1,5 +1,6 @@
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import { Review } from "@prisma/client";
+import { Tooltip } from "react-tooltip";
 
 import React from "react";
 import { Marker, useMap, LayerProps, Source, Layer } from "react-map-gl";
@@ -52,7 +53,7 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
               <div className="flex flex-col items-center justify-center gap-1">
                 <div
                   className={classNames(
-                    "text-xl rounded-full  text-white flex items-center justify-center hover:scale-105 duration-75 opacity-[85%]",
+                    "text-xl rounded-full  text-white flex items-center justify-center hover:scale-110 duration-75 opacity-[85%] border border-stone-50",
                     {
                       "bg-rose-400": mean === 1,
                       "bg-blue-400": mean === 2,
@@ -85,7 +86,7 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
                         }}
                         key={r.properties.id}
                         className={classNames(
-                          "w-8 h-8  hover:scale-110 duration-75",
+                          "w-10 h-10  hover:scale-110 duration-75",
                           {
                             "text-rose-500": r.properties.rating === 1,
                             "text-blue-500": r.properties.rating === 2,
@@ -110,11 +111,14 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
               onClick={() => {
                 setCurrentReviewId(cluster?.properties?.id);
               }}
-              className={classNames("w-8 h-8 hover:scale-110 duration-75", {
-                "text-rose-500": cluster?.properties?.rating === 1,
-                "text-blue-500": cluster?.properties?.rating === 2,
-                "text-emerald-500": cluster?.properties?.rating === 3,
-              })}
+              className={classNames(
+                "w-10 h-10 hover:scale-110 duration-75 stroke-stone-50",
+                {
+                  "text-rose-500": cluster?.properties?.rating === 1,
+                  "text-blue-500": cluster?.properties?.rating === 2,
+                  "text-emerald-500": cluster?.properties?.rating === 3,
+                }
+              )}
             />
           </Marker>
         );

@@ -33,6 +33,7 @@ export function Geocoder(props: GeocoderProps) {
       marker: false,
       flyTo: {
         speed: 2,
+        zoom: 16,
       },
       countries: "GB",
     });

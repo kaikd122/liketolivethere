@@ -44,7 +44,7 @@ export default function Navbar() {
           <Tab
             selected={currentTab === "MAP"}
             onClick={() => {
-              replaceUrl("/");
+              // replaceUrl("/");
               setCurrentTab("MAP");
             }}
           >
@@ -63,7 +63,7 @@ export default function Navbar() {
         <Tab
           selected={currentTab === "TOWNS"}
           onClick={() => {
-            replaceUrl("/towns");
+            // replaceUrl("/towns");
             setCurrentTab("TOWNS");
           }}
         >

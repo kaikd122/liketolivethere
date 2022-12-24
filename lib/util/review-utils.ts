@@ -1,3 +1,4 @@
+import { Review } from "@prisma/client";
 import { ReviewFeature } from "../../types/types";
 
 export function ratingEnumToString(rating: number): string {
@@ -39,4 +40,19 @@ export function reviewFeaturesToDetails(features: ReviewFeature[]): {
     negativeCount,
     neutralCount,
   };
+}
+
+export function reviewsToFeatures(data: Partial<Review>[]): ReviewFeature[] {
+  return data.map((r) => ({
+    type: "Feature",
+    properties: {
+      id: r.id,
+      title: r.title,
+      rating: r.rating,
+    },
+    geometry: {
+      type: "Point",
+      coordinates: [r.longitude, r.latitude],
+    },
+  }));
 }

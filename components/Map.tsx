@@ -20,7 +20,10 @@ import { getReviewsWithinMapBoundsRequest } from "../lib/actions/review";
 import { map } from "leaflet";
 import FlyTo from "./FlyTo";
 import { Geocoder } from "./GeoCoder";
-import { reviewFeaturesToDetails } from "../lib/util/review-utils";
+import {
+  reviewFeaturesToDetails,
+  reviewsToFeatures,
+} from "../lib/util/review-utils";
 import ReviewStats from "./ReviewStats";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
@@ -96,19 +99,7 @@ function MapContainer() {
             setIsMapViewUnsearched(false);
 
             const data: Partial<Review>[] = await res.json();
-            const features = data.map((r) => ({
-              type: "Feature",
-              properties: {
-                id: r.id,
-                title: r.title,
-                rating: r.rating,
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [r.longitude, r.latitude],
-              },
-            }));
-            setReviewFeatures(features);
+            setReviewFeatures(reviewsToFeatures(data));
           }}
           onClick={(e) => {
             if (!isDragging) {
@@ -145,6 +136,9 @@ function MapContainer() {
                 lng: e.viewState.longitude,
                 lat: e.viewState.latitude,
               });
+            } else {
+              setZoom(e.viewState.zoom);
+              setBounds(e.target.getBounds().toArray().flat());
             }
           }}
           onZoomStart={() => {
@@ -159,6 +153,9 @@ function MapContainer() {
                 lng: e.viewState.longitude,
                 lat: e.viewState.latitude,
               });
+            } else {
+              setZoom(e.viewState.zoom);
+              setBounds(e.target.getBounds().toArray().flat());
             }
           }}
         >
@@ -194,7 +191,7 @@ function MapContainer() {
               }}
               style={{ zIndex: "30" }}
             >
-              <MapPinIcon className="w-10 h-10 text-petal active:scale-90 duration-75 " />
+              <MapPinIcon className="w-12 h-12 text-petal active:scale-90 hover:scale-110 duration-75 stroke-stone-50 " />
             </Marker>
           )}
           <ReviewMarkers bounds={bounds} zoom={zoom} />
@@ -207,7 +204,7 @@ function MapContainer() {
           />
           {isMapViewUnsearched && (
             <button
-              className="border shadow-sm border-stone-400 p-2 rounded  active:scale-100 duration-75 hover:scale-105 absolute bottom-2 left-[50%] translate-x-[-50%]  bg-stone-50 font-sans text-sm text-stone-700"
+              className="border shadow-sm border-stone-400 p-2 rounded text-base active:scale-100 duration-75 hover:scale-105 absolute bottom-2 left-[50%] translate-x-[-50%]  bg-stone-50 font-sans text-stone-700"
               onClick={async () => {
                 const res = await getReviewsWithinMapBoundsRequest({
                   data: {
@@ -231,19 +228,8 @@ function MapContainer() {
                 setIsMapViewUnsearched(false);
 
                 const data: Partial<Review>[] = await res.json();
-                const features = data.map((r) => ({
-                  type: "Feature",
-                  properties: {
-                    id: r.id,
-                    title: r.title,
-                    rating: r.rating,
-                  },
-                  geometry: {
-                    type: "Point",
-                    coordinates: [r.longitude, r.latitude],
-                  },
-                }));
-                setReviewFeatures(features);
+
+                setReviewFeatures(reviewsToFeatures(data));
               }}
             >
               Search here
@@ -285,7 +271,7 @@ function MapContainer() {
               className="text-sm"
               onClick={() => {
                 setCurrentTab("TOWNS");
-                replaceUrl(getTownUrl(town));
+                // replaceUrl(getTownUrl(town));
               }}
             >
               {town.name}

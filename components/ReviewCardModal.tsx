@@ -9,9 +9,10 @@ import CoordinatesDisplay from "./CoordinatesDisplay";
 import Button from "./ui/Button";
 import Card from "./ui/Card";
 import Modal from "./ui/Modal";
+import dayjs from "dayjs";
 
 function ReviewCardModal() {
-  const reviewId = uzeStore((state) => state.currentReviewId);
+  const currentReviewId = uzeStore((state) => state.currentReviewId);
   const { setCurrentReviewId } = uzeStore((state) => state.actions);
   const [review, setReview] = useState<Review | null>(null);
   const [user, setUser] = useState<User | null>(null);
@@ -19,7 +20,7 @@ function ReviewCardModal() {
     const main = async () => {
       try {
         const reviewRes = await getReviewByIdRequest({
-          data: { id: reviewId },
+          data: { id: currentReviewId },
         });
         const review = await reviewRes.json();
         setReview(review);
@@ -33,11 +34,11 @@ function ReviewCardModal() {
       }
     };
 
-    if (reviewId) {
+    if (currentReviewId) {
       main();
     }
-  }, [reviewId]);
-  if (!reviewId) {
+  }, [currentReviewId]);
+  if (!currentReviewId) {
     return null;
   }
 
@@ -45,7 +46,12 @@ function ReviewCardModal() {
     return <div>Loading...</div>;
   }
   return (
-    <Modal onClick={() => setCurrentReviewId("")}>
+    <Modal
+      onClick={() => {
+        setCurrentReviewId("");
+        setReview(null);
+      }}
+    >
       <Card className="shadow-lg">
         <div className="flex flex-col gap-6 w-full items-center">
           <div className="flex flex-row justify-between items-start gap-2 w-full ">
@@ -54,12 +60,16 @@ function ReviewCardModal() {
                 preText="Review at"
                 className=" text-lg md:text-2xl gap-1 md:gap-2"
               />
-              <p>Written by {user?.name}</p>
+              <p>
+                Written by {user?.name} on{" "}
+                {dayjs(review.createdAt).format("DD/MM/YYYY")}
+              </p>
             </div>
             <Button
               type="button"
               onClick={() => {
                 setCurrentReviewId("");
+                setReview(null);
               }}
               outlineColor="red"
               className=" "
@@ -79,7 +89,7 @@ function ReviewCardModal() {
             >
               {ratingEnumToString(review.rating!)}
             </div>
-            <p className="text-sm whitespace-pre-line text-left">
+            <p className="text-sm whitespace-pre-line text-left pb-8">
               {review.body}
             </p>
           </div>
