@@ -20,6 +20,8 @@ import { getReviewsWithinMapBoundsRequest } from "../lib/actions/review";
 import { map } from "leaflet";
 import FlyTo from "./FlyTo";
 import { Geocoder } from "./GeoCoder";
+import { reviewFeaturesToDetails } from "../lib/util/review-utils";
+import ReviewStats from "./ReviewStats";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -61,11 +63,10 @@ function MapContainer() {
     <div className={`flex flex-col ${currentTab === "MAP" ? "" : "hidden"}`}>
       <div
         ref={mapRef}
-        className={`flex flex-col items-center justify-center h-500 border border-stone-300 max-h-[50vh] md:max-h-[100vh] rounded shadow`}
+        className={`flex flex-col  items-center justify-center h-500 border border-stone-300 max-h-[50vh] md:max-h-[100vh] rounded shadow`}
       >
         <Map
           onLoad={async (e) => {
-            console.log("LAODD");
             setIsMapLoaded(true);
 
             const map = e.target;
@@ -251,9 +252,11 @@ function MapContainer() {
         </Map>
       </div>
       {coordinates?.lat && coordinates?.lng ? (
-        <div className="py-3 flex flex-row justify-between items-center px-3 md:px-0">
+        <div className="pt-3 flex flex-row justify-between items-center px-3 md:px-0">
           <CoordinatesDisplay
-            preText="Centre lat lng:"
+            preText={`${
+              isCreatingReview ? "Review coordinates:" : "Centre coordinates:"
+            }`}
             className="text-base gap-1"
           />
           {!isCreatingReview ? (
@@ -290,6 +293,7 @@ function MapContainer() {
           );
         })}
       </div>
+      {!isCreatingReview && <ReviewStats />}
     </div>
   );
 }

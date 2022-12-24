@@ -19,7 +19,6 @@ export default function FlyTo() {
     if (isMapViewUnsearched === false) {
       setIsMapViewUnsearched(true);
     }
-    console.log("HERE");
     setBounds(map.getBounds().toArray().flat());
     setZoom(map.getZoom());
     if (isCreatingReview) {

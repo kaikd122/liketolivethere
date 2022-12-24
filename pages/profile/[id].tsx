@@ -39,8 +39,6 @@ function ProfileId() {
     const updateRes = await updateUserCommand(args);
     if (updateRes.ok) {
       setUser({ ...user, name: value });
-    } else {
-      console.log("NOT OK");
     }
   }
   return (

@@ -7,7 +7,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { name, userId } = req.query;
   args.name = name as string;
   args.userId = userId as string;
-  console.log("hi", args);
 
   if (!args?.name && !args?.userId) {
     res.status(403).json({ err: "No userId or name supplied to getUser" });

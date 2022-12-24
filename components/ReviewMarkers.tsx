@@ -41,9 +41,8 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
           );
 
           const mean = Math.round(num / sc.length);
-          console.log(mean);
 
-          return (
+          return zoom < 22 ? (
             <Marker
               key={`${i}-cluster`}
               latitude={latitude}
@@ -74,6 +73,34 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
                 }}
               >
                 {pointCount}
+              </div>
+            </Marker>
+          ) : (
+            <Marker
+              key={`${i}-cluster`}
+              latitude={latitude}
+              longitude={longitude}
+            >
+              <div className="flex flex-col justify-center items-center gap-1">
+                <MapPinIcon
+                  className={classNames("w-8 h-8 hover:scale-110 duration-75", {
+                    "text-rose-500": mean === 1,
+                    "text-blue-500": mean === 2,
+                    "text-emerald-500": mean === 3,
+                  })}
+                />
+                <p
+                  className={classNames(
+                    "text-sans border rounded bg-stone-50 p-1",
+                    {
+                      "text-rose-500 border-rose-500": mean === 1,
+                      "text-blue-500 border-blue-500": mean === 2,
+                      "text-emerald-500 border-emerald-500": mean === 3,
+                    }
+                  )}
+                >
+                  {pointCount}
+                </p>
               </div>
             </Marker>
           );

@@ -7,7 +7,6 @@ function ProfileContainer() {
     return null;
   }
 
-  console.log("HIHI");
   return <div>ProfileContainer</div>;
 }
 
