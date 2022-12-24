@@ -13,53 +13,51 @@ function ReviewStats() {
     return null;
   }
 
-  const negativePercentageClass = (details.negativeCount / details.count) * 100;
-  const positivePercentageClass = (details.positiveCount / details.count) * 100;
-  const neutralPercentageClass = (details.neutralCount / details.count) * 100;
+  const negativePercent = (details.negativeCount / details.count) * 100;
+  const positivePercent = (details.positiveCount / details.count) * 100;
+  const neutralPercent = (details.neutralCount / details.count) * 100;
 
-  console.log(negativePercentageClass);
+  console.log(negativePercent);
 
   return (
     <div className="flex flex-col gap-1 py-3 px-3 md:px-0">
-      <div className="flex rounded  shadow-sm   h-5 w-1/2 overflow-hidden">
+      <span className="whitespace-pre">{`${details.count} ${pluralise({
+        count: details.count,
+        singular: "review",
+        plural: "reviews",
+      })}`}</span>
+      <div className="flex flex-col w-1/2 gap-1">
         {details.negativeCount > 0 && (
-          <div
-            className="h-full bg-rose-400 border-x border-stone-50"
-            style={{ width: `${negativePercentageClass}%` }}
-          ></div>
+          <div className="flex flex-row gap-2 h-6 items-center ">
+            <div
+              className="h-full bg-rose-400 border-x border-stone-50 rounded shadow-sm"
+              style={{ width: `${negativePercent}%` }}
+            />
+            <span className="text-sm">{`${details.negativeCount} negative`}</span>
+          </div>
         )}
         {details.neutralCount > 0 && (
-          <div
-            className="h-full bg-blue-400 border-x border-stone-50"
-            style={{ width: `${neutralPercentageClass}%` }}
-          ></div>
+          <div className="flex flex-row gap-2 h-6 items-center">
+            <div
+              className="h-full bg-blue-400 border-x border-stone-50  rounded shadow-sm"
+              style={{ width: `${neutralPercent}%` }}
+            />
+            <span className="text-sm">{`${details.neutralCount} neutral`}</span>
+          </div>
         )}
         {details.positiveCount > 0 && (
-          <div
-            className="h-full bg-emerald-400 border-x border-stone-50"
-            style={{ width: `${positivePercentageClass}%` }}
-          ></div>
+          <div className="flex flex-row gap-2 h-6 items-center ">
+            <div
+              className="h-full bg-emerald-400 border-x border-stone-50 rounded shadow-sm"
+              style={{ width: `${positivePercent}%` }}
+            />
+            <span className="text-sm">{`${details.positiveCount} positive`}</span>
+          </div>
         )}
       </div>
-      <div className="flex flex-row  flex-wrap">
-        <span className="whitespace-pre">{`${details.count} ${pluralise({
-          count: details.count,
-          singular: "review",
-          plural: "reviews",
-        })}: `}</span>
-        <span className="whitespace-pre text-rose-500">
-          {details.negativeCount}{" "}
-        </span>
-        <span className="whitespace-pre">negative, </span>
-        <span className="whitespace-pre text-blue-500">
-          {details.neutralCount}{" "}
-        </span>
-        <span className="whitespace-pre">neutral, and </span>
-        <span className="whitespace-pre text-emerald-500">
-          {details.positiveCount}{" "}
-        </span>
-        <span className="whitespace-pre">positive</span>
-      </div>
+      <p className="text-sm italic pt-2">
+        Click on a review pin to open a review
+      </p>
     </div>
   );
 }

@@ -156,7 +156,7 @@ function ReviewForm() {
           <input
             {...register("title")}
             placeholder="Add a title here"
-            className="border rounded border-stone-300 w-full  outline-violet-300 p-2 shadow-sm"
+            className="border rounded border-stone-400 w-full  outline-violet-300 p-2 shadow-sm"
             id="title"
           />
         </div>
@@ -168,7 +168,7 @@ function ReviewForm() {
           <textarea
             {...register("body")}
             placeholder="Write your review here"
-            className="border rounded border-stone-300  w-full  outline-violet-300 p-2 shadow-sm"
+            className="border rounded border-stone-400  w-full  outline-violet-300 p-2 shadow-sm"
             id="body"
           />
         </div>

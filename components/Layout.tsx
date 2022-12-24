@@ -7,6 +7,8 @@ import uzeStore from "../lib/store/store";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { Toaster } from "react-hot-toast";
+import Modal from "./ui/Modal";
+import ReviewCardModal from "./ReviewCardModal";
 
 export interface LayoutProps {
   children: ReactNode;
@@ -16,7 +18,6 @@ export default function Layout({ children }: LayoutProps) {
   const { setUser, setCurrentTab } = uzeStore((state) => state.actions);
   const { data: session } = useSession();
   const router = useRouter();
-  console.log(router.asPath);
   useEffect(() => {
     if (!session || user?.name) {
       return;
@@ -60,18 +61,20 @@ export default function Layout({ children }: LayoutProps) {
       setCurrentTab("MAP");
     } else if (router.asPath === "/profile") {
       setCurrentTab("PROFILE");
-    } else if (router.asPath === "/towns") {
+    } else if (router.asPath.slice(0, 6) === "/towns") {
       setCurrentTab("TOWNS");
     }
   }, [router.asPath]);
   return (
-    <div className=" flex flex-col w-full ">
+    <div className=" flex flex-col w-full h-full ">
       <Toaster
         toastOptions={{
           style: { font: "Outfit" },
         }}
       />
       <Navbar />
+
+      <ReviewCardModal />
 
       <main className="flex flex-col md:px-8 mb-8  md:gap-8">{children}</main>
     </div>

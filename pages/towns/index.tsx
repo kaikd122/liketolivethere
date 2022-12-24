@@ -1,12 +1,13 @@
 import React from "react";
 import Layout from "../../components/Layout";
+import TownsContainer from "../../containers/TownsContainer";
 
-export interface TownsProps {
-  children: React.ReactNode;
-}
-
-function Towns({ children }: TownsProps) {
-  return <Layout>{children}</Layout>;
+function Towns() {
+  return (
+    <Layout>
+      <TownsContainer />
+    </Layout>
+  );
 }
 
 export default Towns;

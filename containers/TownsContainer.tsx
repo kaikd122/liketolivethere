@@ -1,6 +1,7 @@
-import { towns } from "@prisma/client";
+import { Review, towns } from "@prisma/client";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
+import TownReviewsList from "../components/TownReviewsList";
 import Button from "../components/ui/Button";
 import Card from "../components/ui/Card";
 import { getReviewsNearTownRequest } from "../lib/actions/review";
@@ -12,8 +13,13 @@ import getTownsByText from "../pages/api/getTownsByText";
 
 function TownsContainer() {
   const currentTab = uzeStore((state) => state.currentTab);
-  const [val, setVal] = React.useState("");
-  const [results, setResults] = React.useState<Array<Partial<towns>>>([]);
+  const { setCurrentTownId, setCurrentTownReviews } = uzeStore(
+    (state) => state.actions
+  );
+  const [val, setVal] = useState("");
+  const currentTownId = uzeStore((state) => state.currentTownId);
+  const [results, setResults] = useState<Array<Partial<towns>>>([]);
+  const [initialReviews, setInitialReviews] = useState<Partial<Review>[]>([]);
 
   if (currentTab !== "TOWNS") {
     return null;
@@ -43,29 +49,39 @@ function TownsContainer() {
         <div className="flex flex-row gap-4 w-full md:w-3/4 justify-between">
           <input
             id="search-towns-input"
-            className="border rounded border-stone-300   outline-violet-300 p-2 shadow-sm w-full"
+            className="border rounded border-stone-400   outline-violet-300 p-2 shadow-sm w-full"
             value={val}
             onChange={(e) => setVal(e.target.value)}
             placeholder="e.g. Wimbledon, Putney, SW19, SW15"
           />
 
-          <button type="submit">Search</button>
+          <Button type="submit" outlineColor="stone" border="thin">
+            Search
+          </Button>
         </div>
       </form>
-      <div className="flex flex-col w-full  ">
+      <div className="flex flex-col w-1/2 gap-2 py-4 ">
         {results.map((result) => {
           return (
             <Button
-              className="flex flex-row justify-between items-center w-full md:w-1/4"
-              onClick={() => {
-                getReviewsNearTownRequest({ data: { townId: result.id! } })
-                  .then(async (res) => {
-                    const data = await res.json();
-                    console.log(data);
-                  })
-                  .catch((e) => {
-                    console.log(e);
+              className="flex flex-row justify-between items-center w-full md:w-1/4 "
+              outlineColor="petal"
+              key={`townresult-${result.id}`}
+              border="thin"
+              onClick={async () => {
+                setResults([]);
+                setCurrentTownId(result.id!);
+                try {
+                  const res = await getReviewsNearTownRequest({
+                    data: { townId: result.id! },
                   });
+                  if (res.ok) {
+                    const data = await res.json();
+                    setInitialReviews(data);
+                  }
+                } catch (error) {
+                  console.log(error);
+                }
               }}
             >
               <p>{result.name}</p>
@@ -74,6 +90,11 @@ function TownsContainer() {
           );
         })}
       </div>
+      {initialReviews.length > 0 && (
+        <>
+          <TownReviewsList initialReviews={initialReviews} />
+        </>
+      )}
     </div>
   );
 }

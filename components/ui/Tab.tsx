@@ -7,7 +7,7 @@ export interface TabProps {
   selected?: boolean;
 }
 
-function Button({ onClick, children, selected }: TabProps) {
+function Tab({ onClick, children, selected }: TabProps) {
   return (
     <button
       onClick={onClick}
@@ -21,4 +21,4 @@ function Button({ onClick, children, selected }: TabProps) {
   );
 }
 
-export default Button;
+export default Tab;

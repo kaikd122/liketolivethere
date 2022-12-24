@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { Review, User } from "@prisma/client";
 import create from "zustand";
 import {
   Coordinates,
@@ -23,6 +23,8 @@ interface State {
     setIsMapViewUnsearched: (isMapViewUnsearched: boolean | undefined) => void;
     setZoom: (zoom: number) => void;
     setBounds: (bounds: number[]) => void;
+    setCurrentTownId: (currentTownId: number) => void;
+    setCurrentTownReviews: (currentTownReviews: Partial<Review>[]) => void;
   };
   isLoading: boolean;
   user: User;
@@ -35,6 +37,8 @@ interface State {
   isMapViewUnsearched: boolean | undefined;
   zoom: number;
   bounds: number[];
+  currentTownId: number | undefined;
+  currentTownReviews: Partial<Review>[];
 }
 
 const uzeStore = create<State>((set) => ({
@@ -53,6 +57,8 @@ const uzeStore = create<State>((set) => ({
   isMapViewUnsearched: undefined,
   zoom: 14,
   bounds: [],
+  currentTownId: undefined,
+  currentTownReviews: [],
   actions: {
     setCurrentReviewId: (currentReviewId) => set({ currentReviewId }),
     setCoordinates: (coordinates) => set({ coordinates }),
@@ -67,6 +73,8 @@ const uzeStore = create<State>((set) => ({
       set({ isMapViewUnsearched }),
     setZoom: (zoom) => set({ zoom }),
     setBounds: (bounds) => set({ bounds }),
+    setCurrentTownId: (currentTownId) => set({ currentTownId }),
+    setCurrentTownReviews: (currentTownReviews) => set({ currentTownReviews }),
   },
 }));
 

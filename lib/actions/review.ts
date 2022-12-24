@@ -17,6 +17,8 @@ export interface createReviewArgs {
 export interface getReviewsNearTownArgs {
   data: {
     townId: number;
+    offset?: number;
+    limit?: number;
   };
 }
 

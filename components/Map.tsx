@@ -63,7 +63,7 @@ function MapContainer() {
     <div className={`flex flex-col ${currentTab === "MAP" ? "" : "hidden"}`}>
       <div
         ref={mapRef}
-        className={`flex flex-col  items-center justify-center h-500 border border-stone-300 max-h-[50vh] md:max-h-[100vh] rounded shadow`}
+        className={`flex flex-col  items-center justify-center h-500 border border-stone-400 max-h-[50vh] md:max-h-[100vh] rounded shadow`}
       >
         <Map
           onLoad={async (e) => {
@@ -192,7 +192,7 @@ function MapContainer() {
                 });
                 setIsDragging(false);
               }}
-              style={{ zIndex: "99" }}
+              style={{ zIndex: "30" }}
             >
               <MapPinIcon className="w-10 h-10 text-petal active:scale-90 duration-75 " />
             </Marker>
