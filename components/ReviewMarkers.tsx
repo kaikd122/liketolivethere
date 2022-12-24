@@ -51,7 +51,7 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
             >
               <div
                 className={classNames(
-                  "text-xl rounded-full  text-white flex items-center justify-center hover:scale-105 duration-75",
+                  "text-xl rounded-full  text-white flex items-center justify-center hover:scale-105 duration-75 opacity-[85%]",
                   {
                     "bg-rose-400": mean === 1,
                     "bg-blue-400": mean === 2,
