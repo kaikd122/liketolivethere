@@ -5,6 +5,8 @@ import React from "react";
 import { Marker, useMap, LayerProps, Source, Layer } from "react-map-gl";
 import uzeStore from "../lib/store/store";
 import useSupercluster from "use-supercluster";
+import { ReviewFeature } from "../types/types";
+import classNames from "classnames";
 
 export interface ReviewMarkersProps {
   bounds: Array<number>;
@@ -24,28 +26,43 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
 
   return (
     <div className="w-full h-full ">
-      {clusters.map((cluster) => {
+      {clusters.map((cluster, i) => {
         const [longitude, latitude] = cluster.geometry.coordinates;
         const { cluster: isCluster, point_count: pointCount } =
           cluster.properties;
 
         if (isCluster) {
+          const sc = supercluster.getLeaves(cluster.id, Infinity);
+
+          const num = sc.reduce(
+            (acc: number, cur: ReviewFeature) =>
+              acc + (cur?.properties?.rating || 2),
+            0
+          );
+
+          const mean = Math.round(num / sc.length);
+          console.log(mean);
+
           return (
             <Marker
-              key={`${cluster.id}-cluster`}
+              key={`${i}-cluster`}
               latitude={latitude}
               longitude={longitude}
             >
               <div
-                className={`text-[xl] rounded-full bg-petalLight text-white flex items-center justify-center 
-                hover:scale-105 duration-75`}
+                className={classNames(
+                  "text-xl rounded-full  text-white flex items-center justify-center hover:scale-105 duration-75",
+                  {
+                    "bg-rose-400": mean === 1,
+                    "bg-blue-400": mean === 2,
+                    "bg-emerald-400": mean === 3,
+                  }
+                )}
                 style={{
-                  width: `${3 + (pointCount / reviewFeatures.length) * 5}vw`,
-                  height: `${3 + (pointCount / reviewFeatures.length) * 5}vw`,
+                  width: `${3 + (pointCount / reviewFeatures.length) * 2}vw`,
+                  height: `${3 + (pointCount / reviewFeatures.length) * 2}vw`,
                 }}
                 onClick={() => {
-                  const d = supercluster.getLeaves(cluster.id, Infinity);
-                  console.log(d);
                   const expansionZoom = Math.min(
                     supercluster.getClusterExpansionZoom(cluster.id)
                   );
@@ -63,11 +80,17 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
         }
         return (
           <Marker
-            key={`${cluster.id}-feature`}
+            key={`${i}-feature`}
             latitude={latitude}
             longitude={longitude}
           >
-            <MapPinIcon className="w-5 h-5 text-petal active:scale-90 duration-75 " />
+            <MapPinIcon
+              className={classNames("w-7 h-7 hover:scale-110 duration-75", {
+                "text-rose-400": cluster?.properties?.rating === 1,
+                "text-blue-400": cluster?.properties?.rating === 2,
+                "text-emerald-400": cluster?.properties?.rating === 3,
+              })}
+            />
           </Marker>
         );
       })}

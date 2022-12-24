@@ -23,7 +23,7 @@
     @apply rounded;
     @apply shadow-sm;
     @apply border;
-    @apply border-stone-500;
+    @apply border-stone-400;
     @apply !m-0 md:!m-2;
     @apply !w-screen;
    

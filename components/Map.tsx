@@ -18,123 +18,10 @@ import { getTownUrl, replaceUrl } from "../lib/util/urls";
 import ReviewMarkers from "./ReviewMarkers";
 import { getReviewsWithinMapBoundsRequest } from "../lib/actions/review";
 import { map } from "leaflet";
+import FlyTo from "./FlyTo";
+import { Geocoder } from "./GeoCoder";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
-
-export interface GeocoderProps {
-  setCoordinates: (coordinates: Coordinates) => void;
-  coordinates: Coordinates;
-  setNearbyTowns: (towns: Array<Partial<towns>>) => void;
-}
-
-export interface SearchHereButtonProps {}
-
-function SearchHereButton(props: SearchHereButtonProps) {
-  const isMapViewUnsearched = uzeStore((state) => state.isMapViewUnsearched);
-  const { setIsMapViewUnsearched } = uzeStore((state) => state.actions);
-  const [shouldShow, setShouldShow] = useState(true);
-
-  useEffect(() => {
-    if (isMapViewUnsearched) {
-      setShouldShow(true);
-    } else {
-      setShouldShow(false);
-    }
-  }, [isMapViewUnsearched]);
-
-  if (!shouldShow) {
-    return null;
-  }
-
-  return <Button>Search here</Button>;
-}
-
-function Geocoder(props: GeocoderProps) {
-  const { current: map } = useMap();
-  const [geo, setGeo] = useState<MapboxGeocoder | null>(null);
-
-  useEffect(() => {
-    if (!map) {
-      return;
-    }
-    if (geo) {
-      return;
-    }
-
-    const geocoder = new MapboxGeocoder({
-      accessToken: mapboxgl.accessToken,
-      mapboxgl: mapboxgl,
-      zoom: 16,
-      minLength: 3,
-      marker: false,
-      flyTo: {
-        speed: 2,
-      },
-      countries: "GB",
-    });
-
-    //for initial load
-    getNearbyTownsRequest({
-      data: {
-        latitude: kingsCrossCoords.lat,
-        longitude: kingsCrossCoords.lng,
-        limit: 5,
-      },
-    }).then(async (res) => {
-      const data = await res.json();
-      props.setNearbyTowns(data);
-    });
-
-    geocoder.on("result", (e) => {
-      const result: Result = e.result;
-      const coords = coordsArrayToObject(result.geometry.coordinates);
-      props.setCoordinates(coords);
-      getNearbyTownsRequest({
-        data: {
-          latitude: coords.lat,
-          longitude: coords.lng,
-          limit: 5,
-        },
-      }).then(async (res) => {
-        const data = await res.json();
-        props.setNearbyTowns(data);
-      });
-    });
-
-    map.addControl(geocoder);
-    setGeo(geocoder);
-  }, []);
-
-  return <div />;
-}
-
-function FlyTo() {
-  const { current: map } = useMap();
-  const { setIsMapViewUnsearched, setZoom, setBounds } = uzeStore(
-    (state) => state.actions
-  );
-  const coordinates = uzeStore((state) => state.coordinates);
-  const zoom = uzeStore((state) => state.zoom);
-  const isCreatingReview = uzeStore((state) => state.isCreatingReview);
-
-  useEffect(() => {
-    if (!map) {
-      return;
-    }
-
-    setIsMapViewUnsearched(true);
-    setBounds(map.getBounds().toArray().flat());
-    setZoom(map.getZoom());
-
-    if (!isCreatingReview) {
-      map.flyTo({
-        center: [coordinates.lng, coordinates.lat],
-        zoom: zoom,
-      });
-    }
-  }, [coordinates, zoom]);
-  return null;
-}
 
 function MapContainer() {
   const coordinates = uzeStore((state) => state.coordinates);
@@ -240,11 +127,13 @@ function MapContainer() {
             borderRadius: "0.25rem",
           }}
           mapStyle="mapbox://styles/mapbox/streets-v12"
+          onDragStart={() => {
+            if (!isCreatingReview) {
+              setIsDragging(true);
+            }
+          }}
           onDragEnd={(e) => {
-            setZoom(e.viewState.zoom);
-            const bounds = e.target.getBounds().toArray().flat();
-            setBounds(bounds);
-            setIsMapViewUnsearched(true);
+            setIsDragging(false);
             if (!isCreatingReview) {
               setCoordinates({
                 lng: e.viewState.longitude,
@@ -252,11 +141,13 @@ function MapContainer() {
               });
             }
           }}
+          onZoomStart={() => {
+            if (!isCreatingReview) {
+              setIsDragging(true);
+            }
+          }}
           onZoomEnd={(e) => {
-            setZoom(e.viewState.zoom);
-            const bounds = e.target.getBounds().toArray().flat();
-            setBounds(bounds);
-            setIsMapViewUnsearched(true);
+            setIsDragging(false);
             if (!isCreatingReview) {
               setCoordinates({
                 lng: e.viewState.longitude,
@@ -302,13 +193,52 @@ function MapContainer() {
           )}
           <ReviewMarkers bounds={bounds} zoom={zoom} />
           <FlyTo />
-          <SearchHereButton />
 
           <Geocoder
             setCoordinates={setCoordinates}
             coordinates={coordinates}
             setNearbyTowns={setNearbyTowns}
           />
+          {isMapViewUnsearched && (
+            <button
+              className="border shadow-sm border-stone-400 p-2 rounded  active:scale-100 duration-75 hover:scale-105 absolute bottom-2 left-[50%] translate-x-[-50%]  bg-stone-50 font-sans text-sm text-stone-700"
+              onClick={async () => {
+                const res = await getReviewsWithinMapBoundsRequest({
+                  data: {
+                    bounds: {
+                      sw: {
+                        lat: bounds[1],
+                        lng: bounds[0],
+                      },
+                      ne: {
+                        lat: bounds[3],
+                        lng: bounds[2],
+                      },
+                    },
+                  },
+                });
+
+                setIsMapViewUnsearched(false);
+
+                const data: Partial<Review>[] = await res.json();
+                const features = data.map((r) => ({
+                  type: "Feature",
+                  properties: {
+                    id: r.id,
+                    title: r.title,
+                    rating: r.rating,
+                  },
+                  geometry: {
+                    type: "Point",
+                    coordinates: [r.longitude, r.latitude],
+                  },
+                }));
+                setReviewFeatures(features);
+              }}
+            >
+              Search here
+            </button>
+          )}
         </Map>
       </div>
       {coordinates?.lat && coordinates?.lng ? (
@@ -317,7 +247,6 @@ function MapContainer() {
             preText="Centre lat lng:"
             className="text-base gap-1"
           />
-          <SearchHereButton />
           {!isCreatingReview ? (
             <Button
               outlineColor="petal"

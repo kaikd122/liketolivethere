@@ -20,7 +20,7 @@ interface State {
     setIsMapLoaded: (isMapLoaded: boolean) => void;
     setCurrentReviewId: (currentReviewId: string) => void;
     setReviewFeatures: (reviewFeatures: ReviewFeature[]) => void;
-    setIsMapViewUnsearched: (isMapViewUnsearched: boolean) => void;
+    setIsMapViewUnsearched: (isMapViewUnsearched: boolean | undefined) => void;
     setZoom: (zoom: number) => void;
     setBounds: (bounds: number[]) => void;
   };
@@ -32,7 +32,7 @@ interface State {
   isMapLoaded: boolean;
   currentReviewId: string;
   reviewFeatures: ReviewFeature[];
-  isMapViewUnsearched: boolean;
+  isMapViewUnsearched: boolean | undefined;
   zoom: number;
   bounds: number[];
 }
@@ -50,7 +50,7 @@ const uzeStore = create<State>((set) => ({
   isMapLoaded: false,
   currentReviewId: "",
   reviewFeatures: [],
-  isMapViewUnsearched: false,
+  isMapViewUnsearched: undefined,
   zoom: 14,
   bounds: [],
   actions: {
