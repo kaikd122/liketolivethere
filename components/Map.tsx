@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import mapboxgl, { Control } from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import Map, { Marker, useMap } from "react-map-gl";
 import MapboxGeocoder, { Result } from "@mapbox/mapbox-gl-geocoder";
-import { Coordinates, kingsCrossCoords } from "../types/types";
+import { Coordinates, kingsCrossCoords, ReviewFeature } from "../types/types";
 import { coordsArrayToObject } from "../lib/util/map-utils";
 import uzeStore from "../lib/store/store";
 import Button from "./ui/Button";
@@ -43,6 +43,7 @@ function MapContainer() {
   const isMapViewUnsearched = uzeStore((state) => state.isMapViewUnsearched);
   const zoom = uzeStore((state) => state.zoom);
   const bounds = uzeStore((state) => state.bounds);
+  const reviewFeatures = uzeStore((state) => state.reviewFeatures);
 
   const mapRef = useRef(null);
   const executeScroll = () => {
@@ -83,6 +84,10 @@ function MapContainer() {
                     lat: bounds[3],
                     lng: bounds[2],
                   },
+                },
+                coordinates: {
+                  lat: coordinates.lat,
+                  lng: coordinates.lng,
                 },
               },
             });
@@ -214,6 +219,10 @@ function MapContainer() {
                         lat: bounds[3],
                         lng: bounds[2],
                       },
+                    },
+                    coordinates: {
+                      lat: coordinates.lat,
+                      lng: coordinates.lng,
                     },
                   },
                 });

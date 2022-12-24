@@ -32,6 +32,9 @@ export interface getReviewsWithinMapBoundsArgs {
       ne: Coordinates;
       sw: Coordinates;
     };
+    coordinates: Coordinates;
+    offset?: number;
+    limit?: number;
   };
 }
 

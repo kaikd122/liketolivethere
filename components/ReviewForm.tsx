@@ -87,9 +87,6 @@ function ReviewForm() {
       setIsCreatingReview(false);
       setRating(undefined);
       reset();
-
-      const reviewRes = await getReviewByIdRequest({ data: { id: id } });
-      const review = await reviewRes.json();
     } catch (e) {
       toast.error("Something went wrong");
       console.log(e);

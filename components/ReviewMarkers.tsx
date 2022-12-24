@@ -85,10 +85,10 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
             longitude={longitude}
           >
             <MapPinIcon
-              className={classNames("w-7 h-7 hover:scale-110 duration-75", {
-                "text-rose-400": cluster?.properties?.rating === 1,
-                "text-blue-400": cluster?.properties?.rating === 2,
-                "text-emerald-400": cluster?.properties?.rating === 3,
+              className={classNames("w-8 h-8 hover:scale-110 duration-75", {
+                "text-rose-500": cluster?.properties?.rating === 1,
+                "text-blue-500": cluster?.properties?.rating === 2,
+                "text-emerald-500": cluster?.properties?.rating === 3,
               })}
             />
           </Marker>

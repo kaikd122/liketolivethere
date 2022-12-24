@@ -20,23 +20,25 @@ function TownsContainer() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center px-3 md:px-0 ">
+    <div className="flex flex-col   px-3 md:px-0 ">
       <form
-        className="flex flex-col w-full align-center"
+        className="flex flex-col w-full align-center gap-2"
         onSubmit={(e) => {
           e.preventDefault();
           getTownsByTextRequest({ data: { text: val } })
             .then(async (res) => {
               const data = await res.json();
-              setResults(data);
+              if (res.ok) {
+                setResults(data);
+              }
             })
             .catch((e) => {
               console.log(e);
             });
         }}
       >
-        <label className="text-stone-400" htmlFor="search-towns-input">
-          Enter a town name or the first part of a postcode
+        <label className="text-stone-4=700" htmlFor="search-towns-input">
+          Enter either a town name or the first part of a postcode
         </label>
         <div className="flex flex-row gap-4 w-full md:w-3/4 justify-between">
           <input
@@ -44,16 +46,17 @@ function TownsContainer() {
             className="border rounded border-stone-300   outline-violet-300 p-2 shadow-sm w-full"
             value={val}
             onChange={(e) => setVal(e.target.value)}
+            placeholder="e.g. Wimbledon, Putney, SW19, SW15"
           />
 
           <button type="submit">Search</button>
         </div>
       </form>
-      <div className="flex flex-col w-full ">
+      <div className="flex flex-col w-full  ">
         {results.map((result) => {
           return (
             <Button
-              className="flex flex-row justify-between items-center w-full md:w-3/4"
+              className="flex flex-row justify-between items-center w-full md:w-1/4"
               onClick={() => {
                 getReviewsNearTownRequest({ data: { townId: result.id! } })
                   .then(async (res) => {

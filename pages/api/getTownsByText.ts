@@ -10,6 +10,7 @@ export interface getTownsByTextResponse {
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const body: getTownsByTextArgs = req.body;
   const { data } = body;
+  if (!data.text) return res.status(403).json({ err: "No text provided" });
   try {
     const result: Array<getTownsByTextResponse> = await prisma.towns.findMany({
       where: {
@@ -33,6 +34,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         name: true,
         postcode_sector: true,
       },
+      take: 20,
     });
 
     res.status(200).json(result);
