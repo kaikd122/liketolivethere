@@ -1,6 +1,5 @@
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import { Review } from "@prisma/client";
-import { Tooltip } from "react-tooltip";
 
 import React from "react";
 import { Marker, useMap, LayerProps, Source, Layer } from "react-map-gl";

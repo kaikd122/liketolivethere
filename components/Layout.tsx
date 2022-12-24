@@ -18,6 +18,7 @@ export default function Layout({ children }: LayoutProps) {
   const { setUser, setCurrentTab } = uzeStore((state) => state.actions);
   const { data: session } = useSession();
   const router = useRouter();
+  const currentTab = uzeStore((state) => state.currentTab);
   useEffect(() => {
     if (!session || user?.name) {
       return;
@@ -57,6 +58,9 @@ export default function Layout({ children }: LayoutProps) {
 
   useEffect(() => {
     console.log(router.asPath);
+    if (currentTab !== undefined) {
+      return;
+    }
     if (router.asPath === "/") {
       setCurrentTab("MAP");
     } else if (router.asPath === "/profile") {

@@ -43,7 +43,7 @@ function ReviewCardModal() {
   }
 
   if (!review) {
-    return <div>Loading...</div>;
+    return null;
   }
   return (
     <Modal

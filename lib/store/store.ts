@@ -23,7 +23,7 @@ interface State {
     setIsMapViewUnsearched: (isMapViewUnsearched: boolean | undefined) => void;
     setZoom: (zoom: number) => void;
     setBounds: (bounds: number[]) => void;
-    setCurrentTownId: (currentTownId: number) => void;
+    setCurrentTownId: (currentTownId: number | undefined) => void;
     setCurrentTownReviews: (currentTownReviews: Partial<Review>[]) => void;
   };
   isLoading: boolean;

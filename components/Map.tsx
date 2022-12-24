@@ -1,25 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import mapboxgl, { Control } from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import Map, { Marker, useMap } from "react-map-gl";
-import MapboxGeocoder, { Result } from "@mapbox/mapbox-gl-geocoder";
-import { Coordinates, kingsCrossCoords, ReviewFeature } from "../types/types";
-import { coordsArrayToObject } from "../lib/util/map-utils";
+
 import uzeStore from "../lib/store/store";
 import Button from "./ui/Button";
 import { MapPinIcon, PlusIcon } from "@heroicons/react/24/solid";
-import getNearbyTowns from "../pages/api/getNearbyTowns";
 import { getNearbyTownsRequest } from "../lib/actions/search";
 import { Review, towns } from "@prisma/client";
-import classNames from "classnames";
 import CoordinatesDisplay from "./CoordinatesDisplay";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { getTownUrl, replaceUrl } from "../lib/util/urls";
 import ReviewMarkers from "./ReviewMarkers";
 import { getReviewsWithinMapBoundsRequest } from "../lib/actions/review";
-import { map } from "leaflet";
 import FlyTo from "./FlyTo";
-import { Geocoder } from "./GeoCoder";
+import { Geocoder } from "./Geocoder";
 import {
   reviewFeaturesToDetails,
   reviewsToFeatures,

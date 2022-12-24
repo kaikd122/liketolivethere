@@ -48,7 +48,7 @@ export default function Navbar() {
               setCurrentTab("MAP");
             }}
           >
-            Map search
+            Explore map
           </Tab>
         ) : (
           <Tab
@@ -57,18 +57,29 @@ export default function Navbar() {
               setCurrentTab("MAP");
             }}
           >
-            <Link href="/"> Map search</Link>
+            <Link href="/">Explore map</Link>
           </Tab>
         )}
-        <Tab
-          selected={currentTab === "TOWNS"}
-          onClick={() => {
-            // replaceUrl("/towns");
-            setCurrentTab("TOWNS");
-          }}
-        >
-          Browse towns
-        </Tab>
+        {isMapLoaded ? (
+          <Tab
+            selected={currentTab === "TOWNS"}
+            onClick={() => {
+              // replaceUrl("/towns");
+              setCurrentTab("TOWNS");
+            }}
+          >
+            Browse towns
+          </Tab>
+        ) : (
+          <Tab
+            selected={currentTab === "TOWNS"}
+            onClick={() => {
+              setCurrentTab("TOWNS");
+            }}
+          >
+            <Link href="/">Browse towns</Link>
+          </Tab>
+        )}
       </div>
     </div>
   );
