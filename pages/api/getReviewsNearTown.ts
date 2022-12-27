@@ -10,6 +10,7 @@ export interface getReviewsNearTownResponse {
   latitude: number | null;
   longitude: number | null;
   user_id: string | null;
+  createdAt: Date;
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

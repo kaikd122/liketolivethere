@@ -19,5 +19,8 @@ module.exports = {
     },
   },
   important: true,
-  plugins: [require("tailwindcss-textshadow")],
+  plugins: [
+    require("tailwindcss-textshadow"),
+    require("@tailwindcss/line-clamp"),
+  ],
 };

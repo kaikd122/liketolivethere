@@ -1,4 +1,5 @@
 import { ArrowUturnLeftIcon } from "@heroicons/react/20/solid";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { Review, towns } from "@prisma/client";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -20,7 +21,6 @@ function TownsContainer() {
   const [val, setVal] = useState("");
   const currentTownId = uzeStore((state) => state.currentTownId);
   const [results, setResults] = useState<Array<Partial<towns>>>([]);
-  const [initialReviews, setInitialReviews] = useState<Partial<Review>[]>([]);
 
   if (currentTab !== "TOWNS") {
     return null;
@@ -47,10 +47,16 @@ function TownsContainer() {
             }}
           >
             <label
-              className="text-stone-700 text-sm italic"
+              className="text-stone-700 text-sm "
               htmlFor="search-towns-input"
             >
-              Enter either a town name or the first part of a postcode
+              <div className="flex flex-row gap-1">
+                <span className="italic">
+                  Enter either a town name or the first part of a postcode, and
+                  click
+                </span>
+                <span>Search</span>
+              </div>
             </label>
             <div className="flex flex-row gap-4 w-full md:w-3/4 justify-between">
               <input
@@ -61,8 +67,14 @@ function TownsContainer() {
                 placeholder="e.g. Wimbledon, Putney, SW19, SW15"
               />
 
-              <Button type="submit" outlineColor="stone" border="thin">
-                Search
+              <Button
+                type="submit"
+                outlineColor="stone"
+                border="thin"
+                className="flex flex-row gap-1 items-center justify-center"
+              >
+                <MagnifyingGlassIcon className="h-5 w-5" />
+                <p>Search</p>
               </Button>
             </div>
           </form>
@@ -71,6 +83,7 @@ function TownsContainer() {
               return (
                 <Button
                   className="flex flex-row justify-between items-center w-full md:w-1/4 "
+                  smallScale
                   outlineColor="stone"
                   key={`townresult-${result.id}`}
                   border="thin"
@@ -78,17 +91,6 @@ function TownsContainer() {
                     setResults([]);
                     setCurrentTownId(result.id!);
                     setVal("");
-                    try {
-                      const res = await getReviewsNearTownRequest({
-                        data: { townId: result.id! },
-                      });
-                      if (res.ok) {
-                        const data = await res.json();
-                        setInitialReviews(data);
-                      }
-                    } catch (error) {
-                      console.log(error);
-                    }
                   }}
                 >
                   <p>{result.name}</p>
@@ -103,22 +105,18 @@ function TownsContainer() {
           <Button
             outlineColor="stone"
             border="thin"
-            className="flex flex-row gap-2 h-8 justify-center items-center"
+            className="flex flex-row gap-1  justify-center items-center"
             onClick={() => {
               setCurrentTownId(undefined);
-              setInitialReviews([]);
             }}
           >
-            <ArrowUturnLeftIcon className="h-6 w-6" />
+            <ArrowUturnLeftIcon className="h-5 w-5" />
             <p>Back to town search</p>
           </Button>
         </div>
       )}
-      {initialReviews.length > 0 && (
-        <>
-          <TownReviewsList initialReviews={initialReviews} />
-        </>
-      )}
+
+      <TownReviewsList />
     </div>
   );
 }

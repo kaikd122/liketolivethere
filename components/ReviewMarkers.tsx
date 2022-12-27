@@ -52,7 +52,7 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
               <div className="flex flex-col items-center justify-center gap-1">
                 <div
                   className={classNames(
-                    "text-xl rounded-full  text-white flex items-center justify-center hover:scale-110 duration-75 opacity-[85%] border border-stone-50",
+                    "text-xl rounded-full  text-white flex items-center justify-center hover:scale-110 duration-75 opacity-[85%] border-2 border-stone-50",
                     {
                       "bg-rose-400": mean === 1,
                       "bg-blue-400": mean === 2,
@@ -85,7 +85,7 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
                         }}
                         key={r.properties.id}
                         className={classNames(
-                          "w-10 h-10  hover:scale-110 duration-75",
+                          "w-10 h-10  hover:scale-110 duration-75 stroke-stone-50",
                           {
                             "text-rose-500": r.properties.rating === 1,
                             "text-blue-500": r.properties.rating === 2,

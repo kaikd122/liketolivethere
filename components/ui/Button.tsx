@@ -15,6 +15,7 @@ export interface ButtonProps {
   spinnerSize?: number;
   selected?: boolean;
   selectedClassName?: string;
+  smallScale?: boolean;
 }
 
 function Button({
@@ -30,6 +31,7 @@ function Button({
   spinnerSize,
   selected,
   selectedClassName,
+  smallScale,
 }: ButtonProps) {
   return (
     <button
@@ -54,6 +56,7 @@ function Button({
           "border-2": border === "thick",
           "border-0": border === "none",
           "shadow-none": shadow === "none",
+          "hover:scale-[102%]": smallScale,
         },
         className,
         selected && selectedClassName

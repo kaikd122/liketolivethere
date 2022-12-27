@@ -4,12 +4,21 @@ import Map, { Marker, useMap } from "react-map-gl";
 
 import uzeStore from "../lib/store/store";
 import Button from "./ui/Button";
-import { MapPinIcon, PlusIcon } from "@heroicons/react/24/solid";
+import {
+  MagnifyingGlassIcon,
+  MapPinIcon,
+  MinusIcon,
+  PencilSquareIcon,
+  PlusIcon,
+} from "@heroicons/react/24/solid";
 import { getNearbyTownsRequest } from "../lib/actions/search";
 import { Review, towns } from "@prisma/client";
 import CoordinatesDisplay from "./CoordinatesDisplay";
 import ReviewMarkers from "./ReviewMarkers";
-import { getReviewsWithinMapBoundsRequest } from "../lib/actions/review";
+import {
+  getReviewsNearTownRequest,
+  getReviewsWithinMapBoundsRequest,
+} from "../lib/actions/review";
 import FlyTo from "./FlyTo";
 import { Geocoder } from "./Geocoder";
 import {
@@ -17,6 +26,7 @@ import {
   reviewsToFeatures,
 } from "../lib/util/review-utils";
 import ReviewStats from "./ReviewStats";
+import ZoomControl from "./ZoomControl";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -32,6 +42,7 @@ function MapContainer() {
     setIsMapViewUnsearched,
     setZoom,
     setBounds,
+    setCurrentTownId,
   } = uzeStore((state) => state.actions);
   const currentTab = uzeStore((state) => state.currentTab);
   const isCreatingReview = uzeStore((state) => state.isCreatingReview);
@@ -188,6 +199,7 @@ function MapContainer() {
           )}
           <ReviewMarkers bounds={bounds} zoom={zoom} />
           <FlyTo />
+          <ZoomControl />
 
           <Geocoder
             setCoordinates={setCoordinates}
@@ -196,7 +208,7 @@ function MapContainer() {
           />
           {isMapViewUnsearched && (
             <button
-              className="border shadow-sm border-stone-400 p-2 rounded text-base active:scale-100 duration-75 hover:scale-105 absolute bottom-2 left-[50%] translate-x-[-50%]  bg-stone-50 font-sans text-stone-700"
+              className="border shadow-sm border-stone-400 p-2 rounded text-base active:scale-100 duration-75 hover:scale-105 absolute bottom-2 left-[50%] translate-x-[-50%] items-center justify-center flex flex-row gap-1 bg-stone-50 font-sans text-stone-700"
               onClick={async () => {
                 const res = await getReviewsWithinMapBoundsRequest({
                   data: {
@@ -224,7 +236,8 @@ function MapContainer() {
                 setReviewFeatures(reviewsToFeatures(data));
               }}
             >
-              Search here
+              <MagnifyingGlassIcon className="h-5 w-5" />
+              <p>Search here</p>
             </button>
           )}
         </Map>
@@ -244,8 +257,10 @@ function MapContainer() {
               onClick={() => {
                 setIsCreatingReview(true);
               }}
+              className="flex flex-row gap-1"
             >
-              Write a review
+              <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
+              <p> Write a review</p>
             </Button>
           ) : (
             <div />
@@ -261,8 +276,22 @@ function MapContainer() {
               border="none"
               key={town.id}
               className="text-sm"
-              onClick={() => {
+              onClick={async () => {
                 setCurrentTab("TOWNS");
+                setCurrentTownId(town.id!);
+
+                try {
+                  const res = await getReviewsNearTownRequest({
+                    data: { townId: town.id! },
+                  });
+                  if (res.ok) {
+                    const data = await res.json();
+                    console.log(data);
+                  }
+                } catch (error) {
+                  console.log(error);
+                }
+
                 // replaceUrl(getTownUrl(town));
               }}
             >

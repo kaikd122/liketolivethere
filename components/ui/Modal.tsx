@@ -12,7 +12,7 @@ function Modal({ children, onClick }: ModalProps) {
       onClick={onClick}
     >
       <div
-        className="relative  bg-stone-50 rounded w-[97vw] md:w-[80vw] m-auto flex-col flex"
+        className="relative  bg-stone-50 rounded-lg w-[97vw] md:w-[80vw] m-auto flex-col flex"
         onClick={(e) => {
           e.stopPropagation();
         }}
