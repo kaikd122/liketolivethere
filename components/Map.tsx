@@ -267,7 +267,7 @@ function MapContainer() {
               className="flex flex-row gap-1"
             >
               <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
-              <p> Write a review here</p>
+              <p> Write a review</p>
             </Button>
           ) : (
             <Button

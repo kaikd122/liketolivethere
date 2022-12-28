@@ -36,7 +36,7 @@ function ReviewStub({ review }: ReviewStubProps) {
             </span>
             <div className="flex flex-row items-center justify-center  ">
               <Button
-                className="text-sm"
+                className="text-sm p-1"
                 outlineColor="petal"
                 border="thin"
                 onClick={() => setCurrentReviewId(review.id!)}
