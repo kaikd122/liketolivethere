@@ -14,7 +14,6 @@ export interface ReviewStubProps {
 
 function ReviewStub({ review }: ReviewStubProps) {
   const { setCurrentReviewId } = uzeStore((state) => state.actions);
-  console.log(review);
   return (
     <div className="flex flex-row gap-2 w-full ">
       <Card className="flex flex-col md:flex-row  w-full  md:justify-between p-4 gap-2">

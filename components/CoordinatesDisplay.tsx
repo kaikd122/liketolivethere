@@ -7,12 +7,14 @@ export interface CoordinatesDisplayProps {
   preText: string;
   className?: string;
   iconSize?: "SMALL" | "MEDIUM" | "LARGE";
+  overrideCoordinates?: { lat: number; lng: number };
 }
 
 function CoordinatesDisplay({
   preText,
   className,
   iconSize,
+  overrideCoordinates,
 }: CoordinatesDisplayProps) {
   const isDragging = uzeStore((state) => state.isDragging);
   const coordinates = uzeStore((state) => state.coordinates);
@@ -34,10 +36,18 @@ function CoordinatesDisplay({
       {/* <p className="">{preText}</p> */}
       <div className={classNames("flex flex-row", className)}>
         <div className="flex flex-row">
-          <p className={latLngClassName}>{coordinates.lat.toFixed(4)}</p>
+          <p className={latLngClassName}>
+            {overrideCoordinates
+              ? overrideCoordinates.lat.toFixed(4)
+              : coordinates.lat.toFixed(4)}
+          </p>
           <p className="">,</p>
         </div>
-        <p className={latLngClassName}>{coordinates.lng.toFixed(4)}</p>
+        <p className={latLngClassName}>
+          {overrideCoordinates
+            ? overrideCoordinates.lng.toFixed(4)
+            : coordinates.lng.toFixed(4)}
+        </p>
       </div>
     </div>
   );

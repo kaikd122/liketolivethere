@@ -15,6 +15,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         name: true,
         latitude: true,
         longitude: true,
+        postcode_sector: true,
+        county: true,
       },
     });
     res.status(200).json(result);

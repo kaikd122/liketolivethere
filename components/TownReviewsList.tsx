@@ -1,37 +1,45 @@
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { Review, towns } from "@prisma/client";
 import result from "postcss/lib/result";
+import { nextTick } from "process";
 import React, { useEffect, useState } from "react";
 import { BeatLoader } from "react-spinners";
 import { getReviewsNearTownRequest } from "../lib/actions/review";
-import { getTownByIdRequest } from "../lib/actions/search";
+import {
+  getNearbyTownsRequest,
+  getTownByIdRequest,
+} from "../lib/actions/search";
 import { TOWN_REVIEWS_PAGE_SIZE } from "../lib/constants";
 import uzeStore from "../lib/store/store";
 import { onlyUnique } from "../lib/util/general";
+import { getPostcodeOutcode } from "../lib/util/map-utils";
 import CoordinatesDisplay from "./CoordinatesDisplay";
 import ReviewContent from "./ReviewContent";
 import ReviewStub from "./ReviewStub";
 import Button from "./ui/Button";
 import ViewOnMapButton from "./ViewOnMapButton";
 
-export interface TownReviewsListProps {
-  //   initialReviews: Partial<Review>[];
-}
+export interface TownReviewsListProps {}
 
 export interface ReviewWithDistance extends Partial<Review> {
   distance: number;
 }
 
-function TownReviewsList(props: TownReviewsListProps) {
+function TownReviewsList() {
   const [reviews, setReviews] = useState<ReviewWithDistance[]>([]);
   const currentTownId = uzeStore((state) => state.currentTownId);
   const [isLoading, setIsLoading] = useState(false);
   const [isAllCurrentTownReviewsLoaded, setIsAllCurrentTownReviewsLoaded] =
     useState(false);
   const [town, setTown] = useState<Partial<towns>>();
-  const { setIsCreatingReview, setViewOnMapSource } = uzeStore(
-    (state) => state.actions
-  );
+  const [nearbyTowns, setNearbyTowns] = useState<Array<Partial<towns>>>([]);
+
+  const {
+    setIsCreatingReview,
+    setViewOnMapSource,
+    setCurrentTab,
+    setCurrentTownId,
+  } = uzeStore((state) => state.actions);
 
   useEffect(() => {
     if (!currentTownId) {
@@ -51,7 +59,6 @@ function TownReviewsList(props: TownReviewsListProps) {
         if (res.ok) {
           const data = await res.json();
           if (data.length < TOWN_REVIEWS_PAGE_SIZE) {
-            console.log("YAY");
             setIsAllCurrentTownReviewsLoaded(true);
           } else {
             setIsAllCurrentTownReviewsLoaded(false);
@@ -64,11 +71,20 @@ function TownReviewsList(props: TownReviewsListProps) {
           },
         });
         if (townRes.ok) {
-          const data = await townRes.json();
-          console.log("DAT", data);
-          setTown(data);
-        } else {
-          console.log("POOP");
+          const townData = await townRes.json();
+          setTown(townData);
+          const nearbyRes = await getNearbyTownsRequest({
+            data: {
+              latitude: Number(townData?.latitude),
+              longitude: Number(townData?.longitude),
+              limit: 6,
+            },
+          });
+          if (nearbyRes.ok) {
+            const data: Partial<towns>[] = await nearbyRes.json();
+            setNearbyTowns(data.filter((t) => t.id !== currentTownId));
+            console.log(data);
+          }
         }
       } catch (error) {
         console.log(error);
@@ -84,15 +100,22 @@ function TownReviewsList(props: TownReviewsListProps) {
 
   return (
     <div className="flex flex-col gap-4 pt-4">
-      <div className="flex flex-row justify-center items-center">
-        <h1 className="text-4xl">{town?.name}</h1>
+      <div className="flex flex-col justify-center items-center gap-2">
+        <h1 className="text-5xl">{town?.name}</h1>
+        <h2 className="text-lg">
+          {town?.county}, {getPostcodeOutcode(town?.postcode_sector)}
+        </h2>
       </div>
       <div>
-        <div className="flex flex-row justify-between items-center flex-wrap gap-2">
+        <div className="flex flex-row justify-between items-center w-full flex-wrap gap-2">
           <CoordinatesDisplay
             iconSize="MEDIUM"
             preText=""
-            className="text-lg md:text-2xl gap-1 md:gap-2"
+            className="text-xl gap-2"
+            overrideCoordinates={{
+              lat: Number(town?.latitude),
+              lng: Number(town?.longitude),
+            }}
           />
           <div className="flex flex-row gap-4 items-center justify-center ">
             <ViewOnMapButton
@@ -112,6 +135,26 @@ function TownReviewsList(props: TownReviewsListProps) {
             />
           </div>
         </div>
+      </div>
+      <div className="flex flex-row  gap-4 flex-wrap  py-1 items-end">
+        {nearbyTowns.map((nt) => {
+          return (
+            <Button
+              bgColor="petalGradient"
+              outlineColor="light"
+              border="none"
+              key={nt.id}
+              className="text-sm"
+              onClick={async () => {
+                setCurrentTownId(nt.id!);
+
+                // replaceUrl(getTownUrl(town));
+              }}
+            >
+              {nt.name}
+            </Button>
+          );
+        })}
       </div>
       {reviews?.length > 0 ? (
         reviews
