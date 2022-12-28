@@ -25,80 +25,91 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
     options: { radius: 75, maxZoom: 22 },
   });
 
+  if (reviewFeatures.length === 0) return null;
+
   return (
     <div className="w-full h-full ">
       {clusters.map((cluster, i) => {
+        console.log("CL", cluster);
         const [longitude, latitude] = cluster.geometry.coordinates;
         const { cluster: isCluster, point_count: pointCount } =
           cluster.properties;
 
         if (isCluster) {
-          const sc = supercluster.getLeaves(cluster.id, Infinity);
+          try {
+            const sc = supercluster.getLeaves(cluster.id, Infinity);
 
-          const num = sc.reduce(
-            (acc: number, cur: ReviewFeature) =>
-              acc + (cur?.properties?.rating || 2),
-            0
-          );
+            const num = sc.reduce(
+              (acc: number, cur: ReviewFeature) =>
+                acc + (cur?.properties?.rating || 2),
+              0
+            );
 
-          const mean = Math.round(num / sc.length);
+            const mean = Math.round(num / sc.length);
 
-          return (
-            <Marker
-              key={`${i}-cluster`}
-              latitude={latitude}
-              longitude={longitude}
-            >
-              <div className="flex flex-col items-center justify-center gap-1">
-                <div
-                  className={classNames(
-                    "text-xl rounded-full  text-white flex items-center justify-center hover:scale-110 duration-75 opacity-[85%] border-2 border-stone-50",
-                    {
-                      "bg-rose-400": mean === 1,
-                      "bg-blue-400": mean === 2,
-                      "bg-emerald-400": mean === 3,
-                    }
-                  )}
-                  style={{
-                    width: `${3 + (pointCount / reviewFeatures.length) * 2}vw`,
-                    height: `${3 + (pointCount / reviewFeatures.length) * 2}vw`,
-                  }}
-                  onClick={() => {
-                    const expansionZoom = Math.min(
-                      supercluster.getClusterExpansionZoom(cluster.id)
-                    );
+            return (
+              <Marker
+                key={`${i}-cluster`}
+                latitude={latitude}
+                longitude={longitude}
+              >
+                <div className="flex flex-col items-center justify-center gap-1">
+                  <div
+                    className={classNames(
+                      "text-xl rounded-full  text-white flex items-center justify-center hover:scale-110 duration-75 opacity-[85%] border-2 border-stone-50",
+                      {
+                        "bg-rose-400": mean === 1,
+                        "bg-blue-400": mean === 2,
+                        "bg-emerald-400": mean === 3,
+                      }
+                    )}
+                    style={{
+                      width: `${
+                        3 + (pointCount / reviewFeatures.length) * 2
+                      }vw`,
+                      height: `${
+                        3 + (pointCount / reviewFeatures.length) * 2
+                      }vw`,
+                    }}
+                    onClick={() => {
+                      const expansionZoom = Math.min(
+                        supercluster.getClusterExpansionZoom(cluster.id)
+                      );
 
-                    map?.flyTo({
-                      center: cluster.geometry.coordinates,
-                      zoom: expansionZoom,
-                    });
-                  }}
-                >
-                  {pointCount}
-                </div>
-                {zoom == 22 && (
-                  <div className="flex flex-row gap-1 items-center justify-center">
-                    {sc.map((r: ReviewFeature) => (
-                      <MapPinIcon
-                        onClick={() => {
-                          setCurrentReviewId(r.properties.id!);
-                        }}
-                        key={r.properties.id}
-                        className={classNames(
-                          "w-10 h-10  hover:scale-110 duration-75 stroke-stone-50",
-                          {
-                            "text-rose-500": r.properties.rating === 1,
-                            "text-blue-500": r.properties.rating === 2,
-                            "text-emerald-500": r.properties.rating === 3,
-                          }
-                        )}
-                      />
-                    ))}
+                      map?.flyTo({
+                        center: cluster.geometry.coordinates,
+                        zoom: expansionZoom,
+                      });
+                    }}
+                  >
+                    {pointCount}
                   </div>
-                )}
-              </div>
-            </Marker>
-          );
+                  {zoom == 22 && (
+                    <div className="flex flex-row gap-1 items-center justify-center">
+                      {sc.map((r: ReviewFeature) => (
+                        <MapPinIcon
+                          onClick={() => {
+                            setCurrentReviewId(r.properties.id!);
+                          }}
+                          key={r.properties.id}
+                          className={classNames(
+                            "w-10 h-10  hover:scale-110 duration-75 stroke-stone-50",
+                            {
+                              "text-rose-500": r.properties.rating === 1,
+                              "text-blue-500": r.properties.rating === 2,
+                              "text-emerald-500": r.properties.rating === 3,
+                            }
+                          )}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </Marker>
+            );
+          } catch (e) {
+            console.log("ERROR", e);
+          }
         }
         return (
           <Marker
@@ -111,7 +122,7 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
                 setCurrentReviewId(cluster?.properties?.id);
               }}
               className={classNames(
-                "w-10 h-10 hover:scale-110 duration-75 stroke-stone-50",
+                "w-10 h-10 hover:scale-110 duration-75 stroke-stone-50 text-petal",
                 {
                   "text-rose-500": cluster?.properties?.rating === 1,
                   "text-blue-500": cluster?.properties?.rating === 2,

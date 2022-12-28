@@ -1,4 +1,5 @@
 import { Review } from "@prisma/client";
+import { ReviewWithDistance } from "../../components/TownReviewsList";
 import { ReviewFeature } from "../../types/types";
 
 export function ratingEnumToString(rating: number): string {
@@ -55,4 +56,8 @@ export function reviewsToFeatures(data: Partial<Review>[]): ReviewFeature[] {
       coordinates: [r.longitude, r.latitude],
     },
   }));
+}
+
+export function metresToKm(metres: number): number {
+  return (metres / 1000).toFixed(1) as unknown as number;
 }

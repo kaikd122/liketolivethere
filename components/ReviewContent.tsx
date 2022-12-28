@@ -7,6 +7,7 @@ import uzeStore from "../lib/store/store";
 import { ratingEnumToString } from "../lib/util/review-utils";
 import CoordinatesDisplay from "./CoordinatesDisplay";
 import Button from "./ui/Button";
+import ViewOnMapButton from "./ViewOnMapButton";
 
 export interface ReviewContentProps {
   review: Partial<Review>;
@@ -16,6 +17,7 @@ export interface ReviewContentProps {
 
 function ReviewContent({ review, user, setReview }: ReviewContentProps) {
   const { setCurrentReviewId } = uzeStore((state) => state.actions);
+  const currentTab = uzeStore((state) => state.currentTab);
   return (
     <div className="flex flex-col gap-4 w-full items-center">
       <div className="flex flex-row justify-between items-start gap-2 w-full ">
@@ -23,11 +25,21 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
           <CoordinatesDisplay
             preText="Review at"
             className=" text-lg md:text-2xl gap-1 md:gap-2"
+            iconSize="MEDIUM"
           />
           <p>
             Written by {user?.name} on{" "}
             {dayjs(review.createdAt).format("DD/MM/YYYY")}
           </p>
+          <div className="flex flex-row w-full justify-start items-center">
+            <ViewOnMapButton
+              withText
+              coordinates={{
+                lat: Number(review.latitude),
+                lng: Number(review.longitude),
+              }}
+            />
+          </div>
         </div>
         <Button
           type="button"

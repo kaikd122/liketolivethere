@@ -25,6 +25,12 @@ interface State {
     setBounds: (bounds: number[]) => void;
     setCurrentTownId: (currentTownId: number | undefined) => void;
     setCurrentTownReviews: (currentTownReviews: Partial<Review>[]) => void;
+    setViewOnMapSource: (
+      viewOnMapSource: {
+        id: string;
+        type: "TOWN" | "REVIEW" | "WRITE";
+      } | null
+    ) => void;
   };
   isLoading: boolean;
   user: User;
@@ -39,6 +45,10 @@ interface State {
   bounds: number[];
   currentTownId: number | undefined;
   currentTownReviews: Partial<Review>[];
+  viewOnMapSource: {
+    id: string;
+    type: "TOWN" | "REVIEW";
+  } | null;
 }
 
 const uzeStore = create<State>((set) => ({
@@ -59,6 +69,7 @@ const uzeStore = create<State>((set) => ({
   bounds: [],
   currentTownId: undefined,
   currentTownReviews: [],
+  viewOnMapSource: null,
   actions: {
     setCurrentReviewId: (currentReviewId) => set({ currentReviewId }),
     setCoordinates: (coordinates) => set({ coordinates }),
@@ -75,6 +86,7 @@ const uzeStore = create<State>((set) => ({
     setBounds: (bounds) => set({ bounds }),
     setCurrentTownId: (currentTownId) => set({ currentTownId }),
     setCurrentTownReviews: (currentTownReviews) => set({ currentTownReviews }),
+    setViewOnMapSource: (viewOnMapSource) => set({ viewOnMapSource }),
   },
 }));
 

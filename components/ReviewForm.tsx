@@ -15,6 +15,7 @@ import cuid from "cuid";
 import { bounds } from "leaflet";
 import { Review } from "@prisma/client";
 import { reviewsToFeatures } from "../lib/util/review-utils";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 
 type FormData = {
   body: string;
@@ -144,6 +145,10 @@ function ReviewForm() {
     return null;
   }
 
+  if (currentTab !== "MAP") {
+    return null;
+  }
+
   return (
     <Card>
       <form
@@ -160,7 +165,9 @@ function ReviewForm() {
             <CoordinatesDisplay
               preText="Writing a review at"
               className=" text-lg md:text-2xl gap-1 md:gap-2"
+              iconSize="MEDIUM"
             />
+
             <p className="text-sm italic">
               Drag the map pin or search again to change coordinates
             </p>
@@ -173,10 +180,11 @@ function ReviewForm() {
               reset();
             }}
             outlineColor="red"
-            className=" "
+            className=" flex flex-row gap-1 items-center justify-center"
             border="thin"
           >
-            Cancel
+            <XMarkIcon className="h-5 w-5 " />
+            <p>Cancel</p>
           </Button>
         </div>
 

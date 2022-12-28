@@ -5,6 +5,7 @@ import Map, { Marker, useMap } from "react-map-gl";
 import uzeStore from "../lib/store/store";
 import Button from "./ui/Button";
 import {
+  ArrowUturnLeftIcon,
   MagnifyingGlassIcon,
   MapPinIcon,
   MinusIcon,
@@ -141,7 +142,12 @@ function MapContainer() {
               });
             } else {
               setZoom(e.viewState.zoom);
-              setBounds(e.target.getBounds().toArray().flat());
+              // setBounds(e.target.getBounds().toArray().flat());
+              const map = e.target;
+              map.flyTo({
+                center: [coordinates.lng, coordinates.lat],
+                zoom: zoom,
+              });
             }
           }}
           onZoomStart={() => {
@@ -208,7 +214,7 @@ function MapContainer() {
           />
           {isMapViewUnsearched && (
             <button
-              className="border shadow-sm border-stone-400 p-2 rounded text-base active:scale-100 duration-75 hover:scale-105 absolute bottom-2 left-[50%] translate-x-[-50%] items-center justify-center flex flex-row gap-1 bg-stone-50 font-sans text-stone-700"
+              className="border shadow-sm border-stone-400 p-2 rounded text-base active:scale-100 duration-75 hover:scale-105 absolute bottom-2 left-[50%] translate-x-[-50%] items-center justify-center flex flex-row gap-1 bg-stone-50 font-sans text-petal"
               onClick={async () => {
                 const res = await getReviewsWithinMapBoundsRequest({
                   data: {
@@ -249,6 +255,7 @@ function MapContainer() {
               isCreatingReview ? "Review coordinates:" : "Centre coordinates:"
             }`}
             className="text-base gap-1"
+            iconSize="SMALL"
           />
           {!isCreatingReview ? (
             <Button
@@ -260,10 +267,21 @@ function MapContainer() {
               className="flex flex-row gap-1"
             >
               <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
-              <p> Write a review</p>
+              <p> Write a review here</p>
             </Button>
           ) : (
-            <div />
+            <Button
+              type="button"
+              onClick={() => {
+                setIsCreatingReview(false);
+              }}
+              outlineColor="petal"
+              border="thin"
+              className="flex flex-row gap-1 items-center justify-center"
+            >
+              <ArrowUturnLeftIcon className="h-5 w-5" />
+              <p>Return to explore mode</p>
+            </Button>
           )}
         </div>
       ) : null}
@@ -279,18 +297,6 @@ function MapContainer() {
               onClick={async () => {
                 setCurrentTab("TOWNS");
                 setCurrentTownId(town.id!);
-
-                try {
-                  const res = await getReviewsNearTownRequest({
-                    data: { townId: town.id! },
-                  });
-                  if (res.ok) {
-                    const data = await res.json();
-                    console.log(data);
-                  }
-                } catch (error) {
-                  console.log(error);
-                }
 
                 // replaceUrl(getTownUrl(town));
               }}
