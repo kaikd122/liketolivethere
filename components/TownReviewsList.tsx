@@ -27,19 +27,16 @@ export interface ReviewWithDistance extends Partial<Review> {
 
 function TownReviewsList() {
   const [reviews, setReviews] = useState<ReviewWithDistance[]>([]);
+
   const currentTownId = uzeStore((state) => state.currentTownId);
   const [isLoading, setIsLoading] = useState(false);
   const [isAllCurrentTownReviewsLoaded, setIsAllCurrentTownReviewsLoaded] =
     useState(false);
+
   const [town, setTown] = useState<Partial<towns>>();
   const [nearbyTowns, setNearbyTowns] = useState<Array<Partial<towns>>>([]);
 
-  const {
-    setIsCreatingReview,
-    setViewOnMapSource,
-    setCurrentTab,
-    setCurrentTownId,
-  } = uzeStore((state) => state.actions);
+  const { setCurrentTownId } = uzeStore((state) => state.actions);
 
   useEffect(() => {
     if (!currentTownId) {
@@ -100,7 +97,7 @@ function TownReviewsList() {
 
   return (
     <div className="flex flex-col gap-4 pt-4">
-      <div className="flex flex-col justify-center items-center gap-2">
+      <div className="flex flex-col justify-center items-center gap-3">
         <h1 className="text-5xl">{town?.name}</h1>
         <h2 className="text-lg">
           {town?.county}, {getPostcodeOutcode(town?.postcode_sector)}
@@ -147,8 +144,6 @@ function TownReviewsList() {
               className="text-sm"
               onClick={async () => {
                 setCurrentTownId(nt.id!);
-
-                // replaceUrl(getTownUrl(town));
               }}
             >
               {nt.name}
@@ -174,12 +169,16 @@ function TownReviewsList() {
         </div>
       ) : (
         <div className="flex justify-center items-center flex-row w-full">
-          <span className="text-lg">No reviews within 2km</span>
+          <span className="text-lg">
+            There are no reviews within 2 kilometres
+          </span>
         </div>
       )}
-      {!isAllCurrentTownReviewsLoaded && (
+      {!isAllCurrentTownReviewsLoaded ? (
         <div className="flex justify-center items-center flex-row w-full">
           <Button
+            outlineColor="stone"
+            border="thin"
             onClick={async () => {
               try {
                 const res = await getReviewsNearTownRequest({
@@ -203,7 +202,13 @@ function TownReviewsList() {
             Load more
           </Button>
         </div>
-      )}
+      ) : reviews?.length > 0 ? (
+        <div className="flex justify-center items-center flex-row w-full">
+          <span className="text-lg">
+            There are no more reviews within 2 kilometres
+          </span>
+        </div>
+      ) : null}
     </div>
   );
 }

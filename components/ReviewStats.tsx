@@ -30,7 +30,7 @@ function ReviewStats() {
         {details.negativeCount > 0 && (
           <div className="flex flex-row gap-2 h-6 items-center ">
             <div
-              className="h-full bg-rose-400 border-x border-stone-50 rounded shadow-sm"
+              className="h-full bg-rose-600 border-x border-stone-50 rounded shadow-sm"
               style={{ width: `${negativePercent}%` }}
             />
             <span className="text-sm">{`${details.negativeCount} negative`}</span>
@@ -39,7 +39,7 @@ function ReviewStats() {
         {details.neutralCount > 0 && (
           <div className="flex flex-row gap-2 h-6 items-center">
             <div
-              className="h-full bg-blue-400 border-x border-stone-50  rounded shadow-sm"
+              className="h-full bg-blue-600 border-x border-stone-50  rounded shadow-sm"
               style={{ width: `${neutralPercent}%` }}
             />
             <span className="text-sm">{`${details.neutralCount} neutral`}</span>
@@ -48,7 +48,7 @@ function ReviewStats() {
         {details.positiveCount > 0 && (
           <div className="flex flex-row gap-2 h-6 items-center ">
             <div
-              className="h-full bg-emerald-400 border-x border-stone-50 rounded shadow-sm"
+              className="h-full bg-emerald-600 border-x border-stone-50 rounded shadow-sm"
               style={{ width: `${positivePercent}%` }}
             />
             <span className="text-sm">{`${details.positiveCount} positive`}</span>

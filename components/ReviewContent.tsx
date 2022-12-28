@@ -21,16 +21,13 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
   return (
     <div className="flex flex-col gap-4 w-full items-center">
       <div className="flex flex-row justify-between items-start gap-2 w-full ">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           <CoordinatesDisplay
             preText="Review at"
             className=" text-lg md:text-2xl gap-1 md:gap-2"
             iconSize="MEDIUM"
           />
-          <p>
-            Written by {user?.name} on{" "}
-            {dayjs(review.createdAt).format("DD/MM/YYYY")}
-          </p>
+
           <div className="flex flex-row w-full justify-start items-center">
             <ViewOnMapButton
               withText
@@ -59,15 +56,21 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
         <div className="text-3xl w-3/4">{review.title}</div>
         <div
           className={classNames("text-xl", {
-            "text-emerald-500": review.rating === 3,
-            "text-blue-500": review.rating === 2,
-            "text-rose-500": review.rating === 1,
+            "text-emerald-600": review.rating === 3,
+            "text-blue-600": review.rating === 2,
+            "text-rose-600": review.rating === 1,
           })}
         >
           {ratingEnumToString(review.rating!)}
         </div>
         <p className="text-sm whitespace-pre-line text-left pb-8">
           {review.body}
+        </p>
+      </div>
+      <div className="flex flex-row w-full items-center justify-start">
+        <p>
+          Written by {user?.name} on{" "}
+          {dayjs(review.createdAt).format("DD/MM/YYYY")}
         </p>
       </div>
     </div>

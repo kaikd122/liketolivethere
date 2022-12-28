@@ -19,6 +19,7 @@ export interface getReviewsNearTownArgs {
     townId: number;
     offset?: number;
     limit?: number;
+    distanceInMetres?: number;
   };
 }
 

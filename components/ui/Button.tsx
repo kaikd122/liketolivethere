@@ -48,8 +48,8 @@ function Button({
           "bg-petal": bgColor === "petal",
           "bg-stone-700": bgColor === "stone",
           "bg-stone-50": bgColor === "light",
-          "bg-rose-400": bgColor === "red",
-          "border-rose-400 text-rose-400": outlineColor === "red",
+          "bg-rose-600": bgColor === "red",
+          "border-rose-600 text-rose-600": outlineColor === "red",
           "bg-gradient-to-br from-violet-500 to-fuchsia-600":
             bgColor === "petalGradient",
           border: border === "thin",

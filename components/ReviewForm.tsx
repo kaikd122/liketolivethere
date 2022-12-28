@@ -225,7 +225,7 @@ function ReviewForm() {
                 setRating(1);
               }}
               selected={rating == 1}
-              selectedClassName="bg-rose-400  !text-stone-50 !border-stone-50"
+              selectedClassName="bg-rose-600  !text-stone-50 !border-stone-50"
             >
               Negative
             </Button>
@@ -235,7 +235,7 @@ function ReviewForm() {
               border="thin"
               onClick={() => setRating(2)}
               selected={rating == 2}
-              selectedClassName="bg-blue-400 !text-stone-50 !border-stone-50"
+              selectedClassName="bg-blue-600 !text-stone-50 !border-stone-50"
             >
               Neutral
             </Button>
@@ -245,7 +245,7 @@ function ReviewForm() {
               border="thin"
               onClick={() => setRating(3)}
               selected={rating == 3}
-              selectedClassName="bg-emerald-400 !text-stone-50 !border-stone-50"
+              selectedClassName="bg-emerald-600 !text-stone-50 !border-stone-50"
             >
               Positive
             </Button>

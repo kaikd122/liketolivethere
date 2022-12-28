@@ -16,33 +16,31 @@ function ReviewStub({ review }: ReviewStubProps) {
   const { setCurrentReviewId } = uzeStore((state) => state.actions);
   return (
     <div className="flex flex-row gap-2 w-full ">
-      <Card className="flex flex-col md:flex-row  w-full  md:justify-between p-4 gap-2">
+      <Button
+        smallScale
+        border="thin"
+        outlineColor="stone"
+        onClick={() => {
+          setCurrentReviewId(review.id!);
+        }}
+        className="flex flex-col md:flex-row  w-full  md:justify-between p-4 gap-2"
+      >
         <div className="flex flex-col gap-2 md:justify-start md:text-left w-full md:w-1/2">
           <span className="text-xl md:text-2xl line-clamp-1">
             {review.title}
           </span>
-          <div className="grid grid-cols-3  md:w-2/3 justify-start items-center ">
+          <div className="grid grid-cols-2  md:w-1/3 justify-start items-center ">
             <span>{metresToKm(review.distance)} km</span>
             <span
               className={classNames("", {
-                "text-emerald-500": review.rating === 3,
+                "text-emerald-600": review.rating === 3,
 
-                "text-blue-500": review.rating === 2,
-                "text-red-500": review.rating === 1,
+                "text-blue-600": review.rating === 2,
+                "text-rose-600": review.rating === 1,
               })}
             >
               {ratingEnumToString(review.rating!)}
             </span>
-            <div className="flex flex-row items-center justify-center  ">
-              <Button
-                className="text-sm p-1"
-                outlineColor="petal"
-                border="thin"
-                onClick={() => setCurrentReviewId(review.id!)}
-              >
-                Open review
-              </Button>
-            </div>
           </div>
         </div>
 
@@ -51,7 +49,7 @@ function ReviewStub({ review }: ReviewStubProps) {
             {review.body}
           </span>
         </div>
-      </Card>
+      </Button>
     </div>
   );
 }

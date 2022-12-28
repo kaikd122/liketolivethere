@@ -58,9 +58,9 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
                     className={classNames(
                       "text-xl rounded-full  text-white flex items-center justify-center hover:scale-110 duration-75 opacity-[85%] border-2 border-stone-50",
                       {
-                        "bg-rose-400": mean === 1,
-                        "bg-blue-400": mean === 2,
-                        "bg-emerald-400": mean === 3,
+                        "bg-rose-600": mean === 1,
+                        "bg-blue-600": mean === 2,
+                        "bg-emerald-600": mean === 3,
                       }
                     )}
                     style={{
@@ -95,9 +95,9 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
                           className={classNames(
                             "w-10 h-10  hover:scale-110 duration-75 stroke-stone-50",
                             {
-                              "text-rose-500": r.properties.rating === 1,
-                              "text-blue-500": r.properties.rating === 2,
-                              "text-emerald-500": r.properties.rating === 3,
+                              "text-rose-600": r.properties.rating === 1,
+                              "text-blue-600": r.properties.rating === 2,
+                              "text-emerald-600": r.properties.rating === 3,
                             }
                           )}
                         />
@@ -124,9 +124,9 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
               className={classNames(
                 "w-10 h-10 hover:scale-110 duration-75 stroke-stone-50 text-petal",
                 {
-                  "text-rose-500": cluster?.properties?.rating === 1,
-                  "text-blue-500": cluster?.properties?.rating === 2,
-                  "text-emerald-500": cluster?.properties?.rating === 3,
+                  "text-rose-600": cluster?.properties?.rating === 1,
+                  "text-blue-600": cluster?.properties?.rating === 2,
+                  "text-emerald-600": cluster?.properties?.rating === 3,
                 }
               )}
             />

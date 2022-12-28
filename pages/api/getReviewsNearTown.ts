@@ -22,9 +22,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       await prisma.$queryRaw`WITH town_geom AS (SELECT geom FROM towns WHERE id = ${
         data.townId
       })  SELECT id, title, body, rating, latitude, longitude, user_id, ST_Distance(Geography(geom), Geography((SELECT geom from town_geom)), true) AS distance FROM "Review" WHERE 
-        ST_DWithin(Geography(geom), Geography((SELECT geom FROM town_geom)), 2000) ORDER BY geom <-> (SELECT geom FROM town_geom) LIMIT ${
-          data.limit || TOWN_REVIEWS_PAGE_SIZE
-        } OFFSET ${data.offset}`;
+        ST_DWithin(Geography(geom), Geography((SELECT geom FROM town_geom)), ${
+          data.distanceInMetres || 2000
+        }) ORDER BY geom <-> (SELECT geom FROM town_geom) LIMIT ${
+        data.limit || TOWN_REVIEWS_PAGE_SIZE
+      } OFFSET ${data.offset}`;
 
     res.status(200).json(result);
   } catch (err) {
