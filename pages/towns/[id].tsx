@@ -65,7 +65,9 @@ function TownId({ data }) {
   if (!data) {
     return (
       <Layout>
-        <div>Something went wrong</div>
+        <div className="flex flex-row w-full justify-center items-center pt-10">
+          <p className="text-rose-600 text-lg">Oops! Something went wrong</p>
+        </div>
       </Layout>
     );
   }

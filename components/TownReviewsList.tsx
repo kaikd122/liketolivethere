@@ -1,7 +1,5 @@
-import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { Review, towns } from "@prisma/client";
-import result from "postcss/lib/result";
-import { nextTick } from "process";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { BeatLoader } from "react-spinners";
 import { getReviewsNearTownRequest } from "../lib/actions/review";
@@ -14,7 +12,6 @@ import uzeStore from "../lib/store/store";
 import { onlyUnique } from "../lib/util/general";
 import { getPostcodeOutcode } from "../lib/util/map-utils";
 import CoordinatesDisplay from "./CoordinatesDisplay";
-import ReviewContent from "./ReviewContent";
 import ReviewStub from "./ReviewStub";
 import Button from "./ui/Button";
 import ViewOnMapButton from "./ViewOnMapButton";
@@ -40,6 +37,7 @@ function TownReviewsList({
   const initialTown = serverSideTown ?? {};
   const initialNearbyTowns = serverSideNearbyTowns ?? [];
   const [reviews, setReviews] = useState<ReviewWithDistance[]>(initialReviews);
+  const isMapLoaded = uzeStore((state) => state.isMapLoaded);
 
   const currentTownId = uzeStore((state) => state.currentTownId);
   const [isLoading, setIsLoading] = useState(false);
@@ -160,11 +158,11 @@ function TownReviewsList({
               border="none"
               key={nt.id}
               className="text-sm"
-              onClick={async () => {
+              onClick={() => {
                 setCurrentTownId(nt.id!);
               }}
             >
-              {nt.name}
+              {isMapLoaded ? nt.name : <Link href="/">{nt.name}</Link>}
             </Button>
           );
         })}

@@ -19,8 +19,17 @@ export default function Navbar() {
   return (
     <div className="w-full flex flex-col">
       <div className="w-full gap-2 flex flex-row flex-wrap items-center justify-between py-4 px-2 md:px-8 bg-gradient-to-br from-violet-500 to-fuchsia-600 shadow z-10">
-        <button className="font-semibold  text-3xl text-stone-50 active:scale-100 duration-75 hover:scale-105">
-          <Link href={`/`}>LikeToLiveThere</Link>
+        <button
+          onClick={() => {
+            setCurrentTab("MAP");
+          }}
+          className="font-semibold  text-3xl text-stone-50 active:scale-100 duration-75 hover:scale-105"
+        >
+          {isMapLoaded ? (
+            "LikeToLiveThere"
+          ) : (
+            <Link href="/">LikeToLiveThere</Link>
+          )}
         </button>
 
         <div className="flex gap-4 ">
@@ -31,55 +40,29 @@ export default function Navbar() {
               onClick={() => setCurrentTab("PROFILE")}
             >
               {user.name}
-              {/* <Link href={`/profile/${encodeURIComponent(user?.id)}`}>
-                {user?.name}
-              </Link> */}
             </Button>
           )}
           <AuthButton />
         </div>
       </div>
       <div className="w-full flex flex-row flex-wrap items-center gap-3 md:gap-6 px-2 py-2 md:px-8 md:py-4">
-        {isMapLoaded ? (
-          <Tab
-            selected={currentTab === "MAP"}
-            onClick={() => {
-              // replaceUrl("/");
-              setCurrentTab("MAP");
-            }}
-          >
-            Explore map
-          </Tab>
-        ) : (
-          <Tab
-            selected={currentTab === "MAP"}
-            onClick={() => {
-              setCurrentTab("MAP");
-            }}
-          >
-            <Link href="/">Explore map</Link>
-          </Tab>
-        )}
-        {isMapLoaded ? (
-          <Tab
-            selected={currentTab === "TOWNS"}
-            onClick={() => {
-              // replaceUrl("/towns");
-              setCurrentTab("TOWNS");
-            }}
-          >
-            Browse towns
-          </Tab>
-        ) : (
-          <Tab
-            selected={currentTab === "TOWNS"}
-            onClick={() => {
-              setCurrentTab("TOWNS");
-            }}
-          >
-            <Link href="/">Browse towns</Link>
-          </Tab>
-        )}
+        <Tab
+          selected={currentTab === "MAP"}
+          onClick={() => {
+            setCurrentTab("MAP");
+          }}
+        >
+          {isMapLoaded ? "Explore map" : <Link href="/">Explore map</Link>}
+        </Tab>
+
+        <Tab
+          selected={currentTab === "TOWNS"}
+          onClick={() => {
+            setCurrentTab("TOWNS");
+          }}
+        >
+          Browse towns
+        </Tab>
       </div>
     </div>
   );

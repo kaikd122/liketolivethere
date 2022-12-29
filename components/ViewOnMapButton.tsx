@@ -1,6 +1,7 @@
 import { MapPinIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
 import { towns } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime";
+import Link from "next/link";
 import React from "react";
 import uzeStore from "../lib/store/store";
 import { Coordinates } from "../types/types";
@@ -28,7 +29,9 @@ function ViewOnMapButton({
     setReviewFeatures,
     setIsMapViewUnsearched,
     setIsCreatingReview,
+    setCurrentReviewId,
   } = uzeStore((state) => state.actions);
+  const isMapLoaded = uzeStore((state) => state.isMapLoaded);
   return (
     <Button
       outlineColor="petal"
@@ -42,21 +45,41 @@ function ViewOnMapButton({
           type: writeMode ? "WRITE" : review?.id ? "REVIEW" : "TOWN",
           id: review?.id || town?.id?.toString() || "new-review",
         });
+        setCurrentReviewId("");
 
         setIsMapViewUnsearched(false);
       }}
     >
       {writeMode ? (
-        <>
-          <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
+        isMapLoaded ? (
+          <>
+            <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
 
-          <p>Write a review</p>
-        </>
-      ) : (
+            <p>Write a review</p>
+          </>
+        ) : (
+          <Link
+            href="/"
+            className="flex flex-row w-full items-center justify-center"
+          >
+            <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
+
+            <p>Write a review</p>
+          </Link>
+        )
+      ) : isMapLoaded ? (
         <>
           <MapPinIcon className="h-5 w-5" />
           {withText && <p>View on map</p>}{" "}
         </>
+      ) : (
+        <Link
+          href="/"
+          className="flex flex-row w-full items-center justify-center"
+        >
+          <MapPinIcon className="h-5 w-5" />
+          {withText && <p>View on map</p>}{" "}
+        </Link>
       )}
     </Button>
   );
