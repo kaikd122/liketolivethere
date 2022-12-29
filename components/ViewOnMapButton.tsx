@@ -45,7 +45,8 @@ function ViewOnMapButton({
           type: writeMode ? "WRITE" : review?.id ? "REVIEW" : "TOWN",
           id: review?.id || town?.id?.toString() || "new-review",
         });
-        setCurrentReviewId("");
+        // setCurrentReviewId("");
+        //can't remember why this is here
 
         setIsMapViewUnsearched(false);
       }}

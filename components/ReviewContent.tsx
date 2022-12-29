@@ -28,15 +28,17 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
             iconSize="MEDIUM"
           />
 
-          <div className="flex flex-row w-full justify-start items-center">
-            <ViewOnMapButton
-              withText
-              coordinates={{
-                lat: Number(review.latitude),
-                lng: Number(review.longitude),
-              }}
-            />
-          </div>
+          {currentTab !== "MAP" && (
+            <div className="flex flex-row w-full justify-start items-center">
+              <ViewOnMapButton
+                withText
+                coordinates={{
+                  lat: Number(review.latitude),
+                  lng: Number(review.longitude),
+                }}
+              />
+            </div>
+          )}
         </div>
         <Button
           type="button"

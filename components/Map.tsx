@@ -17,6 +17,7 @@ import { Review, towns } from "@prisma/client";
 import CoordinatesDisplay from "./CoordinatesDisplay";
 import ReviewMarkers from "./ReviewMarkers";
 import {
+  getRandomReviewRequest,
   getReviewsNearTownRequest,
   getReviewsWithinMapBoundsRequest,
 } from "../lib/actions/review";
@@ -28,6 +29,7 @@ import {
 } from "../lib/util/review-utils";
 import ReviewStats from "./ReviewStats";
 import ZoomControl from "./ZoomControl";
+import { RxShuffle } from "react-icons/rx";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -44,6 +46,7 @@ function MapContainer() {
     setZoom,
     setBounds,
     setCurrentTownId,
+    setViewOnMapSource,
   } = uzeStore((state) => state.actions);
   const currentTab = uzeStore((state) => state.currentTab);
   const isCreatingReview = uzeStore((state) => state.isCreatingReview);
@@ -214,7 +217,7 @@ function MapContainer() {
           />
           {isMapViewUnsearched && (
             <button
-              className="border shadow-sm border-stone-400 p-2 rounded text-base active:scale-100 duration-75 hover:scale-105 absolute bottom-2 left-[50%] translate-x-[-50%] items-center justify-center flex flex-row gap-1 bg-stone-50 font-sans text-petal"
+              className="border shadow-sm border-stone-400 py-1 px-2 border-1 rounded text-lg active:scale-100 duration-75 hover:scale-105 absolute bottom-2 left-[50%] translate-x-[-50%] items-center justify-center flex flex-row gap-1 bg-stone-50 font-sans text-stone-700"
               onClick={async () => {
                 const res = await getReviewsWithinMapBoundsRequest({
                   data: {
@@ -257,35 +260,69 @@ function MapContainer() {
             className="text-base gap-1"
             iconSize="SMALL"
           />
-          {!isCreatingReview ? (
+          <div className="flex flex-row gap-3">
             <Button
               outlineColor="petal"
               border="thin"
-              onClick={() => {
-                setIsCreatingReview(true);
+              className="flex flex-row gap-2 items-center justify-center"
+              onClick={async () => {
+                try {
+                  const res = await getRandomReviewRequest();
+                  if (res.ok) {
+                    const jsonRes: Review[] = await res.json();
+                    const randomReview = jsonRes[0];
+
+                    console.log(randomReview.latitude, randomReview.longitude);
+                    setIsCreatingReview(false);
+                    setCoordinates({
+                      lat: Number(randomReview.latitude),
+                      lng: Number(randomReview.longitude),
+                    });
+                    setViewOnMapSource({
+                      type: "REVIEW",
+                      id: randomReview.id,
+                    });
+                    setIsMapViewUnsearched(false);
+                  }
+                } catch (error) {
+                  console.log(error);
+                }
               }}
-              className="flex flex-row gap-1"
             >
-              <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
-              <p> Write a review</p>
+              <RxShuffle />
+              <p>Random review</p>
             </Button>
-          ) : (
-            <Button
-              type="button"
-              onClick={() => {
-                setIsCreatingReview(false);
-              }}
-              outlineColor="petal"
-              border="thin"
-              className="flex flex-row gap-1 items-center justify-center"
-            >
-              <ArrowUturnLeftIcon className="h-5 w-5" />
-              <p>Return to explore mode</p>
-            </Button>
-          )}
+            {!isCreatingReview ? (
+              <Button
+                outlineColor="petal"
+                border="thin"
+                onClick={() => {
+                  setIsCreatingReview(true);
+                }}
+                className="flex flex-row gap-1"
+              >
+                <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
+                <p> Write a review</p>
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                onClick={() => {
+                  setIsCreatingReview(false);
+                }}
+                outlineColor="petal"
+                border="thin"
+                className="flex flex-row gap-1 items-center justify-center"
+              >
+                <ArrowUturnLeftIcon className="h-5 w-5" />
+                <p>Return to explore mode</p>
+              </Button>
+            )}{" "}
+          </div>
         </div>
       ) : null}
-      <div className="flex flex-row  gap-4 flex-wrap px-3 md:px-0 pt-3">
+
+      <div className="flex flex-row  gap-4 flex-wrap px-3 md:px-0 pt-4">
         {nearbyTowns.map((town) => {
           return (
             <Button

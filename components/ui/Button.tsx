@@ -38,7 +38,7 @@ function Button({
       onClick={onClick}
       type={type}
       className={classNames(
-        "relative shadow-sm rounded p-2 active:scale-100 duration-75 hover:scale-105",
+        "relative shadow-sm rounded py-1 px-2 active:scale-100 duration-75 hover:scale-105",
         {
           "border-violet-500 text-violet-500": outlineColor === "violet",
           "border-stone-400 text-stone-700": outlineColor === "stone",

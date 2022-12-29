@@ -79,3 +79,11 @@ export async function getReviewByIdRequest(args: getReviewByIdArgs) {
   });
   return res;
 }
+
+export async function getRandomReviewRequest() {
+  const res = await fetch("/api/getRandomReview", {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  return res;
+}
