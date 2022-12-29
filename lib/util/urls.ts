@@ -7,6 +7,14 @@ export function getTownUrl(town: Partial<towns>): string {
   return `/towns/${getTownSlug(town)}-${town.id}`;
 }
 
+export function getTownIdFromSlug(slug: string): number | null {
+  const id = slug.split("-").pop();
+  if (!isNaN(id as unknown as number)) {
+    return parseInt(id!);
+  }
+  return null;
+}
+
 export function replaceUrl(url: string) {
   window.history.replaceState(
     {

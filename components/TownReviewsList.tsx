@@ -19,22 +19,36 @@ import ReviewStub from "./ReviewStub";
 import Button from "./ui/Button";
 import ViewOnMapButton from "./ViewOnMapButton";
 
-export interface TownReviewsListProps {}
+export interface TownReviewsListProps {
+  serverSideReviews?: ReviewWithDistance[];
+  serverSideTown?: Partial<towns>;
+  serverSideNearbyTowns?: Array<Partial<towns>>;
+  serverSideIsAllCurrentTownReviewsLoaded?: boolean;
+}
 
 export interface ReviewWithDistance extends Partial<Review> {
   distance: number;
 }
 
-function TownReviewsList() {
-  const [reviews, setReviews] = useState<ReviewWithDistance[]>([]);
+function TownReviewsList({
+  serverSideReviews,
+  serverSideNearbyTowns,
+  serverSideTown,
+  serverSideIsAllCurrentTownReviewsLoaded,
+}: TownReviewsListProps) {
+  const initialReviews = serverSideReviews ?? [];
+  const initialTown = serverSideTown ?? {};
+  const initialNearbyTowns = serverSideNearbyTowns ?? [];
+  const [reviews, setReviews] = useState<ReviewWithDistance[]>(initialReviews);
 
   const currentTownId = uzeStore((state) => state.currentTownId);
   const [isLoading, setIsLoading] = useState(false);
   const [isAllCurrentTownReviewsLoaded, setIsAllCurrentTownReviewsLoaded] =
-    useState(false);
+    useState(!!serverSideIsAllCurrentTownReviewsLoaded);
 
-  const [town, setTown] = useState<Partial<towns>>();
-  const [nearbyTowns, setNearbyTowns] = useState<Array<Partial<towns>>>([]);
+  const [town, setTown] = useState<Partial<towns>>(initialTown);
+  const [nearbyTowns, setNearbyTowns] =
+    useState<Array<Partial<towns>>>(initialNearbyTowns);
 
   const { setCurrentTownId } = uzeStore((state) => state.actions);
 
@@ -47,10 +61,11 @@ function TownReviewsList() {
     const main = async () => {
       try {
         setIsLoading(true);
+
         const res = await getReviewsNearTownRequest({
           data: {
             townId: currentTownId,
-            offset: 0,
+            offset: initialReviews.length,
           },
         });
         if (res.ok) {
@@ -62,6 +77,7 @@ function TownReviewsList() {
           }
           setReviews(data);
         }
+
         const townRes = await getTownByIdRequest({
           data: {
             id: currentTownId,
@@ -88,7 +104,9 @@ function TownReviewsList() {
       }
       setIsLoading(false);
     };
-    main();
+    if (initialReviews.length === 0) {
+      main();
+    }
   }, [currentTownId]);
 
   if (!currentTownId) {
@@ -170,7 +188,7 @@ function TownReviewsList() {
       ) : (
         <div className="flex justify-center items-center flex-row w-full">
           <span className="text-lg">
-            There are no reviews within 2 kilometres
+            There are no reviews within 3 kilometres
           </span>
         </div>
       )}
@@ -205,7 +223,7 @@ function TownReviewsList() {
       ) : reviews?.length > 0 ? (
         <div className="flex justify-center items-center flex-row w-full">
           <span className="text-lg">
-            There are no more reviews within 2 kilometres
+            There are no more reviews within 3 kilometres
           </span>
         </div>
       ) : null}
