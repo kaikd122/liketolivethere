@@ -38,32 +38,10 @@ export function Geocoder(props: GeocoderProps) {
       countries: "GB",
     });
 
-    //for initial load
-    getNearbyTownsRequest({
-      data: {
-        latitude: kingsCrossCoords.lat,
-        longitude: kingsCrossCoords.lng,
-        limit: 5,
-      },
-    }).then(async (res) => {
-      const data = await res.json();
-      props.setNearbyTowns(data);
-    });
-
     geocoder.on("result", (e) => {
       const result: Result = e.result;
       const coords = coordsArrayToObject(result.geometry.coordinates);
       props.setCoordinates(coords);
-      getNearbyTownsRequest({
-        data: {
-          latitude: coords.lat,
-          longitude: coords.lng,
-          limit: 5,
-        },
-      }).then(async (res) => {
-        const data = await res.json();
-        props.setNearbyTowns(data);
-      });
     });
 
     map.addControl(geocoder);

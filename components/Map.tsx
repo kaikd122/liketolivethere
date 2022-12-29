@@ -69,6 +69,23 @@ function MapContainer() {
     }
   }, [isCreatingReview]);
 
+  useEffect(() => {
+    const getNearbyTowns = async () => {
+      getNearbyTownsRequest({
+        data: {
+          latitude: coordinates.lat,
+          longitude: coordinates.lng,
+          limit: 5,
+        },
+      }).then(async (res) => {
+        const data = await res.json();
+        setNearbyTowns(data);
+      });
+    };
+
+    getNearbyTowns();
+  }, [coordinates]);
+
   return (
     <div className={`flex flex-col ${currentTab === "MAP" ? "" : "hidden"}`}>
       <div
@@ -189,16 +206,6 @@ function MapContainer() {
 
                 //need to get bounds
 
-                getNearbyTownsRequest({
-                  data: {
-                    latitude: lngLat.lat,
-                    longitude: lngLat.lng,
-                    limit: 5,
-                  },
-                }).then(async (res) => {
-                  const data = await res.json();
-                  setNearbyTowns(data);
-                });
                 setIsDragging(false);
               }}
               style={{ zIndex: "30" }}
