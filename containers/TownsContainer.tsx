@@ -1,17 +1,14 @@
 import { ArrowUturnLeftIcon } from "@heroicons/react/20/solid";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { Review, towns } from "@prisma/client";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
+import { towns } from "@prisma/client";
+
+import React, { useEffect, useState } from "react";
 import TownReviewsList from "../components/TownReviewsList";
 import Button from "../components/ui/Button";
-import Card from "../components/ui/Card";
-import { getReviewsNearTownRequest } from "../lib/actions/review";
 import { getTownsByTextRequest } from "../lib/actions/search";
 import uzeStore from "../lib/store/store";
 import { getPostcodeOutcode } from "../lib/util/map-utils";
-import getReviewsNearTown from "../pages/api/getReviewsNearTown";
-import getTownsByText from "../pages/api/getTownsByText";
+import { useDebounce } from "use-lodash-debounce";
 
 function TownsContainer() {
   const currentTab = uzeStore((state) => state.currentTab);
@@ -21,6 +18,25 @@ function TownsContainer() {
   const [val, setVal] = useState("");
   const currentTownId = uzeStore((state) => state.currentTownId);
   const [results, setResults] = useState<Array<Partial<towns>>>([]);
+
+  const debouncedVal = useDebounce(val, 500);
+
+  useEffect(() => {
+    if (!debouncedVal) {
+      setResults([]);
+      return;
+    }
+    getTownsByTextRequest({ data: { text: debouncedVal } })
+      .then(async (res) => {
+        const data = await res.json();
+        if (res.ok) {
+          setResults(data);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, [debouncedVal]);
 
   if (currentTab !== "TOWNS") {
     return null;
@@ -52,10 +68,8 @@ function TownsContainer() {
             >
               <div className="flex flex-row gap-1">
                 <span className="italic">
-                  Enter either a town name or the first part of a postcode, and
-                  click
+                  Enter either a town name or the first part of a postcode
                 </span>
-                <span>Search</span>
               </div>
             </label>
             <div className="flex flex-row gap-4 w-full md:w-3/4 justify-between">
