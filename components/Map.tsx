@@ -329,7 +329,7 @@ function MapContainer() {
         </div>
       ) : null}
 
-      <div className="flex flex-row  gap-4 flex-wrap px-3 md:px-0 pt-4">
+      <div className="flex flex-row  gap-4 flex-wrap px-3 md:px-0 pt-3">
         {nearbyTowns.map((town) => {
           return (
             <Button

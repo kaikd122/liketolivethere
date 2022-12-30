@@ -112,6 +112,9 @@ function TownsContainer() {
                 </Button>
               );
             })}
+            {results.length === 0 && debouncedVal && (
+              <p className="text-stone-700 text-base">No results found</p>
+            )}
           </div>
         </>
       ) : (
