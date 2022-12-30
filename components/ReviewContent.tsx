@@ -98,6 +98,7 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
               setCurrentTab("MAP");
               setEditReviewId(review?.id || "");
               setIsCreatingReview(true);
+              setCurrentReviewId("");
 
               setViewOnMapSource({
                 type: "WRITE",

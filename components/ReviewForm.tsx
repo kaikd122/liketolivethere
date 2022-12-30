@@ -31,23 +31,15 @@ function ReviewForm() {
     (state) => state.actions
   );
   const currentTab = uzeStore((state) => state.currentTab);
-  const isDragging = uzeStore((state) => state.isDragging);
   const isCreatingReview = uzeStore((state) => state.isCreatingReview);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control,
-    reset,
-  } = useForm<FormData>();
+  const { register, handleSubmit, reset } = useForm<FormData>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [rating, setRating] = useState<number | undefined>(undefined);
   const bounds = uzeStore((state) => state.bounds);
   const editReviewId = uzeStore((state) => state.editReviewId);
-  const { setIsMapViewUnsearched, setReviewFeatures } = uzeStore(
-    (state) => state.actions
-  );
+  const { setEditReviewId, setIsMapViewUnsearched, setReviewFeatures } =
+    uzeStore((state) => state.actions);
 
   const onSubmit = async (data: FormData) => {
     let isInvalid = false;
@@ -142,10 +134,10 @@ function ReviewForm() {
   };
 
   useEffect(() => {
-    if (isCreatingReview || editReviewId) {
+    if (isCreatingReview) {
       executeScroll();
     }
-  }, [isCreatingReview, editReviewId]);
+  }, [isCreatingReview]);
 
   useEffect(() => {
     setFormErrors([]);
@@ -180,7 +172,7 @@ function ReviewForm() {
     }
   }, [editReviewId]);
 
-  if (!isCreatingReview && !editReviewId) {
+  if (!isCreatingReview) {
     return null;
   }
 
@@ -199,7 +191,6 @@ function ReviewForm() {
         className="overflow-hidden relative flex flex-col gap-6 items-center justify-center w-full p-2 "
         autoComplete="off"
       >
-        {editReviewId && <p>EDIT MODE</p>}
         <div className="flex flex-row justify-between items-start gap-2 w-full">
           <div className="flex flex-col gap-2">
             <CoordinatesDisplay
@@ -216,6 +207,7 @@ function ReviewForm() {
             type="button"
             onClick={() => {
               setIsCreatingReview(false);
+              setEditReviewId("");
               setRating(undefined);
               reset();
             }}

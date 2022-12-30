@@ -30,6 +30,7 @@ import {
 import ReviewStats from "./ReviewStats";
 import ZoomControl from "./ZoomControl";
 import { RxShuffle } from "react-icons/rx";
+import classNames from "classnames";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -47,6 +48,7 @@ function MapContainer() {
     setBounds,
     setCurrentTownId,
     setViewOnMapSource,
+    setEditReviewId,
   } = uzeStore((state) => state.actions);
   const currentTab = uzeStore((state) => state.currentTab);
   const isCreatingReview = uzeStore((state) => state.isCreatingReview);
@@ -90,7 +92,9 @@ function MapContainer() {
     <div className={`flex flex-col ${currentTab === "MAP" ? "" : "hidden"}`}>
       <div
         ref={mapRef}
-        className={`flex flex-col  items-center justify-center h-500 border border-stone-400 max-h-[50vh] md:max-h-[100vh] rounded shadow`}
+        className={`flex flex-col  items-center justify-center h-500 border ${
+          isCreatingReview ? "border-petal border-2" : "border-stone-400"
+        } max-h-[50vh] md:max-h-[100vh] rounded shadow`}
       >
         <Map
           onLoad={async (e) => {
@@ -316,6 +320,7 @@ function MapContainer() {
                 type="button"
                 onClick={() => {
                   setIsCreatingReview(false);
+                  setEditReviewId("");
                 }}
                 outlineColor="petal"
                 border="thin"

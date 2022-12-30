@@ -1,7 +1,7 @@
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import { Review } from "@prisma/client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Marker, useMap, LayerProps, Source, Layer } from "react-map-gl";
 import uzeStore from "../lib/store/store";
 import useSupercluster from "use-supercluster";
@@ -17,8 +17,10 @@ export interface ReviewMarkersProps {
 function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
   const { current: map } = useMap();
   const reviewFeatures = uzeStore((state) => state.reviewFeatures);
-  const { setCurrentReviewId } = uzeStore((state) => state.actions);
-
+  const { setCurrentReviewId, setReviewFeatures } = uzeStore(
+    (state) => state.actions
+  );
+  const editReviewId = uzeStore((state) => state.editReviewId);
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
   const isVerySmallScreen = useMediaQuery("(max-width: 500px)");
 

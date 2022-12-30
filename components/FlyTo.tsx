@@ -21,6 +21,7 @@ export default function FlyTo() {
   const isCreatingReview = uzeStore((state) => state.isCreatingReview);
   const viewOnMapSource = uzeStore((state) => state.viewOnMapSource);
   const bounds = uzeStore((state) => state.bounds);
+  const editReviewId = uzeStore((state) => state.editReviewId);
 
   useEffect(() => {
     if (!map) {
@@ -64,7 +65,11 @@ export default function FlyTo() {
           },
         });
         const data: Partial<Review>[] = await res.json();
-        setReviewFeatures(reviewsToFeatures(data));
+        setReviewFeatures(
+          reviewsToFeatures(data).filter(
+            (r) => r.properties.id !== editReviewId
+          )
+        );
 
         viewOnMapSource.type === "REVIEW" &&
           setCurrentReviewId(viewOnMapSource.id);
