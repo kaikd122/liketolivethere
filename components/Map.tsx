@@ -259,7 +259,7 @@ function MapContainer() {
         </Map>
       </div>
       {coordinates?.lat && coordinates?.lng ? (
-        <div className="pt-3 flex flex-row justify-between items-center px-3 md:px-0">
+        <div className="pt-3 flex flex-row justify-between items-center px-3 md:px-0 flex-wrap gap-2">
           <CoordinatesDisplay
             preText={`${
               isCreatingReview ? "Review coordinates:" : "Centre coordinates:"

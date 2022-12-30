@@ -7,6 +7,7 @@ import uzeStore from "../lib/store/store";
 import useSupercluster from "use-supercluster";
 import { ReviewFeature } from "../types/types";
 import classNames from "classnames";
+import { useMediaQuery } from "usehooks-ts";
 
 export interface ReviewMarkersProps {
   bounds: Array<number>;
@@ -17,6 +18,11 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
   const { current: map } = useMap();
   const reviewFeatures = uzeStore((state) => state.reviewFeatures);
   const { setCurrentReviewId } = uzeStore((state) => state.actions);
+
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
+  const isVerySmallScreen = useMediaQuery("(max-width: 500px)");
+
+  console.log("IS MOBILE", isSmallScreen);
 
   const { clusters, supercluster } = useSupercluster({
     points: reviewFeatures,
@@ -56,7 +62,7 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
                 <div className="flex flex-col items-center justify-center gap-1">
                   <div
                     className={classNames(
-                      "text-xl rounded-full  text-white flex items-center justify-center hover:scale-110 duration-75 opacity-[85%] border-2 border-stone-50",
+                      `text-xl p-2 rounded-full  text-white flex items-center justify-center hover:scale-110 duration-75 opacity-[85%] border-2 border-stone-50`,
                       {
                         "bg-rose-600": mean === 1,
                         "bg-blue-600": mean === 2,
@@ -65,10 +71,12 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
                     )}
                     style={{
                       width: `${
-                        3 + (pointCount / reviewFeatures.length) * 2
+                        (isVerySmallScreen ? 8 : isSmallScreen ? 5 : 3) +
+                        (pointCount / reviewFeatures.length) * 2
                       }vw`,
                       height: `${
-                        3 + (pointCount / reviewFeatures.length) * 2
+                        (isVerySmallScreen ? 8 : isSmallScreen ? 5 : 3) +
+                        (pointCount / reviewFeatures.length) * 2
                       }vw`,
                     }}
                     onClick={() => {
@@ -122,7 +130,7 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
                 setCurrentReviewId(cluster?.properties?.id);
               }}
               className={classNames(
-                "w-10 h-10 hover:scale-110 duration-75 stroke-stone-50 text-petal",
+                "w-10 h-10 hover:scale-110 duration-75 stroke-stone-50",
                 {
                   "text-rose-600": cluster?.properties?.rating === 1,
                   "text-blue-600": cluster?.properties?.rating === 2,
