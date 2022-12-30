@@ -57,8 +57,7 @@ function MapContainer() {
   const isMapViewUnsearched = uzeStore((state) => state.isMapViewUnsearched);
   const zoom = uzeStore((state) => state.zoom);
   const bounds = uzeStore((state) => state.bounds);
-  const reviewFeatures = uzeStore((state) => state.reviewFeatures);
-
+  const user = uzeStore((state) => state.user);
   const mapRef = useRef(null);
   const executeScroll = () => {
     //@ts-ignore

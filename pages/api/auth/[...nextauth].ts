@@ -5,6 +5,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "../../../lib/prisma";
 import generateUsername from "../../../lib/util/generate-username";
 import { redirect } from "next/dist/server/api-utils";
+import { sendVerificationRequestCustom } from "../../../lib/util/sendVerificationRequest";
 
 const authOptions: NextAuthOptions = {
   callbacks: {
@@ -27,6 +28,18 @@ const authOptions: NextAuthOptions = {
         },
       },
       from: process.env.SMTP_FROM,
+      sendVerificationRequest({
+        identifier: email,
+        url,
+        provider: { server, from },
+      }) {
+        sendVerificationRequestCustom({
+          identifier: email,
+          url,
+          provider: { server, from },
+          theme: "light",
+        });
+      },
     }),
   ],
 

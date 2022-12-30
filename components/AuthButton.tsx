@@ -1,9 +1,9 @@
 import { signIn, useSession, signOut } from "next-auth/react";
 import React from "react";
 import uzeStore from "../lib/store/store";
-import Button from "./ui/Button";
+import Button, { ButtonProps } from "./ui/Button";
 
-function AuthButton() {
+function AuthButton({ outlineColor, border }: ButtonProps) {
   const isLoading = uzeStore((state) => state.isLoading);
   const { setIsLoading } = uzeStore((state) => state.actions);
   const { data: session } = useSession();
@@ -20,11 +20,19 @@ function AuthButton() {
   return (
     <>
       {session ? (
-        <Button outlineColor="light" border="thick" onClick={handleLogout}>
+        <Button
+          outlineColor={outlineColor}
+          border={border}
+          onClick={handleLogout}
+        >
           Log out
         </Button>
       ) : (
-        <Button outlineColor="light" border="thick" onClick={handleLogin}>
+        <Button
+          outlineColor={outlineColor}
+          border={border}
+          onClick={handleLogin}
+        >
           Log in
         </Button>
       )}

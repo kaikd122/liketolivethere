@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { BeatLoader } from "react-spinners";
 
 export interface ButtonProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   outlineColor?: "violet" | "stone" | "light" | "red" | "petal";
   bgColor?: "violet" | "stone" | "light" | "red" | "petal" | "petalGradient";
   className?: string;
