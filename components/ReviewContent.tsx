@@ -1,4 +1,4 @@
-import { XMarkIcon } from "@heroicons/react/24/solid";
+import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { Review, User } from "@prisma/client";
 import classNames from "classnames";
 import dayjs from "dayjs";
@@ -17,6 +17,7 @@ export interface ReviewContentProps {
 
 function ReviewContent({ review, user, setReview }: ReviewContentProps) {
   const { setCurrentReviewId } = uzeStore((state) => state.actions);
+  const { user: currentUser } = uzeStore((state) => state);
   const currentTab = uzeStore((state) => state.currentTab);
   return (
     <div className="flex flex-col gap-4 w-full items-center">
@@ -69,11 +70,20 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
           {review.body}
         </p>
       </div>
-      <div className="flex flex-row w-full items-center justify-start">
+      <div className="flex flex-col w-full items-start justify-center gap-2">
         <p>
           Written by {user?.name} on{" "}
           {dayjs(review.createdAt).format("DD/MM/YYYY")}
         </p>
+
+        {user?.id === currentUser?.id && (
+          <Button outlineColor="petal" border="thin">
+            <div className="flex flex-row gap-1">
+              <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
+              <p>Edit review</p>
+            </div>
+          </Button>
+        )}
       </div>
     </div>
   );
