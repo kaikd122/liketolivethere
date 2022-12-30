@@ -2,6 +2,7 @@ import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { Review, User } from "@prisma/client";
 import classNames from "classnames";
 import dayjs from "dayjs";
+import Link from "next/link";
 import React from "react";
 import uzeStore from "../lib/store/store";
 import { ratingEnumToString } from "../lib/util/review-utils";
@@ -16,7 +17,16 @@ export interface ReviewContentProps {
 }
 
 function ReviewContent({ review, user, setReview }: ReviewContentProps) {
-  const { setCurrentReviewId } = uzeStore((state) => state.actions);
+  const {
+    setCurrentReviewId,
+    setEditReviewId,
+    setCoordinates,
+    setIsMapViewUnsearched,
+    setCurrentTab,
+    setViewOnMapSource,
+    setIsCreatingReview,
+  } = uzeStore((state) => state.actions);
+  const isMapLoaded = uzeStore((state) => state.isMapLoaded);
   const { user: currentUser } = uzeStore((state) => state);
   const currentTab = uzeStore((state) => state.currentTab);
   return (
@@ -77,11 +87,36 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
         </p>
 
         {user?.id === currentUser?.id && (
-          <Button outlineColor="petal" border="thin">
-            <div className="flex flex-row gap-1">
-              <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
-              <p>Edit review</p>
-            </div>
+          <Button
+            outlineColor="petal"
+            border="thin"
+            onClick={() => {
+              setCoordinates({
+                lat: Number(review.latitude),
+                lng: Number(review.longitude),
+              });
+              setCurrentTab("MAP");
+              setEditReviewId(review?.id || "");
+              setIsCreatingReview(true);
+
+              setViewOnMapSource({
+                type: "WRITE",
+                id: review?.id!,
+              });
+              setIsMapViewUnsearched(false);
+            }}
+          >
+            {isMapLoaded ? (
+              <div className="flex flex-row gap-1">
+                <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
+                <p>Edit review</p>
+              </div>
+            ) : (
+              <Link href="/" className="flex flex-row gap-1">
+                <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
+                <p>Edit review</p>
+              </Link>
+            )}
           </Button>
         )}
       </div>

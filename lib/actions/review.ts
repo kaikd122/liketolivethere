@@ -14,6 +14,18 @@ export interface createReviewArgs {
   };
 }
 
+export interface updateReviewArgs {
+  data: {
+    body: string;
+    title: string;
+    userId: string;
+    latitude: number;
+    longitude: number;
+    rating: number;
+    id: string;
+  };
+}
+
 export interface getReviewsNearTownArgs {
   data: {
     townId: number;
@@ -49,6 +61,16 @@ export async function createReviewCommand(args: createReviewArgs) {
   });
   return res;
 }
+
+export async function updateReviewCommand(args: updateReviewArgs) {
+  const res = await fetch("/api/updateReview", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(args),
+  });
+  return res;
+}
+
 //
 
 export async function getReviewsNearTownRequest(args: getReviewsNearTownArgs) {

@@ -25,6 +25,7 @@ interface State {
     setBounds: (bounds: number[]) => void;
     setCurrentTownId: (currentTownId: number | undefined) => void;
     setCurrentTownReviews: (currentTownReviews: Partial<Review>[]) => void;
+    setEditReviewId: (editReviewId: string) => void;
     setViewOnMapSource: (
       viewOnMapSource: {
         id: string;
@@ -39,6 +40,7 @@ interface State {
   isDragging: boolean;
   isMapLoaded: boolean;
   currentReviewId: string;
+  editReviewId: string;
   reviewFeatures: ReviewFeature[];
   isMapViewUnsearched: boolean | undefined;
   zoom: number;
@@ -47,7 +49,7 @@ interface State {
   currentTownReviews: Partial<Review>[];
   viewOnMapSource: {
     id: string;
-    type: "TOWN" | "REVIEW";
+    type: "TOWN" | "REVIEW" | "WRITE";
   } | null;
 }
 
@@ -57,6 +59,7 @@ const uzeStore = create<State>((set) => ({
     lng: kingsCrossCoords.lng,
   },
   isLoading: false,
+  editReviewId: "",
   user: {} as User,
   currentTab: undefined,
   isCreatingReview: false,
@@ -71,6 +74,7 @@ const uzeStore = create<State>((set) => ({
   currentTownReviews: [],
   viewOnMapSource: null,
   actions: {
+    setEditReviewId: (editReviewId) => set({ editReviewId }),
     setCurrentReviewId: (currentReviewId) => set({ currentReviewId }),
     setCoordinates: (coordinates) => set({ coordinates }),
     setIsMapLoaded: (isMapLoaded) => set({ isMapLoaded }),

@@ -6,6 +6,7 @@ import {
   createReviewCommand,
   getReviewByIdRequest,
   getReviewsWithinMapBoundsRequest,
+  updateReviewCommand,
 } from "../lib/actions/review";
 import uzeStore from "../lib/store/store";
 import CoordinatesDisplay from "./CoordinatesDisplay";
@@ -43,6 +44,7 @@ function ReviewForm() {
 
   const [rating, setRating] = useState<number | undefined>(undefined);
   const bounds = uzeStore((state) => state.bounds);
+  const editReviewId = uzeStore((state) => state.editReviewId);
   const { setIsMapViewUnsearched, setReviewFeatures } = uzeStore(
     (state) => state.actions
   );
@@ -77,22 +79,36 @@ function ReviewForm() {
     const id = cuid();
 
     try {
-      await createReviewCommand({
-        data: {
-          id: id,
-          body: data.body,
-          latitude: coordinates.lat,
-          longitude: coordinates.lng,
-          title: data.title,
-          userId: user.id,
-          rating: rating!,
-        },
-      });
+      if (editReviewId) {
+        await updateReviewCommand({
+          data: {
+            id: editReviewId,
+            body: data.body,
+            latitude: coordinates.lat,
+            longitude: coordinates.lng,
+            title: data.title,
+            userId: user.id,
+            rating: rating!,
+          },
+        });
+      } else {
+        await createReviewCommand({
+          data: {
+            id: id,
+            body: data.body,
+            latitude: coordinates.lat,
+            longitude: coordinates.lng,
+            title: data.title,
+            userId: user.id,
+            rating: rating!,
+          },
+        });
+      }
 
-      toast.success("Review created!");
+      toast.success(editReviewId ? "Review updated!" : "Review created!");
       setIsSubmitting(false);
 
-      setCurrentReviewId(id);
+      setCurrentReviewId(editReviewId ? editReviewId : id);
       setIsCreatingReview(false);
       setRating(undefined);
       reset();
@@ -126,10 +142,10 @@ function ReviewForm() {
   };
 
   useEffect(() => {
-    if (isCreatingReview) {
+    if (isCreatingReview || editReviewId) {
       executeScroll();
     }
-  }, [isCreatingReview]);
+  }, [isCreatingReview, editReviewId]);
 
   useEffect(() => {
     setFormErrors([]);
@@ -141,7 +157,30 @@ function ReviewForm() {
     formRef?.current && formRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  if (!isCreatingReview) {
+  useEffect(() => {
+    const getReview = async () => {
+      const res = await getReviewByIdRequest({
+        data: {
+          id: editReviewId,
+        },
+      });
+
+      const review = await res.json();
+
+      reset({
+        title: review.title,
+        body: review.body,
+      });
+
+      setRating(review.rating);
+    };
+
+    if (editReviewId) {
+      getReview();
+    }
+  }, [editReviewId]);
+
+  if (!isCreatingReview && !editReviewId) {
     return null;
   }
 
@@ -160,10 +199,11 @@ function ReviewForm() {
         className="overflow-hidden relative flex flex-col gap-6 items-center justify-center w-full p-2 "
         autoComplete="off"
       >
+        {editReviewId && <p>EDIT MODE</p>}
         <div className="flex flex-row justify-between items-start gap-2 w-full">
           <div className="flex flex-col gap-2">
             <CoordinatesDisplay
-              preText="Writing a review at"
+              preText={editReviewId ? "Editing review at" : "Writing review at"}
               className=" text-lg md:text-2xl gap-1 md:gap-2"
               iconSize="MEDIUM"
             />
@@ -195,7 +235,7 @@ function ReviewForm() {
           <input
             {...register("title")}
             placeholder="Add a title here"
-            className="border rounded border-stone-400 w-full  outline-violet-300 p-2 shadow-sm"
+            className="border rounded border-stone-400 w-full  outline-violet-300 p-2 shadow-sm "
             id="title"
           />
         </div>
@@ -207,7 +247,7 @@ function ReviewForm() {
           <textarea
             {...register("body")}
             placeholder="Write your review here"
-            className="border rounded border-stone-400  w-full  outline-violet-300 p-2 shadow-sm"
+            className="border rounded border-stone-400  w-full  outline-violet-300 p-2 shadow-sm min-h-40"
             id="body"
           />
         </div>
@@ -268,7 +308,7 @@ function ReviewForm() {
           className="mb-4"
           loading={isSubmitting}
         >
-          Submit
+          {editReviewId ? "Save changes" : "Submit review"}
         </Button>
       </form>
     </Card>
