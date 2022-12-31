@@ -1,8 +1,10 @@
-import { User } from "@prisma/client";
+import { Review, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import ReviewStub from "../components/ReviewStub";
 import Button from "../components/ui/Button";
+import { getReviewsForUserRequest } from "../lib/actions/review";
 import {
   getUserRequest,
   updateUserArgs,
@@ -16,8 +18,28 @@ function ProfileContainer() {
   const { setUser, setIsMapLoaded } = uzeStore((state) => state.actions);
   const user = uzeStore((state) => state.user);
   const [isEditingUsername, setIsEditingUsername] = useState(false);
+  const [userReviews, setUserReviews] = useState<Review[]>([]);
 
   const [value, setValue] = useState(user?.name || "");
+
+  useEffect(() => {
+    const main = async () => {
+      setUserReviews([]);
+      try {
+        const res = await getReviewsForUserRequest({
+          userId: user?.id,
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setUserReviews(data);
+          console.log(data);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    main();
+  }, [user]);
 
   async function handleSubmit(e: React.MouseEvent) {
     e.preventDefault();
@@ -37,7 +59,7 @@ function ProfileContainer() {
     }
 
     const args: updateUserArgs = {
-      userId: session?.user?.id,
+      userId: user?.id,
       data: { name: value },
     };
     const updateRes = await updateUserCommand(args);
@@ -93,6 +115,9 @@ function ProfileContainer() {
           </Button>
         </div>
       </form>
+      {userReviews.map((r) => {
+        return <ReviewStub review={{ ...r, distance: undefined }} key={r.id} />;
+      })}
     </div>
   );
 }

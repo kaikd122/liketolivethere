@@ -118,3 +118,12 @@ export async function deleteReviewCommand(args: { id: string }) {
   });
   return res;
 }
+
+export async function getReviewsForUserRequest(args: { userId: string }) {
+  const res = await fetch("/api/getReviewsForUser", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(args),
+  });
+  return res;
+}

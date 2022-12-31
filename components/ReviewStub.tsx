@@ -5,11 +5,9 @@ import uzeStore from "../lib/store/store";
 import { metresToKm, ratingEnumToString } from "../lib/util/review-utils";
 import { ReviewWithDistance } from "./TownReviewsList";
 import Button from "./ui/Button";
-import Card from "./ui/Card";
-import ViewOnMapButton from "./ViewOnMapButton";
 
 export interface ReviewStubProps {
-  review: ReviewWithDistance;
+  review: ReviewWithDistance | Review;
 }
 
 function ReviewStub({ review }: ReviewStubProps) {
@@ -28,7 +26,11 @@ function ReviewStub({ review }: ReviewStubProps) {
         <div className="flex flex-col gap-2 md:justify-start md:text-left w-full md:w-1/2">
           <span className="text-2xl line-clamp-1 pt-1 ">{review.title}</span>
           <div className="grid grid-cols-2  md:w-1/3 justify-start  items-center ">
-            <span className="text-petal">{metresToKm(review.distance)} km</span>
+            {review.distance && (
+              <span className="text-petal">
+                {metresToKm(review.distance)} km
+              </span>
+            )}
             <span
               className={classNames("", {
                 "text-emerald-600": review.rating === 3,
