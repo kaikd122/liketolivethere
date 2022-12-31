@@ -38,7 +38,6 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
   return (
     <div className="w-full h-full ">
       {clusters.map((cluster, i) => {
-        console.log("CL", cluster);
         const [longitude, latitude] = cluster.geometry.coordinates;
         const { cluster: isCluster, point_count: pointCount } =
           cluster.properties;

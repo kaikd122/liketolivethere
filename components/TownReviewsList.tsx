@@ -36,7 +36,8 @@ function TownReviewsList({
   const initialReviews = serverSideReviews ?? [];
   const initialTown = serverSideTown ?? {};
   const initialNearbyTowns = serverSideNearbyTowns ?? [];
-  const [reviews, setReviews] = useState<ReviewWithDistance[]>(initialReviews);
+  const reviewStubs = uzeStore((state) => state.reviewStubs);
+  const { setReviewStubs } = uzeStore((state) => state.actions);
   const isMapLoaded = uzeStore((state) => state.isMapLoaded);
 
   const currentTownId = uzeStore((state) => state.currentTownId);
@@ -52,10 +53,11 @@ function TownReviewsList({
 
   useEffect(() => {
     if (!currentTownId) {
-      setReviews([]);
+      setReviewStubs([]);
       setIsAllCurrentTownReviewsLoaded(true);
       return;
     }
+    setReviewStubs(initialReviews);
     const main = async () => {
       try {
         setIsLoading(true);
@@ -73,7 +75,7 @@ function TownReviewsList({
           } else {
             setIsAllCurrentTownReviewsLoaded(false);
           }
-          setReviews(data);
+          setReviewStubs(data);
         }
 
         const townRes = await getTownByIdRequest({
@@ -167,13 +169,13 @@ function TownReviewsList({
           );
         })}
       </div>
-      {reviews?.length > 0 ? (
-        reviews
+      {reviewStubs?.length > 0 ? (
+        reviewStubs
           .filter((val, i) =>
             onlyUnique(
               val.id,
               i,
-              reviews.map((r) => r.id)
+              reviewStubs.map((r) => r.id)
             )
           )
           .map((review) => {
@@ -200,7 +202,7 @@ function TownReviewsList({
                 const res = await getReviewsNearTownRequest({
                   data: {
                     townId: currentTownId!,
-                    offset: reviews.length,
+                    offset: reviewStubs.length,
                   },
                 });
                 if (res.ok) {
@@ -208,7 +210,7 @@ function TownReviewsList({
                   if (data.length < TOWN_REVIEWS_PAGE_SIZE) {
                     setIsAllCurrentTownReviewsLoaded(true);
                   }
-                  setReviews([...reviews, ...data]);
+                  setReviewStubs([...reviewStubs, ...data]);
                 }
               } catch (error) {
                 console.log(error);
@@ -218,7 +220,7 @@ function TownReviewsList({
             Load more
           </Button>
         </div>
-      ) : reviews?.length > 0 ? (
+      ) : reviewStubs?.length > 0 ? (
         <div className="flex justify-center items-center flex-row w-full">
           <span className="text-lg">
             There are no more reviews within 3 kilometres

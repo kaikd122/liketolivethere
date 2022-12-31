@@ -1,5 +1,6 @@
 import { Review, User } from "@prisma/client";
 import create from "zustand";
+import { ReviewWithDistance } from "../../components/TownReviewsList";
 import {
   Coordinates,
   kingsCrossCoords,
@@ -10,7 +11,9 @@ type TabOptions = "MAP" | "TOWNS" | "PROFILE" | undefined;
 
 interface State {
   coordinates: Coordinates;
+  reviewStubs: ReviewWithDistance[];
   actions: {
+    setReviewStubs: (reviewStubs: ReviewWithDistance[]) => void;
     setCoordinates: (coordinates: Coordinates) => void;
     setIsLoading: (isLoading: boolean) => void;
     setUser: (user: User) => void;
@@ -29,7 +32,7 @@ interface State {
     setViewOnMapSource: (
       viewOnMapSource: {
         id: string;
-        type: "TOWN" | "REVIEW" | "WRITE";
+        type: "TOWN" | "REVIEW" | "WRITE" | "GEO";
       } | null
     ) => void;
   };
@@ -49,7 +52,7 @@ interface State {
   currentTownReviews: Partial<Review>[];
   viewOnMapSource: {
     id: string;
-    type: "TOWN" | "REVIEW" | "WRITE";
+    type: "TOWN" | "REVIEW" | "WRITE" | "GEO";
   } | null;
 }
 
@@ -58,6 +61,7 @@ const uzeStore = create<State>((set) => ({
     lat: kingsCrossCoords.lat,
     lng: kingsCrossCoords.lng,
   },
+  reviewStubs: [],
   isLoading: false,
   editReviewId: "",
   user: {} as User,
@@ -74,6 +78,7 @@ const uzeStore = create<State>((set) => ({
   currentTownReviews: [],
   viewOnMapSource: null,
   actions: {
+    setReviewStubs: (reviewStubs) => set({ reviewStubs }),
     setEditReviewId: (editReviewId) => set({ editReviewId }),
     setCurrentReviewId: (currentReviewId) => set({ currentReviewId }),
     setCoordinates: (coordinates) => set({ coordinates }),

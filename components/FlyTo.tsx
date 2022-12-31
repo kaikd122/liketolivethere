@@ -30,7 +30,6 @@ export default function FlyTo() {
     if (isMapViewUnsearched === false) {
       setIsMapViewUnsearched(true);
     }
-    console.log("BOUNDS", bounds);
     setBounds(map.getBounds().toArray().flat());
     setZoom(map.getZoom());
 
@@ -40,6 +39,7 @@ export default function FlyTo() {
         zoom: zoom,
       });
     }
+    console.log("HERE", viewOnMapSource);
     if (viewOnMapSource) {
       setReviewFeatures([]);
       map.once("moveend", async () => {

@@ -109,3 +109,12 @@ export async function getRandomReviewRequest() {
   });
   return res;
 }
+
+export async function deleteReviewCommand(args: { id: string }) {
+  const res = await fetch("/api/deleteReview", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(args),
+  });
+  return res;
+}

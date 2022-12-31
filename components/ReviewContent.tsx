@@ -1,9 +1,15 @@
-import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import {
+  PencilSquareIcon,
+  TrashIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/solid";
 import { Review, User } from "@prisma/client";
 import classNames from "classnames";
 import dayjs from "dayjs";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
+import { deleteReviewCommand } from "../lib/actions/review";
 import uzeStore from "../lib/store/store";
 import { ratingEnumToString } from "../lib/util/review-utils";
 import CoordinatesDisplay from "./CoordinatesDisplay";
@@ -25,10 +31,15 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
     setCurrentTab,
     setViewOnMapSource,
     setIsCreatingReview,
+    setReviewFeatures,
+    setReviewStubs,
   } = uzeStore((state) => state.actions);
   const isMapLoaded = uzeStore((state) => state.isMapLoaded);
+  const reviewStubs = uzeStore((state) => state.reviewStubs);
   const { user: currentUser } = uzeStore((state) => state);
   const currentTab = uzeStore((state) => state.currentTab);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const reviewFeatures = uzeStore((state) => state.reviewFeatures);
   return (
     <div className="flex flex-col gap-4 w-full items-center">
       <div className="flex flex-row justify-between items-start gap-2 w-full ">
@@ -87,38 +98,95 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
         </p>
 
         {user?.id === currentUser?.id && (
-          <Button
-            outlineColor="petal"
-            border="thin"
-            onClick={() => {
-              setCoordinates({
-                lat: Number(review.latitude),
-                lng: Number(review.longitude),
-              });
-              setCurrentTab("MAP");
-              setEditReviewId(review?.id || "");
-              setIsCreatingReview(true);
-              setCurrentReviewId("");
+          <div className="flex flex-row justify-between items-center w-full">
+            <Button
+              outlineColor="petal"
+              border="thin"
+              onClick={() => {
+                setCoordinates({
+                  lat: Number(review.latitude),
+                  lng: Number(review.longitude),
+                });
+                setCurrentTab("MAP");
+                setEditReviewId(review?.id || "");
+                setIsCreatingReview(true);
+                setCurrentReviewId("");
 
-              setViewOnMapSource({
-                type: "WRITE",
-                id: review?.id!,
-              });
-              setIsMapViewUnsearched(false);
-            }}
-          >
-            {isMapLoaded ? (
-              <div className="flex flex-row gap-1">
-                <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
-                <p>Edit review</p>
+                setViewOnMapSource({
+                  type: "WRITE",
+                  id: review?.id!,
+                });
+                setIsMapViewUnsearched(false);
+              }}
+            >
+              {isMapLoaded ? (
+                <div className="flex flex-row gap-1 items-center justify-center">
+                  <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
+                  <p>Edit review</p>
+                </div>
+              ) : (
+                <Link href="/" className="flex flex-row gap-1">
+                  <PencilSquareIcon className="w-5 h-5 " />
+                  <p>Edit review</p>
+                </Link>
+              )}
+            </Button>
+
+            {isDeleting ? (
+              <div className="flex flex-row gap-3">
+                <Button
+                  outlineColor="red"
+                  border="thin"
+                  onClick={async () => {
+                    try {
+                      const res = await deleteReviewCommand({ id: review.id! });
+                      if (res) {
+                        toast.success("Successfully deleted review!");
+                        setReviewFeatures(
+                          reviewFeatures.filter(
+                            (feature) => feature.properties.id !== review.id
+                          )
+                        );
+                        setReviewStubs(
+                          reviewStubs.filter((stub) => stub.id !== review.id)
+                        );
+
+                        setCurrentReviewId("");
+                        setReview && setReview(null);
+                        setIsDeleting(false);
+                      }
+                    } catch (e) {
+                      console.error(e);
+                    }
+                  }}
+                >
+                  <div className="flex flex-row gap-1 justify-center items-center">
+                    <TrashIcon className="w-5 h-5 items-center justify-center" />
+                    <p>Confirm</p>
+                  </div>
+                </Button>
+
+                <Button
+                  outlineColor="stone"
+                  border="thin"
+                  onClick={() => setIsDeleting(false)}
+                >
+                  <p>Cancel</p>
+                </Button>
               </div>
             ) : (
-              <Link href="/" className="flex flex-row gap-1">
-                <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
-                <p>Edit review</p>
-              </Link>
+              <Button
+                outlineColor="red"
+                border="thin"
+                onClick={() => setIsDeleting(true)}
+              >
+                <div className="flex flex-row gap-1 justify-center items-center">
+                  <TrashIcon className="w-5 h-5 items-center justify-center" />
+                  <p>Delete review</p>
+                </div>
+              </Button>
             )}
-          </Button>
+          </div>
         )}
       </div>
     </div>

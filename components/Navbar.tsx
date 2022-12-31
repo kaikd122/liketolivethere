@@ -32,7 +32,7 @@ export default function Navbar() {
                 alt="LikeToLiveThere"
                 src={"/logo-truebw.png"}
                 width={350}
-                height={350}
+                height={50}
               />
             ) : (
               <Link href="/">
@@ -40,7 +40,7 @@ export default function Navbar() {
                   alt="LikeToLiveThere"
                   src={"/logo-truebw.png"}
                   width={350}
-                  height={350}
+                  height={50}
                 />
               </Link>
             )}

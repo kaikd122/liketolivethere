@@ -8,7 +8,7 @@ import uzeStore from "../../lib/store/store";
 import { getTownIdFromSlug } from "../../lib/util/urls";
 import { getReviewsNearTownResponse } from "../api/getReviewsNearTown";
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ query }: any) {
   console.log(getTownIdFromSlug(query.id));
 
   console.log(getTownIdFromSlug(query.id));
@@ -58,7 +58,7 @@ export async function getServerSideProps({ query }) {
   }
 }
 
-function TownId({ data }) {
+function TownId({ data }: any) {
   const { setCurrentTownId } = uzeStore((state) => state.actions);
   console.log(data);
 
@@ -79,7 +79,7 @@ function TownId({ data }) {
       <TownReviewsList
         serverSideReviews={data.reviews}
         serverSideNearbyTowns={data.nearbyTowns.filter(
-          (t) => t.id !== data.townId
+          (t: { id: any }) => t.id !== data.townId
         )}
         serverSideTown={data.town}
         serverSideIsAllCurrentTownReviewsLoaded={

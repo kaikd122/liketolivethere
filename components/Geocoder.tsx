@@ -1,21 +1,29 @@
 import MapboxGeocoder, { Result } from "@mapbox/mapbox-gl-geocoder";
-import { towns } from "@prisma/client";
+import { Review, towns } from "@prisma/client";
 import mapboxgl from "mapbox-gl";
 import { useState, useEffect } from "react";
 import { useMap } from "react-map-gl";
+import { getReviewsWithinMapBoundsRequest } from "../lib/actions/review";
 import { getNearbyTownsRequest } from "../lib/actions/search";
+import uzeStore from "../lib/store/store";
 import { coordsArrayToObject } from "../lib/util/map-utils";
+import { reviewsToFeatures } from "../lib/util/review-utils";
 import { Coordinates, kingsCrossCoords } from "../types/types";
 
 export interface GeocoderProps {
-  setCoordinates: (coordinates: Coordinates) => void;
-  coordinates: Coordinates;
   setNearbyTowns: (towns: Array<Partial<towns>>) => void;
 }
 
 export function Geocoder(props: GeocoderProps) {
   const { current: map } = useMap();
   const [geo, setGeo] = useState<MapboxGeocoder | null>(null);
+  const coordinates = uzeStore((state) => state.coordinates);
+  const {
+    setViewOnMapSource,
+    setIsMapViewUnsearched,
+    setCoordinates,
+    setReviewFeatures,
+  } = uzeStore((state) => state.actions);
 
   useEffect(() => {
     if (!map) {
@@ -33,15 +41,19 @@ export function Geocoder(props: GeocoderProps) {
       marker: false,
       flyTo: {
         speed: 2,
-        zoom: 16,
+        zoom: 14,
       },
       countries: "GB",
     });
 
     geocoder.on("result", (e) => {
+      console.log("RESULT");
       const result: Result = e.result;
-      const coords = coordsArrayToObject(result.geometry.coordinates);
-      props.setCoordinates(coords);
+
+      setViewOnMapSource({
+        id: "geo-result",
+        type: "GEO",
+      });
     });
 
     map.addControl(geocoder);
