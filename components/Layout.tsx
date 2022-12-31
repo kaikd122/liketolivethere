@@ -70,7 +70,7 @@ export default function Layout({ children }: LayoutProps) {
     }
   }, [router.asPath]);
   return (
-    <div className=" flex flex-col w-full h-full ">
+    <div className=" flex flex-col w-full min-h-full ">
       <Toaster
         toastOptions={{
           style: { font: "Outfit" },
@@ -80,7 +80,9 @@ export default function Layout({ children }: LayoutProps) {
 
       <ReviewCardModal />
 
-      <main className="flex flex-col md:px-8 mb-8  md:gap-8">{children}</main>
+      <main className="flex flex-col md:px-8 mb-8  md:gap-8 min-h-[70vh]">
+        {children}
+      </main>
       <footer className="flex justify-center items-center h-12 border border-t border-stone-300 text-stone-700 border-r-0 border-l-0 border-b-0 mx-2">
         <p>Copyright © 2022 Kai Konishi-Dukes</p>
       </footer>

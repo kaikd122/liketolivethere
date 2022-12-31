@@ -16,6 +16,7 @@ export interface ButtonProps {
   selected?: boolean;
   selectedClassName?: string;
   smallScale?: boolean;
+  disabled?: boolean;
 }
 
 function Button({
@@ -32,9 +33,11 @@ function Button({
   selected,
   selectedClassName,
   smallScale,
+  disabled,
 }: ButtonProps) {
   return (
     <button
+      disabled={disabled}
       onClick={onClick}
       type={type}
       className={classNames(

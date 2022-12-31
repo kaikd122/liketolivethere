@@ -32,3 +32,12 @@ export async function getUserRequest(args: getUserArgs) {
   });
   return res;
 }
+
+export async function deleteUserAndReviewsCommand(args: { userId: string }) {
+  const res = await fetch("/api/deleteUserAndReviews", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(args),
+  });
+  return res;
+}

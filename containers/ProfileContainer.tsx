@@ -1,13 +1,16 @@
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { Review, User } from "@prisma/client";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import router from "next/router";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import ReviewStub from "../components/ReviewStub";
 import Button from "../components/ui/Button";
+import Card from "../components/ui/Card";
 import Modal from "../components/ui/Modal";
 import { getReviewsForUserRequest } from "../lib/actions/review";
 import {
+  deleteUserAndReviewsCommand,
   getUserRequest,
   updateUserArgs,
   updateUserCommand,
@@ -15,6 +18,22 @@ import {
 import uzeStore from "../lib/store/store";
 
 function ProfileContainer() {
+  async function handleDeleteAccount() {
+    try {
+      const res = await deleteUserAndReviewsCommand({
+        userId: user?.id,
+      });
+      if (res.ok) {
+        toast.success("Account deleted");
+        router.push("/");
+        signOut();
+        setUser(null);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   const currentTab = uzeStore((state) => state.currentTab);
   const { data: session } = useSession();
   const { setUser, setIsMapLoaded } = uzeStore((state) => state.actions);
@@ -22,6 +41,7 @@ function ProfileContainer() {
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [userReviews, setUserReviews] = useState<Review[]>([]);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [confirmDeleteVal, setConfirmDeleteVal] = useState("");
 
   const [value, setValue] = useState(user?.name || "");
 
@@ -41,7 +61,9 @@ function ProfileContainer() {
         console.log(e);
       }
     };
-    main();
+    if (user?.id) {
+      main();
+    }
   }, [user]);
 
   async function handleSubmit(e: React.MouseEvent) {
@@ -127,23 +149,35 @@ function ProfileContainer() {
         <div />
         {isDeleting ? (
           <div className="flex flex-row gap-3">
-            <Button
-              outlineColor="red"
-              border="thin"
-              className="text-sm"
-              onClick={async () => {}}
-            >
-              <div className="flex flex-row gap-1 justify-center items-center">
-                <TrashIcon className="w-3 h-3 items-center justify-center" />
-                <p>Confirm</p>
-              </div>
-            </Button>
+            {confirmDeleteVal === user?.name ? (
+              <Button
+                outlineColor="red"
+                border="thin"
+                onClick={handleDeleteAccount}
+              >
+                <div className="flex flex-row gap-1 justify-center items-center">
+                  <TrashIcon className="w-5 h-5 items-center justify-center" />
+                  <p>Confirm</p>
+                </div>
+              </Button>
+            ) : (
+              <input
+                onChange={(e) => {
+                  setConfirmDeleteVal(e.target.value);
+                }}
+                value={confirmDeleteVal}
+                placeholder="Type your username"
+                className=" border-stone-400 border rounded p-2 shadow-sm  outline-violet-300"
+              />
+            )}
 
             <Button
               outlineColor="stone"
               border="thin"
-              className="text-sm"
-              onClick={() => setIsDeleting(false)}
+              onClick={() => {
+                setIsDeleting(false);
+                setConfirmDeleteVal("");
+              }}
             >
               <p>Cancel</p>
             </Button>
@@ -151,12 +185,11 @@ function ProfileContainer() {
         ) : (
           <Button
             outlineColor="red"
-            className="text-sm"
             border="thin"
             onClick={() => setIsDeleting(true)}
           >
             <div className="flex flex-row gap-1 justify-center items-center">
-              <TrashIcon className="w-3 h-3 items-center justify-center" />
+              <TrashIcon className="w-5 h-5 items-center justify-center" />
               <p>Delete account</p>
             </div>
           </Button>
