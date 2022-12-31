@@ -72,7 +72,7 @@ function html(params: { url: string; host: string; theme: Theme }) {
     <tr>
       <td align="center"
         style="padding: 0px 0px 10px 0px; font-size: 16px; line-height: 22px; font-family: Outfit, Helvetica, Arial, sans-serif; color: ${color.text};">
-        If you did not repoo this email you can safely ignore it.
+        If you did not request this email you can safely ignore it.
       </td>
     </tr>
   </table>
