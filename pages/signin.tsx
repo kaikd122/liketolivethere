@@ -3,13 +3,14 @@ import Layout from "../components/Layout";
 import Button from "../components/ui/Button";
 import Card from "../components/ui/Card";
 
+//@ts-ignore
 export default function SignIn({ csrfToken }) {
   return (
     <Layout>
       <div className="flex flex-col w-full justify-center items-center">
-        <Card className="w-1/2">
+        <Card className="w-full md:w-3/4 ">
           <form
-            className="flex flex-col items-center justify-center gap-3"
+            className="flex flex-col items-center justify-center gap-5 pt-2"
             method="post"
             action="/api/auth/signin/email"
           >
@@ -17,10 +18,11 @@ export default function SignIn({ csrfToken }) {
             <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
 
             <input
-              className="border rounded border-stone-400   outline-violet-300 p-2 shadow-sm"
+              className="border rounded border-stone-400   outline-violet-300 p-2 shadow-sm w-full"
               type="email"
               id="email"
               name="email"
+              placeholder="e.g. liketolive@there.com"
             />
 
             <Button outlineColor="petal" border="thin" type="submit">
@@ -33,7 +35,7 @@ export default function SignIn({ csrfToken }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: any) {
   const { req } = context;
   const session = await getSession({ req });
   const csrfToken = await getCsrfToken(context);

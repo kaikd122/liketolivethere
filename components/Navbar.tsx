@@ -7,6 +7,7 @@ import { replaceUrl } from "../lib/util/urls";
 import AuthButton from "./AuthButton";
 import Button from "./ui/Button";
 import Tab from "./ui/Tab";
+import Image from "next/image";
 
 export default function Navbar() {
   const user = uzeStore((state) => state.user);
@@ -19,18 +20,35 @@ export default function Navbar() {
   return (
     <div className="w-full flex flex-col">
       <div className="w-full gap-2 flex flex-row flex-wrap items-center justify-between py-4 px-2 md:px-8 bg-gradient-to-br from-violet-500 to-fuchsia-600 shadow z-10">
-        <button
-          onClick={() => {
-            setCurrentTab("MAP");
-          }}
-          className="font-semibold  text-3xl text-stone-50 active:scale-100 duration-75 hover:scale-105"
-        >
-          {isMapLoaded ? (
-            "LikeToLiveThere"
-          ) : (
-            <Link href="/">LikeToLiveThere</Link>
-          )}
-        </button>
+        <div className="flex flex-col gap-1 flex-wrap items-start">
+          <button
+            onClick={() => {
+              setCurrentTab("MAP");
+            }}
+            className="font-semibold  text-4xl text-stone-50 active:scale-100 duration-75 hover:scale-105 font-display "
+          >
+            {isMapLoaded ? (
+              <Image
+                alt="LikeToLiveThere"
+                src={"/logo-truebw.png"}
+                width={350}
+                height={350}
+              />
+            ) : (
+              <Link href="/">
+                <Image
+                  alt="LikeToLiveThere"
+                  src={"/logo-truebw.png"}
+                  width={350}
+                  height={350}
+                />
+              </Link>
+            )}
+          </button>
+          <span className=" text-stone-50 text-sm">
+            An open look into the world's neighbourhoods
+          </span>
+        </div>
 
         <div className="flex gap-4 ">
           {user?.name && (

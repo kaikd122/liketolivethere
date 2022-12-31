@@ -25,7 +25,7 @@ function AuthButton({ outlineColor, border }: ButtonProps) {
           border={border}
           onClick={handleLogout}
         >
-          Log out
+          Sign out
         </Button>
       ) : (
         <Button
@@ -33,7 +33,7 @@ function AuthButton({ outlineColor, border }: ButtonProps) {
           border={border}
           onClick={handleLogin}
         >
-          Log in
+          Sign in
         </Button>
       )}
     </>

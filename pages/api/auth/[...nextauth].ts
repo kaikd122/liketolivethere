@@ -18,6 +18,7 @@ const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/signin",
+    verifyRequest: "/verify-request",
   },
 
   providers: [

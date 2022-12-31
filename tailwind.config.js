@@ -15,7 +15,7 @@ module.exports = {
     fontFamily: {
       sans: ["Outfit", "sans-serif"],
       serif: ["Merriweather", "serif"],
-      display: ["Krona One", "sans-serif"],
+      display: ["Contrail One", "sans-serif"],
     },
   },
   important: true,

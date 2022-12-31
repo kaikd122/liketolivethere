@@ -14,7 +14,7 @@ export async function sendVerificationRequestCustom(params: {
   const result = await transport.sendMail({
     to: identifier,
     from: provider.from,
-    subject: `Sign in to LikeToLiveThere.com`,
+    subject: `Sign in to LikeToLiveThere`,
     text: text({ url, host }),
     html: html({ url, host, theme }),
   });
@@ -39,7 +39,7 @@ function html(params: { url: string; host: string; theme: Theme }) {
 
   const brandColor = "#a743e4";
   const color = {
-    background: "#fafaf9",
+    background: "#fff",
     text: "#44403c",
     mainBackground: "#fafaf9",
     buttonBackground: brandColor,
@@ -70,9 +70,9 @@ function html(params: { url: string; host: string; theme: Theme }) {
       </td>
     </tr>
     <tr>
-      <td align="center"
-        style="padding: 0px 0px 10px 0px; font-size: 16px; line-height: 22px; font-family: Outfit, Helvetica, Arial, sans-serif; color: ${color.text};">
-        If you did not request this email you can safely ignore it.
+    <td align="center"
+        style="padding: 0px 0px 10px 0px; font-size: 18px; line-height: 22px; font-family: Outfit, Helvetica, Arial, sans-serif; color: ${color.text};">
+        We use this easy sign in button so that you don't have to remember another password! It's also more secure than using a password.
       </td>
     </tr>
   </table>

@@ -8,53 +8,6 @@ import {
   getUserRequest,
 } from "../../lib/actions/user";
 import uzeStore from "../../lib/store/store";
-function ProfileId() {
-  const { data: session } = useSession();
-  const { setUser, setIsMapLoaded } = uzeStore((state) => state.actions);
-  const user = uzeStore((state) => state.user);
-
-  const [value, setValue] = useState("");
-
-  useEffect(() => {
-    setIsMapLoaded(false);
-  }, []);
-
-  async function handleSubmit(e: React.MouseEvent) {
-    e.preventDefault();
-    const getRes = await getUserRequest({ name: value });
-    if (getRes.ok) {
-      const data: User[] = await getRes.json();
-      if (data.length) {
-        alert("username taken");
-        return;
-      }
-    } else {
-      return;
-    }
-
-    const args: updateUserArgs = {
-      userId: session?.user?.id,
-      data: { name: value },
-    };
-    const updateRes = await updateUserCommand(args);
-    if (updateRes.ok) {
-      setUser({ ...user, name: value });
-    }
-  }
-  return (
-    <Layout>
-      <form>
-        <input
-          onChange={(e) => setValue(e.target.value)}
-          value={value}
-          defaultValue={session?.user?.name}
-        />
-        <button type="submit" onClick={(e) => handleSubmit(e)}>
-          Change username
-        </button>
-      </form>
-    </Layout>
-  );
-}
+function ProfileId() {}
 
 export default ProfileId;

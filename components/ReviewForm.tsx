@@ -42,12 +42,17 @@ function ReviewForm() {
   const { setEditReviewId, setIsMapViewUnsearched, setReviewFeatures } =
     uzeStore((state) => state.actions);
 
+  const [reviewLength, setReviewLength] = useState(0);
+
   const onSubmit = async (data: FormData) => {
     let isInvalid = false;
     const errors: string[] = [];
     if (!data.body) {
       errors.push("review");
 
+      isInvalid = true;
+    } else if (reviewLength < 200) {
+      errors.push("review");
       isInvalid = true;
     }
 
@@ -242,10 +247,14 @@ function ReviewForm() {
             </label>
             <textarea
               {...register("body")}
-              placeholder="Write your review here"
+              placeholder="Write your review here (minimum 200 characters)"
               className="border rounded border-stone-400  w-full  outline-violet-300 p-2 shadow-sm min-h-40"
               id="body"
+              onChange={(e) => {
+                setReviewLength(e.target.value.length);
+              }}
             />
+            <p className=" text-stone-500">{`${reviewLength}/200`}</p>
           </div>
 
           <div className="flex flex-col w-full md:w-10/12 gap-2">
@@ -290,7 +299,7 @@ function ReviewForm() {
 
           {formErrors.length > 0 && (
             <div className="text-rose-600 text-lg w-full md:w-10/12">
-              {`Missing field${
+              {`Missing or invalid field${
                 formErrors.length === 1 ? "" : "s"
               }: ${formErrors.join(", ")}.`}
             </div>
@@ -309,7 +318,7 @@ function ReviewForm() {
         </form>
       ) : (
         <div className="flex flex-col gap-2 items-center justify-center w-full p-2 ">
-          <p className="text-lg">You must be logged in to write a review</p>
+          <p className="text-lg">You must be signed in to write a review</p>
           <AuthButton outlineColor="petal" border="thin" />
         </div>
       )}
