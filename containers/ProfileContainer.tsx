@@ -1,9 +1,11 @@
+import { TrashIcon } from "@heroicons/react/24/solid";
 import { Review, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import ReviewStub from "../components/ReviewStub";
 import Button from "../components/ui/Button";
+import Modal from "../components/ui/Modal";
 import { getReviewsForUserRequest } from "../lib/actions/review";
 import {
   getUserRequest,
@@ -19,6 +21,7 @@ function ProfileContainer() {
   const user = uzeStore((state) => state.user);
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [userReviews, setUserReviews] = useState<Review[]>([]);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const [value, setValue] = useState(user?.name || "");
 
@@ -115,9 +118,50 @@ function ProfileContainer() {
           </Button>
         </div>
       </form>
+
       {userReviews.map((r) => {
         return <ReviewStub review={{ ...r, distance: undefined }} key={r.id} />;
       })}
+
+      <div className="flex flex-row w-full items-center justify-between ">
+        <div />
+        {isDeleting ? (
+          <div className="flex flex-row gap-3">
+            <Button
+              outlineColor="red"
+              border="thin"
+              className="text-sm"
+              onClick={async () => {}}
+            >
+              <div className="flex flex-row gap-1 justify-center items-center">
+                <TrashIcon className="w-3 h-3 items-center justify-center" />
+                <p>Confirm</p>
+              </div>
+            </Button>
+
+            <Button
+              outlineColor="stone"
+              border="thin"
+              className="text-sm"
+              onClick={() => setIsDeleting(false)}
+            >
+              <p>Cancel</p>
+            </Button>
+          </div>
+        ) : (
+          <Button
+            outlineColor="red"
+            className="text-sm"
+            border="thin"
+            onClick={() => setIsDeleting(true)}
+          >
+            <div className="flex flex-row gap-1 justify-center items-center">
+              <TrashIcon className="w-3 h-3 items-center justify-center" />
+              <p>Delete account</p>
+            </div>
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

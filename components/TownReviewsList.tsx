@@ -24,7 +24,7 @@ export interface TownReviewsListProps {
 }
 
 export interface ReviewWithDistance extends Partial<Review> {
-  distance: number;
+  distance: number | undefined;
 }
 
 function TownReviewsList({

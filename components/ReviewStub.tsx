@@ -7,7 +7,7 @@ import { ReviewWithDistance } from "./TownReviewsList";
 import Button from "./ui/Button";
 
 export interface ReviewStubProps {
-  review: ReviewWithDistance | Review;
+  review: ReviewWithDistance;
 }
 
 function ReviewStub({ review }: ReviewStubProps) {
