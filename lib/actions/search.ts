@@ -19,26 +19,20 @@ export interface getTownByIdArgs {
 }
 
 export async function getNearbyTownsRequest(args: getNearbyTownsArgs) {
-  const res = await fetch(
-    `https://${process.env.VERCEL_URL}/api/getNearbyTowns`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(args),
-    }
-  );
+  const res = await fetch(`/api/getNearbyTowns`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(args),
+  });
   return res;
 }
 
 export async function getTownsByTextRequest(args: getTownsByTextArgs) {
-  const res = await fetch(
-    `https://${process.env.VERCEL_URL}/api/getTownsByText`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(args),
-    }
-  );
+  const res = await fetch(`/api/getTownsByText`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(args),
+  });
   return res;
 }
 
