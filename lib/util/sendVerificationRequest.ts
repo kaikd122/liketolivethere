@@ -49,7 +49,7 @@ function html(params: { url: string; host: string; theme: Theme }) {
 
   return `
 <body style="background: ${color.background};">
-  <table width="100%" border="0" cellspacing="20" cellpadding="0"
+  <table width="100%"  cellspacing="20" cellpadding="0"
     style="background: ${color.mainBackground}; max-width: 600px; margin: auto; border-radius: 10px;">
     <tr>
       <td align="center"
@@ -72,7 +72,7 @@ function html(params: { url: string; host: string; theme: Theme }) {
     <tr>
     <td align="center"
         style="padding: 0px 0px 10px 0px; font-size: 18px; line-height: 22px; font-family: Outfit, Helvetica, Arial, sans-serif; color: ${color.text};">
-        We use this easy sign in button so that you don't have to remember another password! It's also more secure than using a password.
+        We use magic links as they are more secure than signing in with a password.
       </td>
     </tr>
   </table>

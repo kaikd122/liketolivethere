@@ -46,6 +46,12 @@ function ProfileContainer() {
   const [value, setValue] = useState(user?.name || "");
 
   useEffect(() => {
+    if (currentTab !== "PROFILE") {
+      return;
+    }
+    if (user?.name) {
+      setValue(user.name);
+    }
     const main = async () => {
       setUserReviews([]);
       try {
@@ -64,7 +70,7 @@ function ProfileContainer() {
     if (user?.id) {
       main();
     }
-  }, [user]);
+  }, [user, currentTab]);
 
   async function handleSubmit(e: React.MouseEvent) {
     e.preventDefault();
@@ -94,12 +100,6 @@ function ProfileContainer() {
       toast.success("Username updated!");
     }
   }
-
-  useEffect(() => {
-    if (user?.name) {
-      setValue(user.name);
-    }
-  }, [user]);
 
   if (currentTab !== "PROFILE") {
     return null;

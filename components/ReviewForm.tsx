@@ -108,6 +108,7 @@ function ReviewForm() {
 
       setCurrentReviewId(editReviewId ? editReviewId : id);
       setIsCreatingReview(false);
+      setReviewLength(0);
       setRating(undefined);
       reset();
 
@@ -218,6 +219,7 @@ function ReviewForm() {
                 setIsCreatingReview(false);
                 setEditReviewId("");
                 setRating(undefined);
+                setReviewLength(0);
                 reset();
               }}
               outlineColor="red"
@@ -254,7 +256,11 @@ function ReviewForm() {
                 setReviewLength(e.target.value.length);
               }}
             />
-            <p className=" text-stone-500">{`${reviewLength}/200`}</p>
+            <p
+              className={`${
+                reviewLength < 200 ? "text-red-500" : "text-emerald-500"
+              }`}
+            >{`${reviewLength}/200`}</p>
           </div>
 
           <div className="flex flex-col w-full md:w-10/12 gap-2">

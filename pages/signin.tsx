@@ -1,13 +1,14 @@
 import { getCsrfToken, getSession } from "next-auth/react";
 import Layout from "../components/Layout";
+import MinimalLayout from "../components/MinimalLayout";
 import Button from "../components/ui/Button";
 import Card from "../components/ui/Card";
 
 //@ts-ignore
 export default function SignIn({ csrfToken }) {
   return (
-    <Layout>
-      <div className="flex flex-col w-full justify-center items-center">
+    <MinimalLayout>
+      <div className="flex flex-col w-full justify-center items-center p-10">
         <Card className="w-full md:w-3/4 ">
           <form
             className="flex flex-col items-center justify-center gap-5 pt-2"
@@ -31,7 +32,7 @@ export default function SignIn({ csrfToken }) {
           </form>
         </Card>
       </div>
-    </Layout>
+    </MinimalLayout>
   );
 }
 

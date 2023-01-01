@@ -19,6 +19,7 @@ const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/signin",
     verifyRequest: "/verify-request",
+    signOut: "/signout",
   },
 
   providers: [

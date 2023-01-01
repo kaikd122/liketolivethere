@@ -1,11 +1,12 @@
 import React from "react";
 import Layout from "../components/Layout";
+import MinimalLayout from "../components/MinimalLayout";
 import Card from "../components/ui/Card";
 
 function VerifyRequest() {
   return (
-    <Layout>
-      <div className="flex flex-col w-full justify-center items-center">
+    <MinimalLayout>
+      <div className="flex flex-col w-full justify-center items-center p-10">
         <Card className="w-full md:w-3/4 ">
           <div className="flex flex-col w-full justify-center items-center gap-3 pt-2">
             <span className="text-3xl">Check your email</span>
@@ -13,7 +14,7 @@ function VerifyRequest() {
           </div>
         </Card>
       </div>
-    </Layout>
+    </MinimalLayout>
   );
 }
 
