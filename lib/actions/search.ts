@@ -43,7 +43,7 @@ export async function getTownsByTextRequest(args: getTownsByTextArgs) {
 }
 
 export async function getTownByIdRequest(args: getTownByIdArgs) {
-  const res = await fetch(`https://${process.env.VERCEL_URL}/api/getTownById`, {
+  const res = await fetch(`/api/getTownById`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(args),
@@ -52,7 +52,7 @@ export async function getTownByIdRequest(args: getTownByIdArgs) {
 }
 
 export async function getAllTownsRequest() {
-  const res = await fetch(`https://${process.env.VERCEL_URL}/api/getAllTowns`, {
+  const res = await fetch(`/api/getAllTowns`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({}),

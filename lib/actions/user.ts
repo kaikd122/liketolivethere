@@ -11,7 +11,7 @@ export interface getUserArgs {
 }
 
 export async function updateUserCommand(args: updateUserArgs) {
-  const res = await fetch(`https://${process.env.VERCEL_URL}/api/updateUser`, {
+  const res = await fetch(`/api/updateUser`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(args),
@@ -26,24 +26,18 @@ export async function getUserRequest(args: getUserArgs) {
   } else {
     queryParam += `userId=${args.userId}`;
   }
-  const res = await fetch(
-    `https://${process.env.VERCEL_URL}/api/getUser${queryParam}`,
-    {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    }
-  );
+  const res = await fetch(`/api/getUser${queryParam}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
   return res;
 }
 
 export async function deleteUserAndReviewsCommand(args: { userId: string }) {
-  const res = await fetch(
-    `https://${process.env.VERCEL_URL}/api/deleteUserAndReviews`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(args),
-    }
-  );
+  const res = await fetch(`/api/deleteUserAndReviews`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(args),
+  });
   return res;
 }
