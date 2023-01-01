@@ -46,7 +46,7 @@ export async function getTownByIdRequest(args: getTownByIdArgs) {
 }
 
 export async function getAllTownsRequest() {
-  const res = await fetch("http://localhost:3000/api/getAllTowns", {
+  const res = await fetch(`${process.env.SITE_URL}/api/getAllTowns`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({}),
