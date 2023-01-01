@@ -28,7 +28,7 @@ export async function getNearbyTownsRequest(args: getNearbyTownsArgs) {
 }
 
 export async function getTownsByTextRequest(args: getTownsByTextArgs) {
-  const res = await fetch("/api/getTownsByText", {
+  const res = await fetch("api/getTownsByText", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(args),
@@ -41,6 +41,15 @@ export async function getTownByIdRequest(args: getTownByIdArgs) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(args),
+  });
+  return res;
+}
+
+export async function getAllTownsRequest() {
+  const res = await fetch("http://localhost:3000/api/getAllTowns", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({}),
   });
   return res;
 }

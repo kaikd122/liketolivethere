@@ -10,7 +10,9 @@ function VerifyRequest() {
         <Card className="w-full md:w-3/4 ">
           <div className="flex flex-col w-full justify-center items-center gap-3 pt-2">
             <span className="text-3xl">Check your email</span>
-            <span>We've sent you an email with a magic link to sign in.</span>
+            <span>
+              We&apos;ve sent you an email with a magic link to sign in.
+            </span>
           </div>
         </Card>
       </div>

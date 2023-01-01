@@ -27,7 +27,13 @@ function ProfileContainer() {
         toast.success("Account deleted");
         router.push("/");
         signOut();
-        setUser(null);
+        setUser({
+          email: "",
+          emailVerified: null,
+          id: "",
+          name: "",
+          image: "",
+        });
       }
     } catch (e) {
       console.log(e);
