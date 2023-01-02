@@ -6,7 +6,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  @apply bg-stone-50 bg-opacity-20  font-sans text-stone-700 !min-h-screen;
+  @apply bg-stone-50 bg-opacity-20  font-sans text-stone-700  !min-h-screen;
 }
 
 a {
@@ -18,12 +18,3 @@ a {
   box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
-}

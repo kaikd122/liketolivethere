@@ -44,7 +44,7 @@ function Button({
         "  relative shadow-sm rounded py-1 px-2 active:scale-100 duration-75 hover:scale-105",
         {
           "border-violet-500 text-violet-500": outlineColor === "violet",
-          "border-stone-400 text-stone-700": outlineColor === "stone",
+          "border-stone-400 text-stone-700 ": outlineColor === "stone",
           "border-stone-50 text-stone-50": outlineColor === "light",
           "border-petal text-petal": outlineColor === "petal",
           "bg-violet-500": bgColor === "violet",

@@ -27,7 +27,7 @@ function CoordinatesDisplay({
       className={classNames("flex flex-row items-center  flex-wrap", className)}
     >
       <RxCrosshair2
-        className={classNames("h-4 w-4 text-stone-700", {
+        className={classNames("h-4 w-4 text-stone-700 ", {
           "h-3 w-3 md:h-4 md:w-4": iconSize === "SMALL",
           "h-4 w-4 md:h-6 md:w-6": iconSize === "MEDIUM",
           "h-6 w-6 md:h-8 md:w-8": iconSize === "LARGE",

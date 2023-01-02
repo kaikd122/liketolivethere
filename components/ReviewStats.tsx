@@ -35,7 +35,7 @@ function ReviewStats() {
             {details.negativeCount > 0 && (
               <div className="flex flex-row gap-2 h-6 items-center w-full">
                 <div
-                  className="h-full bg-rose-600 border-x border-stone-50 rounded shadow-sm"
+                  className="h-full bg-rose-600 border-x border-stone-50  rounded shadow-sm"
                   style={{ width: `${negativePercent}%` }}
                 />
                 <span className="text-sm w-1/3">{`${details.negativeCount} negative`}</span>

@@ -14,6 +14,7 @@ export default function Document() {
           href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Contrail+One&family=Dela+Gothic+One&family=Outfit:wght@100;200;300;400;500;600;700&display=swap"
           rel="stylesheet"
         ></link>
+        <meta name="color-scheme" content="light only" />
       </Head>
       <body>
         <Main />
