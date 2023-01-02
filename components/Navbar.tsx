@@ -19,7 +19,13 @@ export default function Navbar() {
   const router = useRouter();
   return (
     <div className="w-full flex flex-col">
-      <div className="w-full gap-2 flex flex-row flex-wrap items-center justify-between py-4 px-2 md:px-8 bg-gradient-to-br from-violet-500 to-fuchsia-600 shadow z-10">
+      <div className="w-full flex flex-row flex-wrap items-center justify-evenly  text-black px-2 py-3 md:px-8 gap-2 bg-gradient-to-br from-[#ffab2d] to-[#feca48]  shadow-none z-50 ">
+        <p>Write a review for a chance to win a £20 Amazon voucher</p>
+        <Button className="shadow-none border-black border text-sm">
+          Learn more
+        </Button>
+      </div>
+      <div className="w-full gap-2 flex flex-row flex-wrap items-center justify-between py-4 px-2 md:px-8 bg-gradient-to-br from-violet-500 to-fuchsia-600 shadow z-10 ">
         <div className="flex flex-col gap-1 flex-wrap items-start">
           <button
             onClick={() => {
