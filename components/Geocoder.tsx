@@ -43,6 +43,9 @@ export function Geocoder(props: GeocoderProps) {
     geocoder.on("result", (e) => {
       console.log("RESULT");
 
+      // @ts-ignore
+      geocoder?._inputEl?.blur();
+
       setViewOnMapSource({
         id: "geo-result",
         type: "GEO",
