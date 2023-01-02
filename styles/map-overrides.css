@@ -23,6 +23,10 @@
     @apply font-medium text-sm;
 }
 
+.mapboxgl-ctrl-geocoder--no-results {
+    @apply font-sans;
+}
+
 .mapboxgl-ctrl-geocoder--suggestion-address {
     @apply font-medium text-xs;
 }
