@@ -15,6 +15,18 @@
     
 }
 
+.mapboxgl-ctrl-geocoder--suggestion {
+    @apply font-sans;
+}
+
+.mapboxgl-ctrl-geocoder--suggestion-title {
+    @apply font-medium text-sm;
+}
+
+.mapboxgl-ctrl-geocoder--suggestion-address {
+    @apply font-medium text-xs;
+}
+
 
 
 .mapboxgl-ctrl-geocoder {

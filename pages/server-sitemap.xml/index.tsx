@@ -14,12 +14,26 @@ export const getServerSideProps = async (ctx: any) => {
   console.log("GETTIG SERVER SIDE PROPS");
 
   try {
-    const towns = await prisma.towns.findMany({
-      select: {
-        id: true,
-        name: true,
-      },
-    });
+    let towns: { id: number; name: string | null }[] = [];
+
+    let isAllLoaded = false;
+
+    while (!isAllLoaded) {
+      console.log("CURRENT", towns.length);
+      const resTowns = await prisma.towns.findMany({
+        select: {
+          id: true,
+          name: true,
+        },
+        take: 1000,
+        skip: towns.length,
+      });
+
+      if (resTowns.length < 1000) {
+        isAllLoaded = true;
+      }
+      towns = [...towns, ...resTowns];
+    }
 
     console.log("RES", towns.length);
 
