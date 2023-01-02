@@ -7,9 +7,11 @@ import { TOWN_REVIEWS_PAGE_SIZE } from "../../lib/constants";
 import uzeStore from "../../lib/store/store";
 import { getTownIdFromSlug } from "../../lib/util/urls";
 import { getReviewsNearTownResponse } from "../api/getReviewsNearTown";
+import prisma from "../../lib/prisma";
 
 export async function getServerSideProps({ query }: any) {
   console.log("GETTING SERVER SIDE PROPS");
+  console.log("PRISMA", prisma);
   console.log(getTownIdFromSlug(query.id));
 
   const townId = getTownIdFromSlug(query.id);
