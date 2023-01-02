@@ -20,13 +20,15 @@ export default function Navbar() {
   return (
     <div className="w-full flex flex-col">
       <div className="w-full flex flex-row flex-wrap items-center justify-center text-base text-white px-2 py-2 md:px-8 gap-2 bg-gradient-to-br from-[rgb(223,137,8)] to-[#fdc73e]  shadow-none z-50 ">
-        <p>Write a review for a chance to win a £20 Amazon voucher</p>
-        <Button
-          className="shadow-none border-white border text-sm ml-3"
-          onClick={() => setIsPrizeModalOpen(true)}
-        >
-          Learn more
-        </Button>
+        <p>
+          Write a review for a chance to win a £20 Amazon voucher{" "}
+          <Button
+            className="shadow-none border-white border text-sm ml-3"
+            onClick={() => setIsPrizeModalOpen(true)}
+          >
+            Learn more
+          </Button>
+        </p>
       </div>
       <div className="w-full gap-2 flex flex-row flex-wrap items-center justify-between py-4 px-2 md:px-8 bg-gradient-to-br from-violet-500 to-fuchsia-600 shadow z-10 ">
         <div className="flex flex-col gap-1 flex-wrap items-start">

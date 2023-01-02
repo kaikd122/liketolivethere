@@ -43,23 +43,34 @@ function PrizeModal() {
               live ... there.{" "}
             </p>
             <p className="text-left w-full">
-              If you&apos;re interested in an area, more often than not googling
-              &ldquo;What&apos;s it like to live there?&rdquo; will give you a
+              More often than not, googling &ldquo;What&apos;s it like to live
+              there?&rdquo; when you're interested in an area will give you a
               load of generic information, or propaganda from estate agents. We
               want to change that, by providing an honest, unbiased, and
               community-driven platform for people to share their experiences of
-              living in different areas.
+              living in different areas. We&apos;re most interested in the
+              aspects of living in an area that aren&apos;t captured well in
+              statistics like house prices; answers to questions like &ldquo;Is
+              there a good community spirit?&rdquo; and &ldquo;Does it feel
+              safe?&rdquo;.
             </p>
             <p className="text-left w-full">
-              This means that we need your help! We want to encourage people to
-              share their experiences, and to do that we&apos;re running a
-              monthly prize draw. Each month &#40;on the 1st&#41;, we&apos;ll
-              pick a random user who has contributed at least one review
-              &#40;not necessarily in that month&#41;, and they&apos;ll win a
-              £20 Amazon voucher. The more reviews you contribute, the greater
-              the chance you have of winning. If you win, we&apos;ll send the
-              voucher to the email address you used to sign up.
+              This means that we need your help! And so to encourage people to
+              contribute reviews, we&apos;re running a monthly prize draw. Each
+              month &#40;on the 1st&#41;, we&apos;ll pick a random user who has
+              contributed at least one review &#40;not necessarily in that
+              month&#41;, and they&apos;ll win a £20 Amazon voucher. The more
+              reviews you contribute, the greater the chance you have of
+              winning. If you win, we&apos;ll send the voucher to the email
+              address you used to sign up.
             </p>
+            <p className="text-left w-full">
+              A review doesn't have to be a novel - the minimum length is just
+              200 characters, or about 40 words. The most important thing is
+              that you're honest. So if you having anything to share, however
+              small, that might help others, please do!
+            </p>
+
             <p className="text-left w-full ">Good luck!</p>
           </div>
         </div>
