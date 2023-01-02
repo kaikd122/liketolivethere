@@ -37,7 +37,7 @@ export default function Navbar() {
             ) : (
               <Link href="/">
                 <Image
-                  alt="LikeToLiveThere"
+                  alt="Like To Live There"
                   src={"/logo-truebw.png"}
                   width={350}
                   height={50}
@@ -45,6 +45,7 @@ export default function Navbar() {
               </Link>
             )}
           </button>
+
           <span className=" text-stone-50 text-sm">
             An open look into the world&apos;s neighbourhoods
           </span>
@@ -70,7 +71,13 @@ export default function Navbar() {
             setCurrentTab("MAP");
           }}
         >
-          {isMapLoaded ? "Explore map" : <Link href="/">Explore map</Link>}
+          {isMapLoaded ? (
+            <h1>Explore map</h1>
+          ) : (
+            <h1>
+              <Link href="/">Explore map</Link>
+            </h1>
+          )}
         </Tab>
 
         <Tab
@@ -79,7 +86,7 @@ export default function Navbar() {
             setCurrentTab("TOWNS");
           }}
         >
-          Browse towns
+          <h2>Browse towns</h2>
         </Tab>
       </div>
     </div>

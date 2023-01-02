@@ -18,7 +18,7 @@ function MinimalLayout({ children }: { children: React.ReactNode }) {
             >
               <Link href="/">
                 <Image
-                  alt="LikeToLiveThere"
+                  alt="Like To Live There"
                   src={"/logo-truebw.png"}
                   width={350}
                   height={50}
@@ -32,7 +32,7 @@ function MinimalLayout({ children }: { children: React.ReactNode }) {
         {children}
       </main>
       <footer className="flex justify-center items-center h-12 border border-t border-stone-300 text-stone-700 border-r-0 border-l-0 border-b-0 mx-2">
-        <p>Copyright © 2022 Kai Konishi-Dukes</p>
+        <p>Copyright © 2022 Like To Live There</p>
       </footer>
     </div>
   );

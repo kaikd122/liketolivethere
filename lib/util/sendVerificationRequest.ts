@@ -14,7 +14,7 @@ export async function sendVerificationRequestCustom(params: {
   const result = await transport.sendMail({
     to: identifier,
     from: provider.from,
-    subject: `Sign in to LikeToLiveThere`,
+    subject: `Sign in to Like To Live There`,
     text: text({ url, host }),
     html: html({ url, host, theme }),
   });

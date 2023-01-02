@@ -85,7 +85,7 @@ export default function Layout({ children }: LayoutProps) {
         {children}
       </main>
       <footer className="flex flex-row gap-8 justify-center items-center h-12 border border-t border-stone-300 text-stone-700 border-r-0 border-l-0 border-b-0 mx-2">
-        <p>Copyright © 2022 Kai Konishi-Dukes</p>
+        <p>Copyright © 2022 Like To Live There</p>
         <Link className="text-petal " href={"mailto:admin@liketolivethere.com"}>
           Contact
         </Link>
