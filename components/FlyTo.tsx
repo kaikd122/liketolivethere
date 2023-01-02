@@ -23,13 +23,16 @@ export default function FlyTo() {
   const viewOnMapSource = uzeStore((state) => state.viewOnMapSource);
   const bounds = uzeStore((state) => state.bounds);
   const editReviewId = uzeStore((state) => state.editReviewId);
+  const mapViewSearchStatus = uzeStore((state) => state.mapViewSearchStatus);
 
   useEffect(() => {
     if (!map) {
       return;
     }
 
-    setMapViewSearchStatus("UNSEARCHED");
+    if (mapViewSearchStatus === "SEARCHED") {
+      setMapViewSearchStatus("UNSEARCHED");
+    }
 
     setBounds(map.getBounds().toArray().flat());
     setZoom(map.getZoom());

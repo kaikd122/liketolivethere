@@ -104,6 +104,8 @@ function MapContainer() {
             setBounds(bounds);
             setZoom(map.getZoom());
 
+            setMapViewSearchStatus("LOADING");
+
             const res = await getReviewsWithinMapBoundsRequest({
               data: {
                 bounds: {
@@ -142,7 +144,7 @@ function MapContainer() {
           initialViewState={{
             longitude: coordinates.lng,
             latitude: coordinates.lat,
-            zoom: 14,
+            zoom: 9,
           }}
           style={{
             width: "100%",

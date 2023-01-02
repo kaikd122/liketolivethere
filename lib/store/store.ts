@@ -76,12 +76,12 @@ const uzeStore = create<State>((set) => ({
   currentReviewId: "",
   reviewFeatures: [],
   isMapViewUnsearched: undefined,
-  zoom: 14,
+  zoom: 9,
   bounds: [],
   currentTownId: undefined,
   currentTownReviews: [],
   viewOnMapSource: null,
-  mapViewSearchStatus: "UNSEARCHED",
+  mapViewSearchStatus: "LOADING",
   actions: {
     setMapViewSearchStatus: (mapViewSearchStatus) =>
       set({ mapViewSearchStatus }),
