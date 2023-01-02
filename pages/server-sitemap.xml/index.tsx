@@ -6,11 +6,12 @@ import { getAllTownsRequest } from "../../lib/actions/search";
 import { getTownUrl } from "../../lib/util/urls";
 import prisma from "../../lib/prisma";
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps = async (ctx: any) => {
   // Method to source urls from cms
   // const urls = await fetch('https//example.com/api')
 
   let fields: any = [];
+  console.log("GETTIG SERVER SIDE PROPS");
 
   try {
     const towns = await prisma.towns.findMany({
@@ -30,6 +31,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   } catch (error) {
     console.log(error);
   }
+  console.log("HI");
 
   return getServerSideSitemap(ctx, fields);
 };
