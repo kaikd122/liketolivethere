@@ -7,6 +7,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import "styles/map-overrides.css";
 import { DefaultSeo } from "next-seo";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function App({
   Component,
@@ -37,6 +38,7 @@ export default function App({
         }}
       />
       <Component {...pageProps} />
+      <Analytics />
     </SessionProvider>
   );
 }
