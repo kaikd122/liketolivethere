@@ -11,7 +11,7 @@ import prisma from "../../lib/prisma";
 
 export async function getServerSideProps({ query }: any) {
   console.log("GETTING SERVER SIDE PROPS");
-  console.log("PRISMA", prisma);
+
   console.log(getTownIdFromSlug(query.id));
 
   const townId = getTownIdFromSlug(query.id);
