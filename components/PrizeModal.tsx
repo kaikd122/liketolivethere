@@ -44,9 +44,9 @@ function PrizeModal() {
             </p>
             <p className="text-left w-full">
               More often than not, googling &ldquo;What&apos;s it like to live
-              there?&rdquo; when you're interested in an area will give you a
-              load of generic information, or propaganda from estate agents. We
-              want to change that, by providing an honest, unbiased, and
+              there?&rdquo; when you&apos;re interested in an area will give you
+              a load of generic information, or propaganda from estate agents.
+              We want to change that, by providing an honest, unbiased, and
               community-driven platform for people to share their experiences of
               living in different areas. We&apos;re most interested in the
               aspects of living in an area that aren&apos;t captured well in
@@ -65,10 +65,10 @@ function PrizeModal() {
               address you used to sign up.
             </p>
             <p className="text-left w-full">
-              A review doesn't have to be a novel - the minimum length is just
-              200 characters, or about 40 words. The most important thing is
-              that you're honest. So if you having anything to share, however
-              small, that might help others, please do!
+              A review doesn&apos;t have to be a novel - the minimum length is
+              just 200 characters, or about 40 words. The most important thing
+              is that you&apos;re honest. So if you having anything to share,
+              however small, that might help others, please do!
             </p>
 
             <p className="text-left w-full ">Good luck!</p>
