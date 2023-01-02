@@ -12,7 +12,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let fields: any = [];
 
   try {
-    const res = await getAllTownsRequest();
+    const res = await getAllTownsRequest({ blank: true });
     if (res.ok) {
       const towns: { id: number; name: string }[] = await res.json();
       fields = towns.map((town) => ({

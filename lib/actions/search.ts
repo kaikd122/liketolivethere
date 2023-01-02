@@ -45,11 +45,11 @@ export async function getTownByIdRequest(args: getTownByIdArgs) {
   return res;
 }
 
-export async function getAllTownsRequest() {
+export async function getAllTownsRequest(args: { blank: boolean }) {
   const res = await fetch(`/api/getAllTowns`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({}),
+    body: JSON.stringify(args),
   });
   return res;
 }
