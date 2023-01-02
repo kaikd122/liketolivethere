@@ -5,9 +5,10 @@ import TownReviewsList from "../../components/TownReviewsList";
 import { getReviewsNearTownRequest } from "../../lib/actions/review";
 import { TOWN_REVIEWS_PAGE_SIZE } from "../../lib/constants";
 import uzeStore from "../../lib/store/store";
-import { getTownIdFromSlug } from "../../lib/util/urls";
+import { getTownIdFromSlug, getTownUrl } from "../../lib/util/urls";
 import { getReviewsNearTownResponse } from "../api/getReviewsNearTown";
 import prisma from "../../lib/prisma";
+import { NextSeo } from "next-seo";
 
 export async function getServerSideProps({ query }: any) {
   console.log("GETTING SERVER SIDE PROPS");
@@ -79,6 +80,17 @@ function TownId({ data }: any) {
 
   return (
     <Layout>
+      <NextSeo
+        title={`${data?.town?.name}, ${data?.town?.county}`}
+        description={`What's it like to live in ${data?.town?.name}?`}
+        openGraph={{
+          title: `${data?.town?.name}, ${data?.town?.county}`,
+          description: `What's it like to live in ${data?.town?.name}?`,
+          url: `https://www.liketolivethere.com/towns/${getTownUrl(
+            data?.town
+          )}`,
+        }}
+      />
       <TownReviewsList
         serverSideReviews={data.reviews}
         serverSideNearbyTowns={data.nearbyTowns.filter(
