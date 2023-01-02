@@ -31,6 +31,7 @@ import ReviewStats from "./ReviewStats";
 import ZoomControl from "./ZoomControl";
 import { RxShuffle } from "react-icons/rx";
 import classNames from "classnames";
+import { BeatLoader } from "react-spinners";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -43,7 +44,7 @@ function MapContainer() {
     setCurrentTab,
     setIsMapLoaded,
     setReviewFeatures,
-    setIsMapViewUnsearched,
+    setMapViewSearchStatus,
     setZoom,
     setBounds,
     setCurrentTownId,
@@ -54,10 +55,9 @@ function MapContainer() {
   const isCreatingReview = uzeStore((state) => state.isCreatingReview);
   const [nearbyTowns, setNearbyTowns] = useState<Array<Partial<towns>>>([]);
   const isDragging = uzeStore((state) => state.isDragging);
-  const isMapViewUnsearched = uzeStore((state) => state.isMapViewUnsearched);
+  const mapViewSearchStatus = uzeStore((state) => state.mapViewSearchStatus);
   const zoom = uzeStore((state) => state.zoom);
   const bounds = uzeStore((state) => state.bounds);
-  const user = uzeStore((state) => state.user);
   const mapRef = useRef(null);
   const executeScroll = () => {
     //@ts-ignore
@@ -123,7 +123,7 @@ function MapContainer() {
               },
             });
 
-            setIsMapViewUnsearched(false);
+            setMapViewSearchStatus("SEARCHED");
 
             const data: Partial<Review>[] = await res.json();
             setReviewFeatures(reviewsToFeatures(data));
@@ -221,10 +221,11 @@ function MapContainer() {
           <ZoomControl />
 
           <Geocoder setNearbyTowns={setNearbyTowns} />
-          {isMapViewUnsearched && (
+          {mapViewSearchStatus === "UNSEARCHED" && (
             <button
               className="border shadow-sm border-stone-400 py-1 px-2 border-1 rounded text-lg active:scale-100 duration-75 hover:scale-105 absolute bottom-2 left-[50%] translate-x-[-50%] items-center justify-center flex flex-row gap-1 bg-stone-50 font-sans text-stone-700"
               onClick={async () => {
+                setMapViewSearchStatus("LOADING");
                 const res = await getReviewsWithinMapBoundsRequest({
                   data: {
                     bounds: {
@@ -244,7 +245,7 @@ function MapContainer() {
                   },
                 });
 
-                setIsMapViewUnsearched(false);
+                setMapViewSearchStatus("SEARCHED");
 
                 const data: Partial<Review>[] = await res.json();
 
@@ -254,6 +255,11 @@ function MapContainer() {
               <MagnifyingGlassIcon className="h-5 w-5" />
               <p>Search here</p>
             </button>
+          )}
+          {mapViewSearchStatus === "LOADING" && (
+            <div className="border shadow-sm border-stone-400 py-1 px-2 border-1 rounded text-lg active:scale-100 duration-75 hover:scale-105 absolute bottom-2 left-[50%] translate-x-[-50%] items-center justify-center flex flex-row gap-1 bg-stone-50 font-sans text-stone-700">
+              <BeatLoader color={"#a743e4"} size={15} />
+            </div>
           )}
         </Map>
       </div>
@@ -288,7 +294,7 @@ function MapContainer() {
                       type: "REVIEW",
                       id: randomReview.id,
                     });
-                    setIsMapViewUnsearched(false);
+                    setMapViewSearchStatus("SEARCHED");
                   }
                 } catch (error) {
                   console.log(error);

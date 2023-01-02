@@ -28,6 +28,7 @@ function ViewOnMapButton({
     setViewOnMapSource,
     setReviewFeatures,
     setIsMapViewUnsearched,
+    setMapViewSearchStatus,
     setIsCreatingReview,
     setCurrentReviewId,
   } = uzeStore((state) => state.actions);
@@ -48,7 +49,7 @@ function ViewOnMapButton({
         // setCurrentReviewId("");
         //can't remember why this is here
 
-        setIsMapViewUnsearched(false);
+        setMapViewSearchStatus("SEARCHED");
       }}
     >
       {writeMode ? (

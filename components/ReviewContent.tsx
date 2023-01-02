@@ -27,12 +27,12 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
     setCurrentReviewId,
     setEditReviewId,
     setCoordinates,
-    setIsMapViewUnsearched,
     setCurrentTab,
     setViewOnMapSource,
     setIsCreatingReview,
     setReviewFeatures,
     setReviewStubs,
+    setMapViewSearchStatus,
   } = uzeStore((state) => state.actions);
   const isMapLoaded = uzeStore((state) => state.isMapLoaded);
   const reviewStubs = uzeStore((state) => state.reviewStubs);
@@ -76,7 +76,7 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
           <p>Close</p>
         </Button>
       </div>
-      <div className="gap-4 text-center items-center justify-center flex flex-col w-full md:w-10/12 ">
+      <div className="gap-4 text-center items-center justify-center flex flex-col w-full md:w-10/12 break-words">
         <div className="text-3xl w-3/4">{review.title}</div>
         <div
           className={classNames("text-xl", {
@@ -87,7 +87,7 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
         >
           {ratingEnumToString(review.rating!)}
         </div>
-        <p className="text-sm whitespace-pre-line text-left pb-8">
+        <p className="text-sm whitespace-pre-line text-left pb-8 w-full">
           {review.body}
         </p>
       </div>
@@ -116,7 +116,7 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
                   type: "WRITE",
                   id: review?.id!,
                 });
-                setIsMapViewUnsearched(false);
+                setMapViewSearchStatus("SEARCHED");
               }}
             >
               {isMapLoaded ? (

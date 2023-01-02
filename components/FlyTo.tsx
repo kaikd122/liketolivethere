@@ -9,13 +9,14 @@ export default function FlyTo() {
   const { current: map } = useMap();
   const {
     setIsMapViewUnsearched,
+    setMapViewSearchStatus,
     setZoom,
     setBounds,
     setViewOnMapSource,
     setCurrentReviewId,
     setReviewFeatures,
   } = uzeStore((state) => state.actions);
-  const isMapViewUnsearched = uzeStore((state) => state.isMapViewUnsearched);
+
   const coordinates = uzeStore((state) => state.coordinates);
   const zoom = uzeStore((state) => state.zoom);
   const isCreatingReview = uzeStore((state) => state.isCreatingReview);
@@ -27,9 +28,9 @@ export default function FlyTo() {
     if (!map) {
       return;
     }
-    if (isMapViewUnsearched === false) {
-      setIsMapViewUnsearched(true);
-    }
+
+    setMapViewSearchStatus("UNSEARCHED");
+
     setBounds(map.getBounds().toArray().flat());
     setZoom(map.getZoom());
 
@@ -42,8 +43,9 @@ export default function FlyTo() {
     console.log("HERE", viewOnMapSource);
     if (viewOnMapSource) {
       setReviewFeatures([]);
+      setMapViewSearchStatus("LOADING");
+
       map.once("moveend", async () => {
-        setIsMapViewUnsearched(false);
         const tempBounds = map.getBounds().toArray().flat();
 
         const res = await getReviewsWithinMapBoundsRequest({
@@ -70,6 +72,8 @@ export default function FlyTo() {
             (r) => r.properties.id !== editReviewId
           )
         );
+
+        setMapViewSearchStatus("SEARCHED");
 
         viewOnMapSource.type === "REVIEW" &&
           setCurrentReviewId(viewOnMapSource.id);

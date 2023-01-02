@@ -39,8 +39,12 @@ function ReviewForm() {
   const [rating, setRating] = useState<number | undefined>(undefined);
   const bounds = uzeStore((state) => state.bounds);
   const editReviewId = uzeStore((state) => state.editReviewId);
-  const { setEditReviewId, setIsMapViewUnsearched, setReviewFeatures } =
-    uzeStore((state) => state.actions);
+  const {
+    setEditReviewId,
+    setIsMapViewUnsearched,
+    setReviewFeatures,
+    setMapViewSearchStatus,
+  } = uzeStore((state) => state.actions);
 
   const [reviewLength, setReviewLength] = useState(0);
 
@@ -130,7 +134,7 @@ function ReviewForm() {
           },
         },
       });
-      setIsMapViewUnsearched(false);
+      setMapViewSearchStatus("SEARCHED");
 
       const featureData: Partial<Review>[] = await res.json();
       setReviewFeatures(reviewsToFeatures(featureData));

@@ -17,13 +17,7 @@ export interface GeocoderProps {
 export function Geocoder(props: GeocoderProps) {
   const { current: map } = useMap();
   const [geo, setGeo] = useState<MapboxGeocoder | null>(null);
-  const coordinates = uzeStore((state) => state.coordinates);
-  const {
-    setViewOnMapSource,
-    setIsMapViewUnsearched,
-    setCoordinates,
-    setReviewFeatures,
-  } = uzeStore((state) => state.actions);
+  const { setViewOnMapSource } = uzeStore((state) => state.actions);
 
   useEffect(() => {
     if (!map) {
@@ -48,7 +42,6 @@ export function Geocoder(props: GeocoderProps) {
 
     geocoder.on("result", (e) => {
       console.log("RESULT");
-      const result: Result = e.result;
 
       setViewOnMapSource({
         id: "geo-result",

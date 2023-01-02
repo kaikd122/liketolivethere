@@ -114,120 +114,128 @@ function TownReviewsList({
   }
 
   return (
-    <div className="flex flex-col gap-4 pt-4">
-      <div className="flex flex-col justify-center items-center gap-3">
-        <h1 className="text-5xl">{town?.name}</h1>
-        <h2 className="text-lg">
-          {town?.county}, {getPostcodeOutcode(town?.postcode_sector)}
-        </h2>
-      </div>
-      <div>
-        <div className="flex flex-row justify-between items-center w-full flex-wrap gap-2">
-          <CoordinatesDisplay
-            iconSize="MEDIUM"
-            preText=""
-            className="text-xl gap-2"
-            overrideCoordinates={{
-              lat: Number(town?.latitude),
-              lng: Number(town?.longitude),
-            }}
-          />
-          <div className="flex flex-row gap-4 items-center justify-center ">
-            <ViewOnMapButton
-              withText
-              town={town}
-              coordinates={{
-                lat: Number(town?.latitude),
-                lng: Number(town?.longitude),
-              }}
-            />
-            <ViewOnMapButton
-              coordinates={{
-                lat: Number(town?.latitude),
-                lng: Number(town?.longitude),
-              }}
-              writeMode
-            />
-          </div>
-        </div>
-      </div>
-      <div className="flex flex-row  gap-4 flex-wrap  py-1 items-end">
-        {nearbyTowns.map((nt) => {
-          return (
-            <Button
-              bgColor="petalGradient"
-              outlineColor="light"
-              border="none"
-              key={nt.id}
-              className="text-sm"
-              onClick={() => {
-                setCurrentTownId(nt.id!);
-              }}
-            >
-              {isMapLoaded ? nt.name : <Link href="/">{nt.name}</Link>}
-            </Button>
-          );
-        })}
-      </div>
-      {reviewStubs?.length > 0 ? (
-        reviewStubs
-          .filter((val, i) =>
-            onlyUnique(
-              val.id,
-              i,
-              reviewStubs.map((r) => r.id)
-            )
-          )
-          .map((review) => {
-            return <ReviewStub key={`${review.id}-stub`} review={review} />;
-          })
-      ) : isLoading ? (
-        <div className="flex justify-center items-center flex-row w-full">
-          <BeatLoader color={"#a743e4"} />
+    <>
+      {isLoading ? (
+        <div className="flex flex-col justify-center items-center gap-4">
+          <BeatLoader color={"#a743e4"} size={30} />
         </div>
       ) : (
-        <div className="flex justify-center items-center flex-row w-full">
-          <span className="text-lg">
-            There are no reviews within 3 kilometres
-          </span>
+        <div className="flex flex-col gap-4 pt-4">
+          <div className="flex flex-col justify-center items-center gap-3">
+            <h1 className="text-5xl">{town?.name}</h1>
+            <h2 className="text-lg">
+              {town?.county}, {getPostcodeOutcode(town?.postcode_sector)}
+            </h2>
+          </div>
+          <div>
+            <div className="flex flex-row justify-between items-center w-full flex-wrap gap-2">
+              <CoordinatesDisplay
+                iconSize="MEDIUM"
+                preText=""
+                className="text-xl gap-2"
+                overrideCoordinates={{
+                  lat: Number(town?.latitude),
+                  lng: Number(town?.longitude),
+                }}
+              />
+              <div className="flex flex-row gap-4 items-center justify-center ">
+                <ViewOnMapButton
+                  withText
+                  town={town}
+                  coordinates={{
+                    lat: Number(town?.latitude),
+                    lng: Number(town?.longitude),
+                  }}
+                />
+                <ViewOnMapButton
+                  coordinates={{
+                    lat: Number(town?.latitude),
+                    lng: Number(town?.longitude),
+                  }}
+                  writeMode
+                />
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-row  gap-4 flex-wrap  py-1 items-end">
+            {nearbyTowns.map((nt) => {
+              return (
+                <Button
+                  bgColor="petalGradient"
+                  outlineColor="light"
+                  border="none"
+                  key={nt.id}
+                  className="text-sm"
+                  onClick={() => {
+                    setCurrentTownId(nt.id!);
+                  }}
+                >
+                  {isMapLoaded ? nt.name : <Link href="/">{nt.name}</Link>}
+                </Button>
+              );
+            })}
+          </div>
+          {reviewStubs?.length > 0 ? (
+            reviewStubs
+              .filter((val, i) =>
+                onlyUnique(
+                  val.id,
+                  i,
+                  reviewStubs.map((r) => r.id)
+                )
+              )
+              .map((review) => {
+                return <ReviewStub key={`${review.id}-stub`} review={review} />;
+              })
+          ) : isLoading ? (
+            <div className="flex justify-center items-center flex-row w-full">
+              <BeatLoader color={"#a743e4"} />
+            </div>
+          ) : (
+            <div className="flex justify-center items-center flex-row w-full">
+              <span className="text-lg">
+                There are no reviews within 3 kilometres
+              </span>
+            </div>
+          )}
+          {!isAllCurrentTownReviewsLoaded ? (
+            <div className="flex justify-center items-center flex-row w-full">
+              <Button
+                outlineColor="stone"
+                border="thin"
+                onClick={async () => {
+                  try {
+                    const res = await getReviewsNearTownRequest({
+                      data: {
+                        townId: currentTownId!,
+                        offset: reviewStubs.length,
+                      },
+                    });
+                    if (res.ok) {
+                      const data = await res.json();
+                      if (data.length < TOWN_REVIEWS_PAGE_SIZE) {
+                        setIsAllCurrentTownReviewsLoaded(true);
+                      }
+                      setReviewStubs([...reviewStubs, ...data]);
+                    }
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }}
+              >
+                Load more
+              </Button>
+            </div>
+          ) : reviewStubs?.length > 0 ? (
+            <div className="flex justify-center items-center flex-row w-full">
+              <span className="text-lg">
+                There are no more reviews within 3 kilometres
+              </span>
+            </div>
+          ) : null}
         </div>
       )}
-      {!isAllCurrentTownReviewsLoaded ? (
-        <div className="flex justify-center items-center flex-row w-full">
-          <Button
-            outlineColor="stone"
-            border="thin"
-            onClick={async () => {
-              try {
-                const res = await getReviewsNearTownRequest({
-                  data: {
-                    townId: currentTownId!,
-                    offset: reviewStubs.length,
-                  },
-                });
-                if (res.ok) {
-                  const data = await res.json();
-                  if (data.length < TOWN_REVIEWS_PAGE_SIZE) {
-                    setIsAllCurrentTownReviewsLoaded(true);
-                  }
-                  setReviewStubs([...reviewStubs, ...data]);
-                }
-              } catch (error) {
-                console.log(error);
-              }
-            }}
-          >
-            Load more
-          </Button>
-        </div>
-      ) : reviewStubs?.length > 0 ? (
-        <div className="flex justify-center items-center flex-row w-full">
-          <span className="text-lg">
-            There are no more reviews within 3 kilometres
-          </span>
-        </div>
-      ) : null}
-    </div>
+    </>
   );
 }
 

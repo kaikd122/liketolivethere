@@ -9,9 +9,12 @@ import {
 
 type TabOptions = "MAP" | "TOWNS" | "PROFILE" | undefined;
 
+type MapViewSearchStatus = "UNSEARCHED" | "SEARCHED" | "LOADING";
+
 interface State {
   coordinates: Coordinates;
   reviewStubs: ReviewWithDistance[];
+  mapViewSearchStatus: MapViewSearchStatus;
   actions: {
     setReviewStubs: (reviewStubs: ReviewWithDistance[]) => void;
     setCoordinates: (coordinates: Coordinates) => void;
@@ -24,6 +27,7 @@ interface State {
     setCurrentReviewId: (currentReviewId: string) => void;
     setReviewFeatures: (reviewFeatures: ReviewFeature[]) => void;
     setIsMapViewUnsearched: (isMapViewUnsearched: boolean | undefined) => void;
+    setMapViewSearchStatus: (mapViewSearchStatus: MapViewSearchStatus) => void;
     setZoom: (zoom: number) => void;
     setBounds: (bounds: number[]) => void;
     setCurrentTownId: (currentTownId: number | undefined) => void;
@@ -77,7 +81,11 @@ const uzeStore = create<State>((set) => ({
   currentTownId: undefined,
   currentTownReviews: [],
   viewOnMapSource: null,
+  mapViewSearchStatus: "UNSEARCHED",
   actions: {
+    setMapViewSearchStatus: (mapViewSearchStatus) =>
+      set({ mapViewSearchStatus }),
+
     setReviewStubs: (reviewStubs) => set({ reviewStubs }),
     setEditReviewId: (editReviewId) => set({ editReviewId }),
     setCurrentReviewId: (currentReviewId) => set({ currentReviewId }),

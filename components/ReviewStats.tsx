@@ -1,5 +1,6 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import React, { useMemo } from "react";
+import { BeatLoader } from "react-spinners";
 import uzeStore from "../lib/store/store";
 import { pluralise } from "../lib/util/general";
 import { reviewFeaturesToDetails } from "../lib/util/review-utils";
@@ -7,6 +8,7 @@ import { reviewFeaturesToDetails } from "../lib/util/review-utils";
 function ReviewStats() {
   const reviewFeatures = uzeStore((state) => state.reviewFeatures);
   const isMapViewUnsearched = uzeStore((state) => state.isMapViewUnsearched);
+  const mapViewSearchStatus = uzeStore((state) => state.mapViewSearchStatus);
   const details = useMemo(() => {
     return reviewFeaturesToDetails(reviewFeatures);
   }, [reviewFeatures]);
@@ -18,20 +20,18 @@ function ReviewStats() {
   return (
     <div className=" flex flex-col gap-2 py-5 px-3 md:px-0">
       <span className="text-2xl">Stats</span>
-      {details.count === 0 && !isMapViewUnsearched ? (
-        <span className="whitespace-pre text">
-          There are no reviews in the current map view
-        </span>
-      ) : !isMapViewUnsearched ? (
+      {details.count === 0 && mapViewSearchStatus === "SEARCHED" ? (
+        <span className="">There are no reviews in the current map view</span>
+      ) : mapViewSearchStatus === "SEARCHED" ? (
         <>
-          <span className="whitespace-pre text">{`There ${
-            details.count === 1 ? "is" : "are"
-          } ${details.count} ${pluralise({
+          <p className="">{`There ${details.count === 1 ? "is" : "are"} ${
+            details.count
+          } ${pluralise({
             count: details.count,
             singular: "review",
             plural: "reviews",
-          })} in the current map view`}</span>
-          <div className="flex flex-col w-3/4 md:w-1/2 gap-1">
+          })} in the current map view`}</p>
+          <div className="flex flex-col w-full md:w-1/2 gap-1">
             {details.negativeCount > 0 && (
               <div className="flex flex-row gap-2 h-6 items-center w-full">
                 <div
@@ -66,11 +66,17 @@ function ReviewStats() {
             )}
           </div>
         </>
+      ) : mapViewSearchStatus === "LOADING" ? (
+        <BeatLoader color={"#a743e4"} size={10} />
       ) : (
-        <span className="italic whitespace-pre ">
-          Click <span className="font-medium not-italic"> Search here </span> on
-          the map to get stats for the current map view
-        </span>
+        <p className="italic  ">
+          Click{" "}
+          <span className="font-medium not-italic whitespace-pre ">
+            {" "}
+            Search here{" "}
+          </span>{" "}
+          on the map to get stats for the current map view
+        </p>
       )}
     </div>
   );
