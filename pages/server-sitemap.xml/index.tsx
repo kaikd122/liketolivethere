@@ -25,11 +25,11 @@ export const getServerSideProps = async (ctx: any) => {
           id: true,
           name: true,
         },
-        take: 1000,
+        take: 10000,
         skip: towns.length,
       });
 
-      if (resTowns.length < 1000) {
+      if (resTowns.length < 10000) {
         isAllLoaded = true;
       }
       towns = [...towns, ...resTowns];
