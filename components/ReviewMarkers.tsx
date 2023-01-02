@@ -63,7 +63,7 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
                 <div className="flex flex-col items-center justify-center gap-1">
                   <div
                     className={classNames(
-                      `text-xl p-2 rounded-full  text-white flex items-center justify-center hover:scale-110 duration-75 opacity-[85%] border-2 border-stone-50`,
+                      `text-base font-sans p-2 rounded-full  text-white flex items-center justify-center hover:scale-110 duration-75 opacity-[85%] border-2 border-stone-50`,
                       {
                         "bg-rose-600": mean === 1,
                         "bg-blue-600": mean === 2,
@@ -73,11 +73,11 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
                     style={{
                       width: `${
                         (isVerySmallScreen ? 8 : isSmallScreen ? 5 : 3) +
-                        (pointCount / reviewFeatures.length) * 2
+                        (pointCount / reviewFeatures.length) * 3
                       }vw`,
                       height: `${
                         (isVerySmallScreen ? 8 : isSmallScreen ? 5 : 3) +
-                        (pointCount / reviewFeatures.length) * 2
+                        (pointCount / reviewFeatures.length) * 3
                       }vw`,
                     }}
                     onClick={() => {
