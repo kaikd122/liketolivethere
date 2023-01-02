@@ -7,11 +7,11 @@ function Towns() {
   return (
     <Layout>
       <NextSeo
-        description={`Browse towns | Like To Live There`}
-        title={`Browse towns | Like To Live There`}
+        description={`Browse towns | LikeToLiveThere`}
+        title={`Browse towns | LikeToLiveThere`}
         openGraph={{
-          title: `Browse towns | Like To Live There`,
-          description: `Browse towns | Like To Live There`,
+          title: `Browse towns | LikeToLiveThere`,
+          description: `Browse towns | LikeToLiveThere`,
           url: `https://www.liketolivethere.com/towns/`,
         }}
       />
