@@ -22,6 +22,7 @@ import AuthButton from "./AuthButton";
 type FormData = {
   body: string;
   title: string;
+  lastLivedYear: number;
 };
 
 function ReviewForm() {
@@ -60,6 +61,17 @@ function ReviewForm() {
       isInvalid = true;
     }
 
+    if (!data.lastLivedYear) {
+      errors.push("year");
+      isInvalid = true;
+    } else {
+      const val = parseInt(data.lastLivedYear.toString());
+      const currentYear = new Date().getFullYear();
+      if (data.lastLivedYear > currentYear || data.lastLivedYear < 1920) {
+        errors.push("year");
+        isInvalid = true;
+      }
+    }
     if (!data.title) {
       errors.push("title");
       isInvalid = true;
@@ -91,6 +103,7 @@ function ReviewForm() {
             title: data.title,
             userId: user.id,
             rating: rating!,
+            lastLivedYear: parseInt(data.lastLivedYear.toString()),
           },
         });
       } else {
@@ -102,6 +115,7 @@ function ReviewForm() {
             longitude: coordinates.lng,
             title: data.title,
             userId: user.id,
+            lastLivedYear: parseInt(data.lastLivedYear.toString()),
             rating: rating!,
           },
         });
@@ -112,9 +126,14 @@ function ReviewForm() {
 
       setCurrentReviewId(editReviewId ? editReviewId : id);
       setIsCreatingReview(false);
+      setEditReviewId("");
       setReviewLength(0);
       setRating(undefined);
-      reset();
+      reset({
+        body: "",
+        title: "",
+        lastLivedYear: undefined,
+      });
 
       const res = await getReviewsWithinMapBoundsRequest({
         data: {
@@ -173,9 +192,11 @@ function ReviewForm() {
       reset({
         title: review.title,
         body: review.body,
+        lastLivedYear: review.lastLivedYear,
       });
 
       setRating(review.rating);
+      setReviewLength(review.body.length);
     };
 
     if (editReviewId) {
@@ -221,10 +242,15 @@ function ReviewForm() {
                 type="button"
                 onClick={() => {
                   setIsCreatingReview(false);
+                  editReviewId && setMapViewSearchStatus("UNSEARCHED");
                   setEditReviewId("");
                   setRating(undefined);
                   setReviewLength(0);
-                  reset();
+                  reset({
+                    body: "",
+                    title: "",
+                    lastLivedYear: undefined,
+                  });
                 }}
                 outlineColor="red"
                 className=" flex flex-row gap-1 items-center justify-center"
@@ -265,6 +291,19 @@ function ReviewForm() {
                   reviewLength < 200 ? "text-red-500" : "text-emerald-500"
                 }`}
               >{`${reviewLength}/200`}</p>
+            </div>
+
+            <div className="flex flex-col w-full md:w-10/12 gap-2">
+              <label htmlFor="lastLivedYear" className="text-lg">
+                The year you last lived here
+              </label>
+              <input
+                {...register("lastLivedYear")}
+                placeholder="e.g. 2021"
+                className="border rounded border-stone-400 w-full  outline-violet-300 p-2 shadow-sm "
+                id="lastLivedYear"
+                type={"number"}
+              />
             </div>
 
             <div className="flex flex-col w-full md:w-10/12 gap-2">

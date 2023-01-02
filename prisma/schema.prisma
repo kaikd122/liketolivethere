@@ -9,19 +9,20 @@ datasource db {
 }
 
 model Review {
-  id        String                   @id @default(cuid())
-  title     String
-  body      String
-  createdAt DateTime                 @default(now()) @map("created_at")
-  updatedAt DateTime                 @updatedAt @map("updated_at")
-  userId    String                   @map("user_id")
-  latitude  Decimal
-  longitude Decimal
-  townId    Int?                     @map("town_id")
-  geom      Unsupported("geometry")? @default(dbgenerated("st_setsrid(st_makepoint((0)::double precision, (0)::double precision), 4326)"))
-  rating    Int?                     @default(0)
-  town      towns?                   @relation(fields: [townId], references: [id])
-  user      User                     @relation(fields: [userId], references: [id])
+  id            String                   @id @default(cuid())
+  title         String
+  body          String
+  createdAt     DateTime                 @default(now()) @map("created_at")
+  updatedAt     DateTime                 @updatedAt @map("updated_at")
+  userId        String                   @map("user_id")
+  latitude      Decimal
+  longitude     Decimal
+  townId        Int?                     @map("town_id")
+  geom          Unsupported("geometry")? @default(dbgenerated("st_setsrid(st_makepoint((0)::double precision, (0)::double precision), 4326)"))
+  rating        Int?                     @default(0)
+  town          towns?                   @relation(fields: [townId], references: [id])
+  user          User                     @relation(fields: [userId], references: [id])
+  lastLivedYear Int?                     @map("last_lived_year")
 
   @@index([geom], map: "review_geom_index", type: Gist)
 }

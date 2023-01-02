@@ -43,7 +43,7 @@ export default function FlyTo() {
         zoom: zoom,
       });
     }
-    console.log("HERE", viewOnMapSource);
+
     if (viewOnMapSource) {
       setReviewFeatures([]);
       setMapViewSearchStatus("LOADING");
@@ -78,12 +78,12 @@ export default function FlyTo() {
 
         setMapViewSearchStatus("SEARCHED");
 
-        viewOnMapSource.type === "REVIEW" &&
+        viewOnMapSource?.type === "REVIEW" &&
           setCurrentReviewId(viewOnMapSource.id);
         setViewOnMapSource(null);
       });
     }
-  }, [coordinates, zoom]);
+  }, [coordinates, zoom, editReviewId]);
 
   return null;
 }

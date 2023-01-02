@@ -17,8 +17,6 @@ export async function getServerSideProps({ query }: any) {
       await prisma.$queryRaw`WITH town_geom AS (SELECT geom FROM towns WHERE id = ${townId})  SELECT id, title, body, rating, latitude, longitude, user_id, ST_Distance(Geography(geom), Geography((SELECT geom from town_geom)), true) AS distance FROM "Review" WHERE 
             ST_DWithin(Geography(geom), Geography((SELECT geom FROM town_geom)), ${3000}) ORDER BY geom <-> (SELECT geom FROM town_geom) LIMIT ${TOWN_REVIEWS_PAGE_SIZE}`;
 
-    console.log(result);
-
     const townRes = await prisma.towns.findUnique({
       where: {
         id: townId!,

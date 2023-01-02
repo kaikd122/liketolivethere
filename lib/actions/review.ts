@@ -11,6 +11,7 @@ export interface createReviewArgs {
     longitude: number;
     rating: number;
     id?: string;
+    lastLivedYear: number;
   };
 }
 
@@ -23,6 +24,7 @@ export interface updateReviewArgs {
     longitude: number;
     rating: number;
     id: string;
+    lastLivedYear: number;
   };
 }
 

@@ -96,6 +96,7 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
           Written by {user?.name} on{" "}
           {dayjs(review.createdAt).format("DD/MM/YYYY")}
         </p>
+        <p>Last lived here in {review.lastLivedYear}</p>
 
         {currentUser?.id && user?.id === currentUser?.id && (
           <div className="flex flex-row justify-between items-center w-full">
