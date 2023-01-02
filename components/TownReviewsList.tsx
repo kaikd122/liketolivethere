@@ -116,7 +116,7 @@ function TownReviewsList({
   return (
     <>
       {isLoading ? (
-        <div className="flex flex-col justify-center items-center gap-4">
+        <div className="flex flex-col justify-center items-center gap-4 pt-4">
           <BeatLoader color={"#a743e4"} size={30} />
         </div>
       ) : (

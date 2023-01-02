@@ -19,7 +19,7 @@ export default function Navbar() {
   const router = useRouter();
   return (
     <div className="w-full flex flex-col">
-      <div className="w-full flex flex-row flex-wrap items-center justify-evenly  text-black px-2 py-3 md:px-8 gap-2 bg-gradient-to-br from-[#ffab2d] to-[#feca48]  shadow-none z-50 ">
+      <div className="w-full flex flex-row flex-wrap items-center justify-evenly text-sm text-black px-2 py-3 md:px-8 gap-2 bg-gradient-to-br from-[#ffab2d] to-[#feca48]  shadow-none z-50 ">
         <p>Write a review for a chance to win a £20 Amazon voucher</p>
         <Button className="shadow-none border-black border text-sm">
           Learn more
@@ -31,7 +31,7 @@ export default function Navbar() {
             onClick={() => {
               setCurrentTab("MAP");
             }}
-            className="font-semibold  text-4xl text-stone-50 active:scale-100 duration-75 hover:scale-105 font-display "
+            className="font-semibold  text-4xl text-stone-50 active:scale-100 duration-75 hover:scale-105 font-display px-2"
           >
             {isMapLoaded ? (
               <Image

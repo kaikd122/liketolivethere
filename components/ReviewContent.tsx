@@ -97,7 +97,7 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
           {dayjs(review.createdAt).format("DD/MM/YYYY")}
         </p>
 
-        {user?.id === currentUser?.id && (
+        {currentUser?.id && user?.id === currentUser?.id && (
           <div className="flex flex-row justify-between items-center w-full">
             <Button
               outlineColor="petal"
