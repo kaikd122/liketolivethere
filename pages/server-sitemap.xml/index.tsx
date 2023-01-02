@@ -13,6 +13,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   try {
     const res = await getAllTownsRequest({ blank: true });
+    console.log("RES", res);
     if (res.ok) {
       const towns: { id: number; name: string }[] = await res.json();
       fields = towns.map((town) => ({

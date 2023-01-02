@@ -46,7 +46,7 @@ export async function getTownByIdRequest(args: getTownByIdArgs) {
 }
 
 export async function getAllTownsRequest(args: { blank: boolean }) {
-  const res = await fetch(`/api/getAllTowns`, {
+  const res = await fetch(`https://${process.env.VERCEL_URL}/api/getAllTowns`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(args),

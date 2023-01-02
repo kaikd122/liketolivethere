@@ -9,6 +9,7 @@ import { getTownIdFromSlug } from "../../lib/util/urls";
 import { getReviewsNearTownResponse } from "../api/getReviewsNearTown";
 
 export async function getServerSideProps({ query }: any) {
+  console.log("GETTING SERVER SIDE PROPS");
   console.log(getTownIdFromSlug(query.id));
 
   console.log(getTownIdFromSlug(query.id));
