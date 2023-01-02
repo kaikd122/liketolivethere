@@ -193,145 +193,146 @@ function ReviewForm() {
 
   return (
     <Card>
-      {user?.id ? (
-        <form
-          ref={formRef}
-          onSubmit={handleSubmit(onSubmit)}
-          onChange={() => {
-            setFormErrors([]);
-          }}
-          className="overflow-hidden relative flex flex-col gap-6 items-center justify-center w-full p-2 "
-          autoComplete="off"
-        >
-          <div className="flex flex-row justify-between items-start gap-2 w-full">
-            <div className="flex flex-col gap-2">
-              <CoordinatesDisplay
-                preText={
-                  editReviewId ? "Editing review at" : "Writing review at"
-                }
-                className=" text-lg md:text-2xl gap-1 md:gap-2"
-                iconSize="MEDIUM"
-              />
-
-              <p className="text-sm italic">
-                Drag the map pin or search again to change coordinates
-              </p>
-            </div>
-            <Button
-              type="button"
-              onClick={() => {
-                setIsCreatingReview(false);
-                setEditReviewId("");
-                setRating(undefined);
-                setReviewLength(0);
-                reset();
-              }}
-              outlineColor="red"
-              className=" flex flex-row gap-1 items-center justify-center"
-              border="thin"
-            >
-              <XMarkIcon className="h-5 w-5 " />
-              <p>Cancel</p>
-            </Button>
-          </div>
-
-          <div className="flex flex-col w-full md:w-10/12 gap-2">
-            <label htmlFor="title" className="text-lg">
-              Title
-            </label>
-            <input
-              {...register("title")}
-              placeholder="Add a title here"
-              className="border rounded border-stone-400 w-full  outline-violet-300 p-2 shadow-sm "
-              id="title"
-            />
-          </div>
-
-          <div className="flex flex-col w-full md:w-10/12 gap-2">
-            <label htmlFor="body" className="text-lg">
-              Review
-            </label>
-            <textarea
-              {...register("body")}
-              placeholder="Write your review here (minimum 200 characters)"
-              className="border rounded border-stone-400  w-full  outline-violet-300 p-2 shadow-sm min-h-40"
-              id="body"
-              onChange={(e) => {
-                setReviewLength(e.target.value.length);
-              }}
-            />
-            <p
-              className={`${
-                reviewLength < 200 ? "text-red-500" : "text-emerald-500"
-              }`}
-            >{`${reviewLength}/200`}</p>
-          </div>
-
-          <div className="flex flex-col w-full md:w-10/12 gap-2">
-            <label htmlFor="rating" className="text-lg">
-              Overall experience
-            </label>
-            <div className="flex flex-row gap-4 text-sm text-center bg-">
-              <Button
-                type="button"
-                outlineColor="stone"
-                border="thin"
-                onClick={() => {
-                  setRating(1);
-                }}
-                selected={rating == 1}
-                selectedClassName="bg-rose-600  !text-stone-50 !border-stone-50"
-              >
-                Negative
-              </Button>
-              <Button
-                type="button"
-                outlineColor="stone"
-                border="thin"
-                onClick={() => setRating(2)}
-                selected={rating == 2}
-                selectedClassName="bg-blue-600 !text-stone-50 !border-stone-50"
-              >
-                Neutral
-              </Button>
-              <Button
-                type="button"
-                outlineColor="stone"
-                border="thin"
-                onClick={() => setRating(3)}
-                selected={rating == 3}
-                selectedClassName="bg-emerald-600 !text-stone-50 !border-stone-50"
-              >
-                Positive
-              </Button>
-            </div>
-          </div>
-
-          {formErrors.length > 0 && (
-            <div className="text-rose-600 text-lg w-full md:w-10/12">
-              {`Missing or invalid field${
-                formErrors.length === 1 ? "" : "s"
-              }: ${formErrors.join(", ")}.`}
-            </div>
-          )}
-
-          <Button
-            outlineColor="petal"
-            spinnerSize={7}
-            type="submit"
-            border="thin"
-            className="mb-4"
-            loading={isSubmitting}
+      <div className="w-full " ref={formRef}>
+        {user?.id ? (
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            onChange={() => {
+              setFormErrors([]);
+            }}
+            className="overflow-hidden relative flex flex-col gap-6 items-center justify-center w-full p-2 "
+            autoComplete="off"
           >
-            {editReviewId ? "Save changes" : "Submit review"}
-          </Button>
-        </form>
-      ) : (
-        <div className="flex flex-col gap-2 items-center justify-center w-full p-2 ">
-          <p className="text-lg">You must be signed in to write a review</p>
-          <AuthButton outlineColor="petal" border="thin" />
-        </div>
-      )}
+            <div className="flex flex-row justify-between items-start gap-2 w-full">
+              <div className="flex flex-col gap-2">
+                <CoordinatesDisplay
+                  preText={
+                    editReviewId ? "Editing review at" : "Writing review at"
+                  }
+                  className=" text-lg md:text-2xl gap-1 md:gap-2"
+                  iconSize="MEDIUM"
+                />
+
+                <p className="text-sm italic">
+                  Drag the map pin or search again to change coordinates
+                </p>
+              </div>
+              <Button
+                type="button"
+                onClick={() => {
+                  setIsCreatingReview(false);
+                  setEditReviewId("");
+                  setRating(undefined);
+                  setReviewLength(0);
+                  reset();
+                }}
+                outlineColor="red"
+                className=" flex flex-row gap-1 items-center justify-center"
+                border="thin"
+              >
+                <XMarkIcon className="h-5 w-5 " />
+                <p>Cancel</p>
+              </Button>
+            </div>
+
+            <div className="flex flex-col w-full md:w-10/12 gap-2">
+              <label htmlFor="title" className="text-lg">
+                Title
+              </label>
+              <input
+                {...register("title")}
+                placeholder="Add a title here"
+                className="border rounded border-stone-400 w-full  outline-violet-300 p-2 shadow-sm "
+                id="title"
+              />
+            </div>
+
+            <div className="flex flex-col w-full md:w-10/12 gap-2">
+              <label htmlFor="body" className="text-lg">
+                Review
+              </label>
+              <textarea
+                {...register("body")}
+                placeholder="Write your review here (minimum 200 characters)"
+                className="border rounded border-stone-400  w-full  outline-violet-300 p-2 shadow-sm min-h-40"
+                id="body"
+                onChange={(e) => {
+                  setReviewLength(e.target.value.length);
+                }}
+              />
+              <p
+                className={`${
+                  reviewLength < 200 ? "text-red-500" : "text-emerald-500"
+                }`}
+              >{`${reviewLength}/200`}</p>
+            </div>
+
+            <div className="flex flex-col w-full md:w-10/12 gap-2">
+              <label htmlFor="rating" className="text-lg">
+                Overall experience
+              </label>
+              <div className="flex flex-row gap-4 text-sm text-center bg-">
+                <Button
+                  type="button"
+                  outlineColor="stone"
+                  border="thin"
+                  onClick={() => {
+                    setRating(1);
+                  }}
+                  selected={rating == 1}
+                  selectedClassName="bg-rose-600  !text-stone-50 !border-stone-50"
+                >
+                  Negative
+                </Button>
+                <Button
+                  type="button"
+                  outlineColor="stone"
+                  border="thin"
+                  onClick={() => setRating(2)}
+                  selected={rating == 2}
+                  selectedClassName="bg-blue-600 !text-stone-50 !border-stone-50"
+                >
+                  Neutral
+                </Button>
+                <Button
+                  type="button"
+                  outlineColor="stone"
+                  border="thin"
+                  onClick={() => setRating(3)}
+                  selected={rating == 3}
+                  selectedClassName="bg-emerald-600 !text-stone-50 !border-stone-50"
+                >
+                  Positive
+                </Button>
+              </div>
+            </div>
+
+            {formErrors.length > 0 && (
+              <div className="text-rose-600 text-lg w-full md:w-10/12">
+                {`Missing or invalid field${
+                  formErrors.length === 1 ? "" : "s"
+                }: ${formErrors.join(", ")}.`}
+              </div>
+            )}
+
+            <Button
+              outlineColor="petal"
+              spinnerSize={7}
+              type="submit"
+              border="thin"
+              className="mb-4"
+              loading={isSubmitting}
+            >
+              {editReviewId ? "Save changes" : "Submit review"}
+            </Button>
+          </form>
+        ) : (
+          <div className="flex flex-col gap-2 items-center justify-center w-full p-2 ">
+            <p className="text-lg">You must be signed in to write a review</p>
+            <AuthButton outlineColor="petal" border="thin" />
+          </div>
+        )}
+      </div>
     </Card>
   );
 }
