@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getNearbyTownsArgs } from "../../lib/actions/search";
+import prisma from "../../lib/prisma";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const body: getNearbyTownsArgs = req.body;
