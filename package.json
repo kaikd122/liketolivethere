@@ -8,7 +8,6 @@
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate",
     "vercel-build": "prisma generate && prisma migrate deploy && next build",
     "prisma:generate": "prisma generate"
   },
