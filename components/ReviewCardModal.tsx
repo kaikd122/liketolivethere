@@ -12,6 +12,7 @@ import Modal from "./ui/Modal";
 import dayjs from "dayjs";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import ReviewContent from "./ReviewContent";
+import { BeatLoader } from "react-spinners";
 
 function ReviewCardModal() {
   const currentReviewId = uzeStore((state) => state.currentReviewId);
