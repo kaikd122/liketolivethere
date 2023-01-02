@@ -78,14 +78,17 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
       </div>
       <div className="gap-4 text-center items-center justify-center flex flex-col w-full md:w-10/12 break-words">
         <div className="text-3xl w-3/4">{review.title}</div>
-        <div
-          className={classNames("text-xl", {
-            "text-emerald-600": review.rating === 3,
-            "text-blue-600": review.rating === 2,
-            "text-rose-600": review.rating === 1,
-          })}
-        >
-          {ratingEnumToString(review.rating!)}
+        <div className="flex flex-row gap-4 flex-wrap items-center justify-center">
+          <div
+            className={classNames("text-xl", {
+              "text-emerald-600": review.rating === 3,
+              "text-blue-600": review.rating === 2,
+              "text-rose-600": review.rating === 1,
+            })}
+          >
+            {ratingEnumToString(review.rating!)}
+          </div>
+          <p className="text-xl">Lived here in {review.lastLivedYear}</p>
         </div>
         <p className="text-sm whitespace-pre-line text-left pb-8 w-full">
           {review.body}
@@ -96,7 +99,6 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
           Written by {user?.name} on{" "}
           {dayjs(review.createdAt).format("DD/MM/YYYY")}
         </p>
-        <p>Based on living here in {review.lastLivedYear}</p>
 
         {currentUser?.id && user?.id === currentUser?.id && (
           <div className="flex flex-row justify-between items-center w-full">
