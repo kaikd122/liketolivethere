@@ -14,7 +14,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
   if (args?.name) {
     try {
-      console.log("try");
       const users = await prisma.user.findMany({
         where: {
           name: args.name,

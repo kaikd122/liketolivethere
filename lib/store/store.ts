@@ -15,6 +15,7 @@ interface State {
   coordinates: Coordinates;
   reviewStubs: ReviewWithDistance[];
   mapViewSearchStatus: MapViewSearchStatus;
+  isPrizeModalOpen: boolean;
   actions: {
     setReviewStubs: (reviewStubs: ReviewWithDistance[]) => void;
     setCoordinates: (coordinates: Coordinates) => void;
@@ -33,6 +34,7 @@ interface State {
     setCurrentTownId: (currentTownId: number | undefined) => void;
     setCurrentTownReviews: (currentTownReviews: Partial<Review>[]) => void;
     setEditReviewId: (editReviewId: string) => void;
+    setIsPrizeModalOpen: (isPrizeModalOpen: boolean) => void;
     setViewOnMapSource: (
       viewOnMapSource: {
         id: string;
@@ -81,11 +83,12 @@ const uzeStore = create<State>((set) => ({
   currentTownId: undefined,
   currentTownReviews: [],
   viewOnMapSource: null,
+  isPrizeModalOpen: false,
   mapViewSearchStatus: "LOADING",
   actions: {
     setMapViewSearchStatus: (mapViewSearchStatus) =>
       set({ mapViewSearchStatus }),
-
+    setIsPrizeModalOpen: (isPrizeModalOpen) => set({ isPrizeModalOpen }),
     setReviewStubs: (reviewStubs) => set({ reviewStubs }),
     setEditReviewId: (editReviewId) => set({ editReviewId }),
     setCurrentReviewId: (currentReviewId) => set({ currentReviewId }),

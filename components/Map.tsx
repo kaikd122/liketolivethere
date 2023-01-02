@@ -286,7 +286,6 @@ function MapContainer() {
                     const jsonRes: Review[] = await res.json();
                     const randomReview = jsonRes[0];
 
-                    console.log(randomReview.latitude, randomReview.longitude);
                     setIsCreatingReview(false);
                     setCoordinates({
                       lat: Number(randomReview.latitude),

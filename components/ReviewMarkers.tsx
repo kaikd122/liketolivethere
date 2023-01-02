@@ -24,8 +24,6 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
   const isVerySmallScreen = useMediaQuery("(max-width: 500px)");
 
-  console.log("IS MOBILE", isSmallScreen);
-
   const { clusters, supercluster } = useSupercluster({
     points: reviewFeatures,
     bounds: bounds as unknown as [number, number, number, number],
@@ -117,7 +115,7 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
               </Marker>
             );
           } catch (e) {
-            console.log("ERROR", e);
+            console.log(e);
           }
         }
         return (

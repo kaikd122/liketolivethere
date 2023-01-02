@@ -13,15 +13,18 @@ export default function Navbar() {
   const user = uzeStore((state) => state.user);
   const currentTab = uzeStore((state) => state.currentTab);
   const isMapLoaded = uzeStore((state) => state.isMapLoaded);
-  const { setCurrentTab, setIsCreatingReview } = uzeStore(
+  const { setCurrentTab, setIsPrizeModalOpen } = uzeStore(
     (state) => state.actions
   );
   const router = useRouter();
   return (
     <div className="w-full flex flex-col">
-      <div className="w-full flex flex-row flex-wrap items-center justify-evenly text-sm text-black px-2 py-3 md:px-8 gap-2 bg-gradient-to-br from-[#ffab2d] to-[#feca48]  shadow-none z-50 ">
+      <div className="w-full flex flex-row flex-wrap items-center justify-center text-base text-white px-2 py-2 md:px-8 gap-2 bg-gradient-to-br from-[rgb(223,137,8)] to-[#fdc73e]  shadow-none z-50 ">
         <p>Write a review for a chance to win a £20 Amazon voucher</p>
-        <Button className="shadow-none border-black border text-sm">
+        <Button
+          className="shadow-none border-white border text-sm ml-3"
+          onClick={() => setIsPrizeModalOpen(true)}
+        >
           Learn more
         </Button>
       </div>
@@ -52,7 +55,7 @@ export default function Navbar() {
             )}
           </button>
 
-          <span className=" text-stone-50 text-sm">
+          <span className=" text-stone-50 text-sm px-2">
             An open look into the world&apos;s neighbourhoods
           </span>
         </div>

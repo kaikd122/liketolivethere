@@ -11,7 +11,6 @@ export const getServerSideProps = async (ctx: any) => {
   // const urls = await fetch('https//example.com/api')
 
   let fields: any = [];
-  console.log("GETTIG SERVER SIDE PROPS");
 
   try {
     let towns: { id: number; name: string | null }[] = [];
@@ -19,7 +18,6 @@ export const getServerSideProps = async (ctx: any) => {
     let isAllLoaded = false;
 
     // while (!isAllLoaded) {
-    console.log("CURRENT", towns.length);
     const resTowns = await prisma.towns.findMany({
       select: {
         id: true,
@@ -35,8 +33,6 @@ export const getServerSideProps = async (ctx: any) => {
     towns = [...towns, ...resTowns];
     // }
 
-    console.log("RES", towns.length);
-
     fields = towns.map((town) => ({
       loc: `${process.env.SITE_URL}/${getTownUrl(town)}`,
       lastmod: new Date().toISOString(),
@@ -45,7 +41,6 @@ export const getServerSideProps = async (ctx: any) => {
   } catch (error) {
     console.log(error);
   }
-  console.log("HI");
 
   return getServerSideSitemap(ctx, fields);
 };

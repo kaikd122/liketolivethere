@@ -11,10 +11,6 @@ import prisma from "../../lib/prisma";
 import { NextSeo } from "next-seo";
 
 export async function getServerSideProps({ query }: any) {
-  console.log("GETTING SERVER SIDE PROPS");
-
-  console.log(getTownIdFromSlug(query.id));
-
   const townId = getTownIdFromSlug(query.id);
   try {
     const result: Array<getReviewsNearTownResponse> =
@@ -64,7 +60,6 @@ export async function getServerSideProps({ query }: any) {
 
 function TownId({ data }: any) {
   const { setCurrentTownId } = uzeStore((state) => state.actions);
-  console.log(data);
 
   if (!data) {
     return (

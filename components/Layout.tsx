@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import Modal from "./ui/Modal";
 import ReviewCardModal from "./ReviewCardModal";
 import Link from "next/link";
+import PrizeModal from "./PrizeModal";
 
 export interface LayoutProps {
   children: ReactNode;
@@ -80,6 +81,7 @@ export default function Layout({ children }: LayoutProps) {
       <Navbar />
 
       <ReviewCardModal />
+      <PrizeModal />
 
       <main className="flex flex-col md:px-8 mb-8  md:gap-8 min-h-[70vh]">
         {children}

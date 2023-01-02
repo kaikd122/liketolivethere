@@ -67,7 +67,6 @@ function ProfileContainer() {
         if (res.ok) {
           const data = await res.json();
           setUserReviews(data);
-          console.log(data);
         }
       } catch (e) {
         console.log(e);

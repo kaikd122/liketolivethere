@@ -96,7 +96,6 @@ function TownReviewsList({
           if (nearbyRes.ok) {
             const data: Partial<towns>[] = await nearbyRes.json();
             setNearbyTowns(data.filter((t) => t.id !== currentTownId));
-            console.log(data);
           }
         }
       } catch (error) {
