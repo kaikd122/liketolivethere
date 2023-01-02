@@ -12,7 +12,6 @@ export async function getServerSideProps({ query }: any) {
   console.log("GETTING SERVER SIDE PROPS");
   console.log(getTownIdFromSlug(query.id));
 
-  console.log(getTownIdFromSlug(query.id));
   const townId = getTownIdFromSlug(query.id);
   try {
     const result: Array<getReviewsNearTownResponse> =
@@ -51,6 +50,7 @@ export async function getServerSideProps({ query }: any) {
       },
     };
   } catch (err) {
+    console.log(err);
     return {
       props: {
         data: null,
