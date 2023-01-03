@@ -9,6 +9,7 @@ import { getTownsByTextRequest } from "../lib/actions/search";
 import uzeStore from "../lib/store/store";
 import { getPostcodeOutcode } from "../lib/util/map-utils";
 import { useDebounce } from "use-lodash-debounce";
+import { BeatLoader } from "react-spinners";
 
 function TownsContainer() {
   const currentTab = uzeStore((state) => state.currentTab);
@@ -19,18 +20,29 @@ function TownsContainer() {
   const currentTownId = uzeStore((state) => state.currentTownId);
   const [results, setResults] = useState<Array<Partial<towns>>>([]);
 
+  const [searchStatus, setSearchStatus] = useState<
+    "NO_RESULTS" | "RESULTS" | "LOADING"
+  >("NO_RESULTS");
+
   const debouncedVal = useDebounce(val, 500);
 
   useEffect(() => {
     if (!debouncedVal) {
       setResults([]);
+      setSearchStatus("NO_RESULTS");
       return;
     }
+    setSearchStatus("LOADING");
     getTownsByTextRequest({ data: { text: debouncedVal } })
       .then(async (res) => {
         const data = await res.json();
         if (res.ok) {
           setResults(data);
+          if (data && data.length > 0) {
+            setSearchStatus("RESULTS");
+          } else {
+            setSearchStatus("NO_RESULTS");
+          }
         }
       })
       .catch((e) => {
@@ -112,8 +124,11 @@ function TownsContainer() {
                 </Button>
               );
             })}
-            {results.length === 0 && debouncedVal && (
+            {searchStatus === "NO_RESULTS" && debouncedVal && (
               <p className="text-stone-700 text-base">No results found</p>
+            )}
+            {searchStatus === "LOADING" && (
+              <BeatLoader color={"#a743e4"} size={15} />
             )}
           </div>
         </>
