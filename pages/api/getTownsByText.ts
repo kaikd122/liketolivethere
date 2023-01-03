@@ -17,13 +17,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         OR: [
           {
             name: {
-              contains: data.text,
+              contains: data.text.trim(),
               mode: "insensitive",
             },
           },
           {
             postcode_sector: {
-              contains: data.text,
+              contains: data.text.trim(),
               mode: "insensitive",
             },
           },

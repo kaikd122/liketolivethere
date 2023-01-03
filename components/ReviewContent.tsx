@@ -40,6 +40,7 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
   const currentTab = uzeStore((state) => state.currentTab);
   const [isDeleting, setIsDeleting] = useState(false);
   const reviewFeatures = uzeStore((state) => state.reviewFeatures);
+
   return (
     <div className="flex flex-col gap-4 w-full items-center">
       <div className="flex flex-row justify-between items-start gap-2 w-full ">

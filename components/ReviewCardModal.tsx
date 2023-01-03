@@ -45,7 +45,7 @@ function ReviewCardModal() {
     return null;
   }
 
-  if (!review) {
+  if (!review?.id) {
     return null;
   }
   return (
