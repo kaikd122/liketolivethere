@@ -235,7 +235,7 @@ function ReviewForm() {
                 />
 
                 <p className="text-sm italic">
-                  Drag the map pin or search again to change coordinates
+                  Drag the map pin to adjust review coordinates
                 </p>
               </div>
               <Button
@@ -266,8 +266,8 @@ function ReviewForm() {
               </label>
               <input
                 {...register("title")}
-                placeholder="Add a title here"
-                className="border rounded border-stone-400 w-full  outline-violet-300 p-2 shadow-sm font-light"
+                placeholder="Can't think of a good title? Just put the name of the town"
+                className="border rounded border-stone-400 w-full  outline-violet-300 p-2 shadow-sm font-light text-base"
                 id="title"
               />
             </div>
@@ -278,8 +278,8 @@ function ReviewForm() {
               </label>
               <textarea
                 {...register("body")}
-                placeholder="Write your review here (minimum 200 characters)"
-                className="border rounded border-stone-400  w-full  outline-violet-300 p-2 shadow-sm h-full font-light"
+                placeholder="Minimum 200 characters"
+                className="border rounded border-stone-400  w-full  outline-violet-300 p-2 shadow-sm h-full font-light text-base"
                 id="body"
                 onChange={(e) => {
                   setReviewLength(e.target.value.length);
@@ -312,7 +312,7 @@ function ReviewForm() {
               <input
                 {...register("lastLivedYear")}
                 placeholder="e.g. 2021"
-                className="border rounded border-stone-400 w-full  outline-violet-300 p-2 shadow-sm font-light"
+                className="border rounded border-stone-400 w-full  outline-violet-300 p-2 text-base shadow-sm font-light"
                 id="lastLivedYear"
                 type={"number"}
               />

@@ -17,7 +17,9 @@ export interface GeocoderProps {
 export function Geocoder(props: GeocoderProps) {
   const { current: map } = useMap();
   const [geo, setGeo] = useState<MapboxGeocoder | null>(null);
-  const { setViewOnMapSource } = uzeStore((state) => state.actions);
+  const { setViewOnMapSource, setIsCreatingReview } = uzeStore(
+    (state) => state.actions
+  );
 
   useEffect(() => {
     if (!map) {
@@ -40,9 +42,8 @@ export function Geocoder(props: GeocoderProps) {
       countries: "GB",
     });
 
-    geocoder.on("result", (e) => {
-      console.log("RESULT");
-
+    geocoder.on("result", () => {
+      setIsCreatingReview(false);
       // @ts-ignore
       geocoder?._inputEl?.blur();
 
