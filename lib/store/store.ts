@@ -35,6 +35,7 @@ interface State {
     setCurrentTownReviews: (currentTownReviews: Partial<Review>[]) => void;
     setEditReviewId: (editReviewId: string) => void;
     setIsPrizeModalOpen: (isPrizeModalOpen: boolean) => void;
+    setIsWhatToWriteModalOpen: (isWhatToWriteModalOpen: boolean) => void;
     setViewOnMapSource: (
       viewOnMapSource: {
         id: string;
@@ -56,6 +57,7 @@ interface State {
   bounds: number[];
   currentTownId: number | undefined;
   currentTownReviews: Partial<Review>[];
+  isWhatToWriteModalOpen: boolean;
   viewOnMapSource: {
     id: string;
     type: "TOWN" | "REVIEW" | "WRITE" | "GEO";
@@ -67,6 +69,7 @@ const uzeStore = create<State>((set) => ({
     lat: kingsCrossCoords.lat,
     lng: kingsCrossCoords.lng,
   },
+  isWhatToWriteModalOpen: false,
   reviewStubs: [],
   isLoading: false,
   editReviewId: "",
@@ -86,6 +89,9 @@ const uzeStore = create<State>((set) => ({
   isPrizeModalOpen: false,
   mapViewSearchStatus: "LOADING",
   actions: {
+    setIsWhatToWriteModalOpen: (isWhatToWriteModalOpen) =>
+      set({ isWhatToWriteModalOpen }),
+
     setMapViewSearchStatus: (mapViewSearchStatus) =>
       set({ mapViewSearchStatus }),
     setIsPrizeModalOpen: (isPrizeModalOpen) => set({ isPrizeModalOpen }),

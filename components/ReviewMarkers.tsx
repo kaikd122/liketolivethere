@@ -25,7 +25,7 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
   const isVerySmallScreen = useMediaQuery("(max-width: 500px)");
 
   const { clusters, supercluster } = useSupercluster({
-    points: reviewFeatures,
+    points: reviewFeatures.filter((r) => r.properties.id !== editReviewId),
     bounds: bounds as unknown as [number, number, number, number],
     zoom,
     options: { radius: 75, maxZoom: 22 },

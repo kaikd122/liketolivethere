@@ -70,11 +70,7 @@ export default function FlyTo() {
           },
         });
         const data: Partial<Review>[] = await res.json();
-        setReviewFeatures(
-          reviewsToFeatures(data).filter(
-            (r) => r.properties.id !== editReviewId
-          )
-        );
+        setReviewFeatures(reviewsToFeatures(data));
 
         setMapViewSearchStatus("SEARCHED");
 
@@ -83,7 +79,7 @@ export default function FlyTo() {
         setViewOnMapSource(null);
       });
     }
-  }, [coordinates, zoom, editReviewId]);
+  }, [coordinates, zoom]);
 
   return null;
 }

@@ -28,7 +28,7 @@
 }
 
 .mapboxgl-ctrl-geocoder--suggestion-address {
-    @apply font-medium text-xs;
+    @apply font-light text-xs;
 }
 
 

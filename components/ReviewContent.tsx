@@ -90,11 +90,11 @@ function ReviewContent({ review, user, setReview }: ReviewContentProps) {
           </div>
           <p className="text-xl">Lived here in {review.lastLivedYear}</p>
         </div>
-        <p className="text-sm whitespace-pre-line text-left pb-8 w-full">
+        <p className="text-sm whitespace-pre-line text-left pb-8 w-full font-light">
           {review.body}
         </p>
       </div>
-      <div className="flex flex-col w-full items-start justify-center gap-2">
+      <div className="flex flex-col w-full items-start justify-center gap-2 text-sm">
         <p>
           Written by {user?.name} on{" "}
           {dayjs(review.createdAt).format("DD/MM/YYYY")}

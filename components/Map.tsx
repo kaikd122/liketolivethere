@@ -64,11 +64,11 @@ function MapContainer() {
     mapRef?.current && mapRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    if (!isCreatingReview) {
-      executeScroll();
-    }
-  }, [isCreatingReview]);
+  // useEffect(() => {
+  //   if (!isCreatingReview) {
+  //     executeScroll();
+  //   }
+  // }, [isCreatingReview]);
 
   useEffect(() => {
     const getNearbyTowns = async () => {

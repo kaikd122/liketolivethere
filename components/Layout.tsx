@@ -59,7 +59,6 @@ export default function Layout({ children }: LayoutProps) {
   }, [session?.user?.name]);
 
   useEffect(() => {
-    console.log(router.asPath);
     if (currentTab !== undefined) {
       return;
     }

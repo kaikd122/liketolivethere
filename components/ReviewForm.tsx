@@ -42,7 +42,7 @@ function ReviewForm() {
   const editReviewId = uzeStore((state) => state.editReviewId);
   const {
     setEditReviewId,
-    setIsMapViewUnsearched,
+    setIsWhatToWriteModalOpen,
     setReviewFeatures,
     setMapViewSearchStatus,
   } = uzeStore((state) => state.actions);
@@ -213,7 +213,7 @@ function ReviewForm() {
   }
 
   return (
-    <Card>
+    <Card className="mt-4">
       <div className="w-full " ref={formRef}>
         {user?.id ? (
           <form
@@ -242,7 +242,6 @@ function ReviewForm() {
                 type="button"
                 onClick={() => {
                   setIsCreatingReview(false);
-                  editReviewId && setMapViewSearchStatus("UNSEARCHED");
                   setEditReviewId("");
                   setRating(undefined);
                   setReviewLength(0);
@@ -268,29 +267,42 @@ function ReviewForm() {
               <input
                 {...register("title")}
                 placeholder="Add a title here"
-                className="border rounded border-stone-400 w-full  outline-violet-300 p-2 shadow-sm "
+                className="border rounded border-stone-400 w-full  outline-violet-300 p-2 shadow-sm font-light"
                 id="title"
               />
             </div>
 
-            <div className="flex flex-col w-full md:w-10/12 gap-2">
+            <div className="flex flex-col w-full md:w-10/12 gap-2 h-72">
               <label htmlFor="body" className="text-lg">
                 Review
               </label>
               <textarea
                 {...register("body")}
                 placeholder="Write your review here (minimum 200 characters)"
-                className="border rounded border-stone-400  w-full  outline-violet-300 p-2 shadow-sm min-h-40"
+                className="border rounded border-stone-400  w-full  outline-violet-300 p-2 shadow-sm h-full font-light"
                 id="body"
                 onChange={(e) => {
                   setReviewLength(e.target.value.length);
                 }}
               />
-              <p
-                className={`${
-                  reviewLength < 200 ? "text-red-500" : "text-emerald-500"
-                }`}
-              >{`${reviewLength}/200`}</p>
+              <div className="flex flex-row justify-between">
+                <p
+                  className={`${
+                    reviewLength < 200 ? "text-red-500" : "text-emerald-500"
+                  }`}
+                >{`${reviewLength}/200`}</p>
+                <Button
+                  type="button"
+                  className="text-sm"
+                  outlineColor="stone"
+                  border="thin"
+                  onClick={() => {
+                    setIsWhatToWriteModalOpen(true);
+                  }}
+                >
+                  What should I write?
+                </Button>
+              </div>
             </div>
 
             <div className="flex flex-col w-full md:w-10/12 gap-2">
@@ -300,7 +312,7 @@ function ReviewForm() {
               <input
                 {...register("lastLivedYear")}
                 placeholder="e.g. 2021"
-                className="border rounded border-stone-400 w-full  outline-violet-300 p-2 shadow-sm "
+                className="border rounded border-stone-400 w-full  outline-violet-300 p-2 shadow-sm font-light"
                 id="lastLivedYear"
                 type={"number"}
               />

@@ -57,7 +57,7 @@ export default function Navbar() {
             )}
           </button>
 
-          <span className=" text-stone-50 text-sm px-2">
+          <span className=" text-stone-50 text-sm px-2 font-light">
             An open look into the world&apos;s neighbourhoods
           </span>
         </div>
