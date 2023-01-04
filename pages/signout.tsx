@@ -12,7 +12,13 @@ export default function SignOut() {
         <Card className="w-full md:w-3/4 flex flex-col gap-4">
           <span className="text-3xl">Click here to complete signing out</span>
 
-          <Button outlineColor="petal" border="thin" onClick={() => signOut()}>
+          <Button
+            outlineColor="petal"
+            border="thin"
+            onClick={() => {
+              signOut();
+            }}
+          >
             Sign out
           </Button>
         </Card>

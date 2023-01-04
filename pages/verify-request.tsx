@@ -13,6 +13,10 @@ function VerifyRequest() {
             <span>
               We&apos;ve sent you an email with a magic link to sign in.
             </span>
+            <span className="text-sm text-left">
+              Sometimes this email can take a few minutes to arrive - please be
+              patient!
+            </span>
           </div>
         </Card>
       </div>

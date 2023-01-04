@@ -278,7 +278,7 @@ function ReviewForm() {
               </label>
               <textarea
                 {...register("body")}
-                placeholder="Minimum 200 characters"
+                placeholder="The review must be at least 200 characters"
                 className="border rounded border-stone-400  w-full  outline-violet-300 p-2 shadow-sm h-full font-light text-base"
                 id="body"
                 onChange={(e) => {
@@ -286,11 +286,18 @@ function ReviewForm() {
                 }}
               />
               <div className="flex flex-row justify-between">
-                <p
-                  className={`${
-                    reviewLength < 200 ? "text-red-500" : "text-emerald-500"
-                  }`}
-                >{`${reviewLength}/200`}</p>
+                {reviewLength < 200 ? (
+                  <p className="text-red-500">
+                    <span className="text-stone-700">Characters: </span>
+                    {reviewLength}
+                  </p>
+                ) : (
+                  <p className="text-emerald-500">
+                    <span className="text-stone-700">Characters: </span>
+                    {reviewLength}
+                  </p>
+                )}
+
                 <Button
                   type="button"
                   className="text-sm"

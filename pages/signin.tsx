@@ -9,7 +9,7 @@ export default function SignIn({ csrfToken }) {
   return (
     <MinimalLayout>
       <div className="flex flex-col w-full justify-center items-center p-10">
-        <Card className="w-full md:w-3/4 ">
+        <Card className="w-full md:w-3/4 flex flex-col ">
           <form
             className="flex flex-col items-center justify-center gap-5 pt-2"
             method="post"
@@ -30,6 +30,12 @@ export default function SignIn({ csrfToken }) {
               Sign in
             </Button>
           </form>
+          <p className="text-sm text-left p-8">
+            If this is your first time signing in, an account will be created
+            for you with a random username. Your email address will never be
+            made public or shared with anyone else. It will only be used for the
+            purposes of signing in.
+          </p>
         </Card>
       </div>
     </MinimalLayout>
