@@ -76,6 +76,9 @@ function TownId({ data }: any) {
       <NextSeo
         title={`${data?.town?.name}, ${data?.town?.county}`}
         description={`What's it like to live in ${data?.town?.name}?`}
+        canonical={`https://www.liketolivethere.com/towns/${getTownUrl(
+          data?.town
+        )}`}
         openGraph={{
           title: `${data?.town?.name}, ${data?.town?.county}`,
           description: `What's it like to live in ${data?.town?.name}?`,

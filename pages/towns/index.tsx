@@ -9,6 +9,7 @@ function Towns() {
       <NextSeo
         description={`Browse towns | LikeToLiveTherse`}
         title={`Browse towns | Like To Live There`}
+        canonical={`https://www.liketolivethere.com/towns/`}
         openGraph={{
           title: `Browse towns | Like To Live There`,
           description: `Browse towns | Like To Live There`,
