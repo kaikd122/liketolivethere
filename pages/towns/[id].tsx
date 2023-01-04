@@ -76,15 +76,11 @@ function TownId({ data }: any) {
       <NextSeo
         title={`${data?.town?.name}, ${data?.town?.county}`}
         description={`What's it like to live in ${data?.town?.name}?`}
-        canonical={`https://www.liketolivethere.com/towns/${getTownUrl(
-          data?.town
-        )}`}
+        canonical={`https://www.liketolivethere.com/${getTownUrl(data?.town)}`}
         openGraph={{
           title: `${data?.town?.name}, ${data?.town?.county}`,
           description: `What's it like to live in ${data?.town?.name}?`,
-          url: `https://www.liketolivethere.com/towns/${getTownUrl(
-            data?.town
-          )}`,
+          url: `https://www.liketolivethere.com/${getTownUrl(data?.town)}`,
         }}
       />
       <TownReviewsList
