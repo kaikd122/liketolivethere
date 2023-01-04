@@ -35,7 +35,7 @@ export async function sendVerificationRequestCustom(params: {
 function html(params: { url: string; host: string; theme: Theme }) {
   const { url, host, theme } = params;
 
-  const escapedHost = "LikeToLiveThere";
+  const escapedHost = "Like To Live There";
 
   const brandColor = "#a743e4";
   const color = {
