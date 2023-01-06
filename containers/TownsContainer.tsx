@@ -10,6 +10,8 @@ import uzeStore from "../lib/store/store";
 import { getPostcodeOutcode } from "../lib/util/map-utils";
 import { useDebounce } from "use-lodash-debounce";
 import { BeatLoader } from "react-spinners";
+import Link from "next/link";
+import { getTownUrl } from "../lib/util/urls";
 
 function TownsContainer() {
   const currentTab = uzeStore((state) => state.currentTab);
@@ -107,21 +109,23 @@ function TownsContainer() {
           <div className="flex flex-col w-1/2 gap-2 py-4 ">
             {results.map((result) => {
               return (
-                <Button
-                  className="flex flex-row justify-between items-center w-full md:w-1/4 "
-                  smallScale
-                  outlineColor="stone"
-                  key={`townresult-${result.id}`}
-                  border="thin"
-                  onClick={async () => {
-                    setResults([]);
-                    setCurrentTownId(result.id!);
-                    setVal("");
-                  }}
-                >
-                  <p>{result.name}</p>
-                  <p>{getPostcodeOutcode(result.postcode_sector)}</p>
-                </Button>
+                <Link href={`${getTownUrl(result)}`}>
+                  <Button
+                    className="flex flex-row justify-between items-center w-full md:w-1/4 "
+                    smallScale
+                    outlineColor="stone"
+                    key={`townresult-${result.id}`}
+                    border="thin"
+                    onClick={async () => {
+                      // setResults([]);
+                      // setCurrentTownId(result.id!);
+                      setVal("");
+                    }}
+                  >
+                    <p>{result.name}</p>
+                    <p>{getPostcodeOutcode(result.postcode_sector)}</p>
+                  </Button>
+                </Link>
               );
             })}
             {searchStatus === "NO_RESULTS" && debouncedVal && (

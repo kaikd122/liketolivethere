@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useContext, useEffect, useRef } from "react";
 import Navbar from "./Navbar";
 import { useSession } from "next-auth/react";
 import generateUsername from "../lib/util/generate-username";
@@ -11,11 +11,16 @@ import Modal from "./ui/Modal";
 import ReviewCardModal from "./ReviewCardModal";
 import Link from "next/link";
 import PrizeModal from "./PrizeModal";
+import mapboxgl from "mapbox-gl";
+import { mapContext } from "./context";
+mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
 export interface LayoutProps {
   children: ReactNode;
 }
 export default function Layout({ children }: LayoutProps) {
+  console.log("RENDER LAYOUD");
+
   const user = uzeStore((state) => state.user);
   const { setUser, setCurrentTab } = uzeStore((state) => state.actions);
   const { data: session } = useSession();
@@ -59,6 +64,29 @@ export default function Layout({ children }: LayoutProps) {
     }
   }, [session?.user?.name]);
 
+  const { setMap, map } = useContext(mapContext);
+  const mapContainer = useRef(null);
+  const executeScroll = () => {
+    //@ts-ignore
+    mapRef?.current && mapRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    if (!map) {
+      console.log("INITIALIAZING");
+      const map = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: "mapbox://styles/mapbox/streets-v11", // stylesheet location
+        center: [-78.137343, 41.137451], // starting position
+        zoom: 5, // starting zoom
+      });
+
+      map.on("load", () => {
+        setMap(map);
+      });
+    }
+  }, [map, setMap]);
+
   useEffect(() => {
     if (currentTab !== undefined) {
       return;
@@ -84,6 +112,8 @@ export default function Layout({ children }: LayoutProps) {
       <PrizeModal />
 
       <main className="flex flex-col md:px-8 mb-8  md:gap-8 min-h-[70vh]">
+        <div className="h-96" ref={(el) => (mapContainer.current = el)}></div>
+
         {children}
       </main>
       <footer className="flex flex-row gap-8 justify-center items-center h-12 border border-t border-stone-300 text-stone-700 border-r-0 border-l-0 border-b-0 mx-2">

@@ -38,23 +38,14 @@ export default function Navbar() {
             }}
             className="font-semibold  text-4xl text-stone-50 active:scale-100 duration-75 hover:scale-105 font-display px-2"
           >
-            {isMapLoaded ? (
+            <Link href="/">
               <Image
-                alt="LikeToLiveThere"
+                alt="Like To Live There"
                 src={"/logo-truebw.png"}
                 width={350}
                 height={50}
               />
-            ) : (
-              <Link href="/">
-                <Image
-                  alt="Like To Live There"
-                  src={"/logo-truebw.png"}
-                  width={350}
-                  height={50}
-                />
-              </Link>
-            )}
+            </Link>
           </button>
 
           <span className=" text-stone-50 text-sm px-2 font-light">
