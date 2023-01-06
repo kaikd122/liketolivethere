@@ -1,10 +1,10 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import Email from "next-auth/providers/email";
+import GoogleProvider from "next-auth/providers/google";
 
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "../../../lib/prisma";
-import generateUsername from "../../../lib/util/generate-username";
-import { redirect } from "next/dist/server/api-utils";
+
 import { sendVerificationRequestCustom } from "../../../lib/util/sendVerificationRequest";
 
 const authOptions: NextAuthOptions = {
@@ -20,6 +20,7 @@ const authOptions: NextAuthOptions = {
     signIn: "/signin",
     verifyRequest: "/verify-request",
     signOut: "/signout",
+    error: "/signin",
   },
 
   providers: [
@@ -44,6 +45,19 @@ const authOptions: NextAuthOptions = {
           provider: { server, from },
           theme: "light",
         });
+      },
+    }),
+
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: null,
+          image: null,
+          email: profile.email,
+        };
       },
     }),
   ],

@@ -22,6 +22,7 @@ export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
   const currentTab = uzeStore((state) => state.currentTab);
   useEffect(() => {
+    console.log(session);
     if (!session || user?.name) {
       return;
     }
