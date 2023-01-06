@@ -1,9 +1,10 @@
 import { PlusIcon, MinusIcon } from "@heroicons/react/24/solid";
-import React from "react";
+import React, { useContext } from "react";
 import { useMap } from "react-map-gl";
+import { MapContext } from "../lib/context/MapContext";
 
 function ZoomControl() {
-  const { current: map } = useMap();
+  const { map } = useContext(MapContext);
 
   if (!map) {
     return null;

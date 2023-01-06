@@ -218,11 +218,11 @@ function MapContainer() {
               <MapPinIcon className="w-12 h-12 text-petal active:scale-90 hover:scale-110 duration-75 stroke-stone-50 " />
             </Marker>
           )}
-          <ReviewMarkers bounds={bounds} zoom={zoom} />
+          {/* <ReviewMarkers bounds={bounds} zoom={zoom} /> */}
           <FlyTo />
           <ZoomControl />
 
-          <Geocoder setNearbyTowns={setNearbyTowns} />
+          <Geocoder />
           {mapViewSearchStatus === "UNSEARCHED" && (
             <button
               className="border shadow-sm border-stone-400 py-1 px-2 border-1 rounded text-lg active:scale-100 duration-75 hover:scale-105 absolute bottom-2 left-[50%] translate-x-[-50%] items-center justify-center flex flex-row gap-1 bg-stone-50 font-sans text-stone-700"

@@ -1,13 +1,14 @@
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import { Review } from "@prisma/client";
 
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Marker, useMap, LayerProps, Source, Layer } from "react-map-gl";
 import uzeStore from "../lib/store/store";
 import useSupercluster from "use-supercluster";
 import { ReviewFeature } from "../types/types";
 import classNames from "classnames";
 import { useMediaQuery } from "usehooks-ts";
+import { MapContext } from "../lib/context/MapContext";
 
 export interface ReviewMarkersProps {
   bounds: Array<number>;
@@ -15,7 +16,7 @@ export interface ReviewMarkersProps {
 }
 
 function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
-  const { current: map } = useMap();
+  const { map } = useContext(MapContext);
   const reviewFeatures = uzeStore((state) => state.reviewFeatures);
   const { setCurrentReviewId, setReviewFeatures } = uzeStore(
     (state) => state.actions
@@ -32,6 +33,37 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
   });
 
   if (reviewFeatures.length === 0) return null;
+
+  if (!map) return null;
+
+  if (map.getSource("points") || map.getLayer("points")) {
+    return null;
+  }
+
+  map.loadImage("/marker-icon.png", (error, image) => {
+    if (error) throw error;
+    map.addImage("custom-marker", image);
+  });
+
+  map.addSource("points", {
+    type: "geojson",
+    data: {
+      type: "FeatureCollection",
+      features: reviewFeatures,
+    },
+  });
+
+  map.addLayer({
+    id: "points",
+    type: "symbol",
+    source: "points",
+    layout: {
+      "icon-image": "custom-marker",
+      "icon-allow-overlap": true,
+    },
+  });
+
+  return null;
 
   return (
     <div className="w-full h-full ">

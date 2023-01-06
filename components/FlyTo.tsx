@@ -1,12 +1,13 @@
 import { Review } from "@prisma/client";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useMap } from "react-map-gl";
 import { getReviewsWithinMapBoundsRequest } from "../lib/actions/review";
+import { MapContext } from "../lib/context/MapContext";
 import uzeStore from "../lib/store/store";
 import { reviewsToFeatures } from "../lib/util/review-utils";
 
 export default function FlyTo() {
-  const { current: map } = useMap();
+  const { map } = useContext(MapContext);
   const {
     setIsMapViewUnsearched,
     setMapViewSearchStatus,
