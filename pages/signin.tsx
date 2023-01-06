@@ -32,7 +32,7 @@ export default function SignIn({ csrfToken, providers }) {
                 signIn(googleProvider?.id);
               }}
               smallScale
-              className="flex flex-row justify-center text-xl items-center gap-2 w-full text-blue-500 border-blue-500 pb-4"
+              className="flex flex-row justify-center text-xl items-center gap-2 w-full text-blue-500 border-blue-500 mb-4"
             >
               <Image
                 alt="google-logo"
