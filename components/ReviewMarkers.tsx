@@ -18,12 +18,14 @@ export interface ReviewMarkersProps {
 function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
   const { map } = useContext(MapContext);
   const reviewFeatures = uzeStore((state) => state.reviewFeatures);
+  const coordinates = uzeStore((state) => state.coordinates);
   const { setCurrentReviewId, setReviewFeatures } = uzeStore(
     (state) => state.actions
   );
   const editReviewId = uzeStore((state) => state.editReviewId);
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
   const isVerySmallScreen = useMediaQuery("(max-width: 500px)");
+  const isCreatingReview = uzeStore((state) => state.isCreatingReview);
 
   const { clusters, supercluster } = useSupercluster({
     points: reviewFeatures.filter((r) => r.properties.id !== editReviewId),
@@ -31,6 +33,52 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
     zoom,
     options: { radius: 75, maxZoom: 22 },
   });
+
+  useEffect(() => {
+    if (!map) return;
+
+    if (isCreatingReview) {
+      if (
+        map.getSource("write-review-point") ||
+        map.getLayer("write-review-point")
+      )
+        return;
+      map.addSource("write-review-point", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: coordinates,
+              },
+            },
+          ],
+        },
+      });
+      map.addLayer({
+        id: "write-review-point",
+        type: "circle",
+        source: "write-review-point",
+        paint: {
+          "circle-radius": 10,
+          "circle-color": "#0070f3",
+          "circle-stroke-width": 2,
+          "circle-stroke-color": "#fff",
+        },
+      });
+    } else {
+      if (
+        map.getSource("write-review-point") ||
+        map.getLayer("write-review-point")
+      ) {
+        map.removeLayer("write-review-point");
+        map.removeSource("write-review-point");
+      }
+    }
+  }, [isCreatingReview]);
 
   if (reviewFeatures.length === 0) return null;
 
