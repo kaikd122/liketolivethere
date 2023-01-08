@@ -70,11 +70,11 @@ function ReviewMarkers({ bounds, zoom }: ReviewMarkersProps) {
                     )}
                     style={{
                       width: `${
-                        (isVerySmallScreen ? 8 : isSmallScreen ? 5 : 3) +
+                        (isVerySmallScreen ? 8 : isSmallScreen ? 5 : 2) +
                         (pointCount / reviewFeatures.length) * 3
                       }vw`,
                       height: `${
-                        (isVerySmallScreen ? 8 : isSmallScreen ? 5 : 3) +
+                        (isVerySmallScreen ? 8 : isSmallScreen ? 5 : 2) +
                         (pointCount / reviewFeatures.length) * 3
                       }vw`,
                     }}
