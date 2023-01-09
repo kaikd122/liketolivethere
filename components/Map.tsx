@@ -32,6 +32,8 @@ import ZoomControl from "./ZoomControl";
 import { RxShuffle } from "react-icons/rx";
 import classNames from "classnames";
 import { BeatLoader } from "react-spinners";
+import Link from "next/link";
+import { getTownUrl } from "../lib/util/urls";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -339,21 +341,23 @@ function MapContainer() {
       <div className="flex flex-row  gap-4 flex-wrap px-3 md:px-0 pt-3">
         {nearbyTowns.map((town) => {
           return (
-            <Button
-              bgColor="petalGradient"
-              outlineColor="light"
-              border="none"
-              key={town.id}
-              className="text-sm"
-              onClick={async () => {
-                setCurrentTab("TOWNS");
-                setCurrentTownId(town.id!);
+            <Link href={`/${getTownUrl(town)}`}>
+              <Button
+                bgColor="petalGradient"
+                outlineColor="light"
+                border="none"
+                key={town.id}
+                className="text-sm"
+                onClick={async () => {
+                  setCurrentTab("TOWNS");
+                  setCurrentTownId(town.id!);
 
-                // replaceUrl(getTownUrl(town));
-              }}
-            >
-              {town.name}
-            </Button>
+                  // replaceUrl(getTownUrl(town));
+                }}
+              >
+                {town.name}
+              </Button>
+            </Link>
           );
         })}
       </div>

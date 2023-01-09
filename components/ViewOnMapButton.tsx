@@ -53,27 +53,14 @@ function ViewOnMapButton({
       }}
     >
       {writeMode ? (
-        isMapLoaded ? (
-          <>
-            <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
+        <Link
+          href="/"
+          className="flex flex-row w-full items-center justify-center"
+        >
+          <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
 
-            <p>Write a review</p>
-          </>
-        ) : (
-          <Link
-            href="/"
-            className="flex flex-row w-full items-center justify-center"
-          >
-            <PencilSquareIcon className="w-5 h-5 items-center justify-center" />
-
-            <p>Write a review</p>
-          </Link>
-        )
-      ) : isMapLoaded ? (
-        <>
-          <MapPinIcon className="h-5 w-5" />
-          {withText && <p>View on map</p>}{" "}
-        </>
+          <p>Write a review</p>
+        </Link>
       ) : (
         <Link
           href="/"

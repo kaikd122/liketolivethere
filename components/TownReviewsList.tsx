@@ -11,6 +11,7 @@ import { TOWN_REVIEWS_PAGE_SIZE } from "../lib/constants";
 import uzeStore from "../lib/store/store";
 import { onlyUnique } from "../lib/util/general";
 import { getPostcodeOutcode } from "../lib/util/map-utils";
+import { getTownUrl } from "../lib/util/urls";
 import CoordinatesDisplay from "./CoordinatesDisplay";
 import ReviewStub from "./ReviewStub";
 import Button from "./ui/Button";
@@ -159,18 +160,20 @@ function TownReviewsList({
           <div className="flex flex-row  gap-4 flex-wrap  py-1 items-end">
             {nearbyTowns.map((nt) => {
               return (
-                <Button
-                  bgColor="petalGradient"
-                  outlineColor="light"
-                  border="none"
-                  key={nt.id}
-                  className="text-sm"
-                  onClick={() => {
-                    setCurrentTownId(nt.id!);
-                  }}
-                >
-                  {isMapLoaded ? nt.name : <Link href="/">{nt.name}</Link>}
-                </Button>
+                <Link href={`/${getTownUrl(town)}`}>
+                  <Button
+                    bgColor="petalGradient"
+                    outlineColor="light"
+                    border="none"
+                    key={nt.id}
+                    className="text-sm"
+                    onClick={() => {
+                      setCurrentTownId(nt.id!);
+                    }}
+                  >
+                    {isMapLoaded ? nt.name : <Link href="/">{nt.name}</Link>}
+                  </Button>
+                </Link>
               );
             })}
           </div>
