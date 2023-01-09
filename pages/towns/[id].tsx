@@ -9,6 +9,9 @@ import { getTownIdFromSlug, getTownUrl } from "../../lib/util/urls";
 import { getReviewsNearTownResponse } from "../api/getReviewsNearTown";
 import prisma from "../../lib/prisma";
 import { NextSeo } from "next-seo";
+import { ArrowUturnLeftIcon } from "@heroicons/react/24/solid";
+import Button from "../../components/ui/Button";
+import Link from "next/link";
 
 export async function getServerSideProps({ query }: any) {
   const townId = getTownIdFromSlug(query.id);
@@ -83,6 +86,24 @@ function TownId({ data }: any) {
           url: `https://www.liketolivethere.com/${getTownUrl(data?.town)}`,
         }}
       />
+      <div className="flex w-full flex-row">
+        <Button
+          outlineColor="stone"
+          border="thin"
+          className="flex flex-row gap-1  justify-center items-center"
+          onClick={() => {
+            setCurrentTownId(undefined);
+          }}
+        >
+          <Link
+            href="/towns"
+            className="flex flex-row gap-1 justify-center items-center"
+          >
+            <ArrowUturnLeftIcon className="h-5 w-5" />
+            <p>Back to town search</p>
+          </Link>
+        </Button>
+      </div>
       <TownReviewsList
         serverSideReviews={data.reviews}
         serverSideNearbyTowns={data.nearbyTowns.filter(
