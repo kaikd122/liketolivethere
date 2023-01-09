@@ -38,23 +38,14 @@ export default function Navbar() {
             }}
             className="font-semibold  text-4xl text-stone-50 active:scale-100 duration-75 hover:scale-105 font-display px-2"
           >
-            {isMapLoaded ? (
+            <Link href="/">
               <Image
-                alt="LikeToLiveThere"
+                alt="Like To Live There"
                 src={"/logo-truebw.png"}
                 width={350}
                 height={50}
               />
-            ) : (
-              <Link href="/">
-                <Image
-                  alt="Like To Live There"
-                  src={"/logo-truebw.png"}
-                  width={350}
-                  height={50}
-                />
-              </Link>
-            )}
+            </Link>
           </button>
 
           <span className=" text-stone-50 text-sm px-2 font-light">
@@ -82,13 +73,9 @@ export default function Navbar() {
             setCurrentTab("MAP");
           }}
         >
-          {isMapLoaded ? (
-            <h1>Explore map</h1>
-          ) : (
-            <h1>
-              <Link href="/">Explore map</Link>
-            </h1>
-          )}
+          <h1>
+            <Link href="/">Explore map</Link>
+          </h1>
         </Tab>
 
         <Tab
@@ -97,7 +84,9 @@ export default function Navbar() {
             setCurrentTab("TOWNS");
           }}
         >
-          <h2>Browse towns</h2>
+          <h2>
+            <Link href="/towns">Browse towns</Link>
+          </h2>
         </Tab>
       </div>
     </div>

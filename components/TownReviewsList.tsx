@@ -11,6 +11,7 @@ import { TOWN_REVIEWS_PAGE_SIZE } from "../lib/constants";
 import uzeStore from "../lib/store/store";
 import { onlyUnique } from "../lib/util/general";
 import { getPostcodeOutcode } from "../lib/util/map-utils";
+import { getTownUrl } from "../lib/util/urls";
 import CoordinatesDisplay from "./CoordinatesDisplay";
 import ReviewStub from "./ReviewStub";
 import Button from "./ui/Button";
@@ -169,7 +170,7 @@ function TownReviewsList({
                     setCurrentTownId(nt.id!);
                   }}
                 >
-                  {isMapLoaded ? nt.name : <Link href="/">{nt.name}</Link>}
+                  <Link href={`/${getTownUrl(nt)}`}>{nt.name}</Link>
                 </Button>
               );
             })}

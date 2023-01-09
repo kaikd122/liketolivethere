@@ -32,6 +32,8 @@ import ZoomControl from "./ZoomControl";
 import { RxShuffle } from "react-icons/rx";
 import classNames from "classnames";
 import { BeatLoader } from "react-spinners";
+import Link from "next/link";
+import { getTownUrl } from "../lib/util/urls";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -352,7 +354,7 @@ function MapContainer() {
                 // replaceUrl(getTownUrl(town));
               }}
             >
-              {town.name}
+              <Link href={`/${getTownUrl(town)}`}>{town.name}</Link>
             </Button>
           );
         })}

@@ -8,11 +8,13 @@ import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import "styles/map-overrides.css";
 import { DefaultSeo } from "next-seo";
 import { Analytics } from "@vercel/analytics/react";
+import { useRouter } from "next/router";
 
 export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps) {
+  const router = useRouter();
   return (
     <SessionProvider session={session}>
       <DefaultSeo
@@ -37,7 +39,7 @@ export default function App({
           ],
         }}
       />
-      <Component {...pageProps} />
+      <Component {...pageProps} key={router.asPath} />
       <Analytics />
     </SessionProvider>
   );
