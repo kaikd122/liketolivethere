@@ -63,12 +63,11 @@ export default function Layout({ children }: LayoutProps) {
     if (currentTab !== undefined) {
       return;
     }
-    if (router.asPath === "/") {
-      setCurrentTab("MAP");
-    } else if (router.asPath === "/profile") {
-      setCurrentTab("PROFILE");
-    } else if (router.asPath.slice(0, 6) === "/towns") {
+
+    if (router.asPath.slice(0, 6) === "/towns") {
       setCurrentTab("TOWNS");
+    } else {
+      setCurrentTab("MAP");
     }
   }, [router.asPath]);
   return (
