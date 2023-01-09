@@ -160,7 +160,7 @@ function TownReviewsList({
           <div className="flex flex-row  gap-4 flex-wrap  py-1 items-end">
             {nearbyTowns.map((nt) => {
               return (
-                <Link href={`/${getTownUrl(town)}`}>
+                <Link href={`/${getTownUrl(nt)}`}>
                   <Button
                     bgColor="petalGradient"
                     outlineColor="light"
