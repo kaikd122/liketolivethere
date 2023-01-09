@@ -19,7 +19,7 @@ export default function Home() {
         <MapContainer />
         <ReviewForm />
         <ProfileContainer />
-        <TownsContainer />
+        {/* <TownsContainer /> */}
       </Layout>
     </>
   );

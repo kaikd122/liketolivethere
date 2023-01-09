@@ -341,23 +341,21 @@ function MapContainer() {
       <div className="flex flex-row  gap-4 flex-wrap px-3 md:px-0 pt-3">
         {nearbyTowns.map((town) => {
           return (
-            <Link href={`/${getTownUrl(town)}`}>
-              <Button
-                bgColor="petalGradient"
-                outlineColor="light"
-                border="none"
-                key={town.id}
-                className="text-sm"
-                onClick={async () => {
-                  setCurrentTab("TOWNS");
-                  setCurrentTownId(town.id!);
+            <Button
+              bgColor="petalGradient"
+              outlineColor="light"
+              border="none"
+              key={town.id}
+              className="text-sm"
+              onClick={async () => {
+                setCurrentTab("TOWNS");
+                setCurrentTownId(town.id!);
 
-                  // replaceUrl(getTownUrl(town));
-                }}
-              >
-                {town.name}
-              </Button>
-            </Link>
+                // replaceUrl(getTownUrl(town));
+              }}
+            >
+              <Link href={`/${getTownUrl(town)}`}>{town.name}</Link>
+            </Button>
           );
         })}
       </div>

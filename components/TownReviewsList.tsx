@@ -160,20 +160,18 @@ function TownReviewsList({
           <div className="flex flex-row  gap-4 flex-wrap  py-1 items-end">
             {nearbyTowns.map((nt) => {
               return (
-                <Link href={`/${getTownUrl(nt)}`}>
-                  <Button
-                    bgColor="petalGradient"
-                    outlineColor="light"
-                    border="none"
-                    key={nt.id}
-                    className="text-sm"
-                    onClick={() => {
-                      setCurrentTownId(nt.id!);
-                    }}
-                  >
-                    {isMapLoaded ? nt.name : <Link href="/">{nt.name}</Link>}
-                  </Button>
-                </Link>
+                <Button
+                  bgColor="petalGradient"
+                  outlineColor="light"
+                  border="none"
+                  key={nt.id}
+                  className="text-sm"
+                  onClick={() => {
+                    setCurrentTownId(nt.id!);
+                  }}
+                >
+                  <Link href={`/${getTownUrl(nt)}`}>{nt.name}</Link>
+                </Button>
               );
             })}
           </div>
