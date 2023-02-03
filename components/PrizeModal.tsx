@@ -83,7 +83,7 @@ function PrizeModal() {
                 is that you&apos;re honest. You don&apos;t have to be currently
                 living in an area to review it - out of date reviews are still
                 useful in building a picture of an area, and in suggesting how
-                it might develop in the future. So if you having anything to
+                it might develop in the future. So if you have anything to
                 share, however small, that might help others, please do!
               </p>
 
@@ -119,7 +119,7 @@ function PrizeModal() {
                 is that you&apos;re honest. You don&apos;t have to be currently
                 living in an area to review it - out of date reviews are still
                 useful in building a picture of an area, and in suggesting how
-                it might develop in the future. So if you having anything to
+                it might develop in the future. So if you have anything to
                 share, however small, that might help others, please do!
               </p>
               <p className="text-left w-full">Thank you!</p>
