@@ -44,7 +44,7 @@ export default function SignIn({ csrfToken, providers }) {
             </Button>
           )}
 
-          <form
+          {/* <form
             className="flex flex-col items-center justify-center gap-2 w-full"
             method="post"
             action="/api/auth/signin/email"
@@ -82,7 +82,7 @@ export default function SignIn({ csrfToken, providers }) {
               made public or shared with anyone else. It will only be used for
               the purposes of signing in.
             </p>
-          )}
+          )} */}
         </Card>
       </div>
     </MinimalLayout>
